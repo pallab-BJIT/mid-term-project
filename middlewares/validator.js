@@ -316,6 +316,37 @@ const validator = {
             .isString()
             .withMessage('Street only be string'),
     ],
+
+    loginUser: [
+        body('email')
+            .not()
+            .equals('')
+            .withMessage('Email is required')
+            .bail()
+            .isString()
+            .withMessage('Email Must be of type string')
+            .bail()
+            .isEmail()
+            .withMessage('Invalid email address'),
+        body('password')
+            .not()
+            .equals('')
+            .withMessage('Password is required')
+            .bail()
+            .isString()
+            .withMessage('Password Must be of type string')
+            .bail()
+            .isStrongPassword({
+                minLength: 8,
+                minLowerCase: 1,
+                minUpperCase: 1,
+                minSymbols: 1,
+                minNumbers: 1,
+            })
+            .withMessage(
+                'Password must be at least 8 characters with a lowercase ,a uppercase,a number and a special character'
+            ),
+    ],
 };
 
 module.exports = validator;

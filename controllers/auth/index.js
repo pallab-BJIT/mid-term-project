@@ -1,9 +1,14 @@
 const { validationResult } = require('express-validator');
-const { hashPasswordUsingBcrypt } = require('../../util/hashPassword');
+const {
+    hashPasswordUsingBcrypt,
+    comparePasswords,
+} = require('../../util/hashPassword');
 const authModel = require('../../models/auth');
 const userModel = require('../../models/user');
 const { sendResponse } = require('../../util/response');
 const HTTP_STATUS = require('../../constants/statusCode');
+const generateAccessToken = require('../../util/accessTokenGenerator');
+const generateRefreshToken = require('../../util/refreshTokenGenerator');
 
 class AuthController {
     async signUp(req, res) {
@@ -91,6 +96,79 @@ class AuthController {
                         HTTP_STATUS.BAD_REQUEST,
                         'The email is already in use'
                     );
+                }
+            }
+        } catch (error) {
+            console.log(error);
+            return sendResponse(
+                res,
+                HTTP_STATUS.INTERNAL_SERVER_ERROR,
+                'Internal server error'
+            );
+        }
+    }
+
+    async login(req, res) {
+        try {
+            const validation = validationResult(req).array();
+            if (validation.length) {
+                const error = {};
+                validation.forEach((validationError) => {
+                    const property = validationError.path;
+                    error[property] = validationError.msg;
+                });
+                return sendResponse(
+                    res,
+                    HTTP_STATUS.UNPROCESSABLE_ENTITY,
+                    'Unprocessable Entity',
+                    error
+                );
+            } else {
+                const { email, password } = req.body;
+                const emailExists = await authModel
+                    .findOne({ email: email })
+                    .populate('user');
+                if (!emailExists) {
+                    return sendResponse(
+                        res,
+                        HTTP_STATUS.BAD_REQUEST,
+                        'You are not registered'
+                    );
+                } else {
+                    const passwordExists = await comparePasswords(
+                        password,
+                        emailExists?.password
+                    );
+
+                    if (!passwordExists) {
+                        return sendResponse(
+                            res,
+                            HTTP_STATUS.BAD_REQUEST,
+                            'Wrong credentials'
+                        );
+                    } else {
+                        const data = {
+                            _id: emailExists?._id,
+                            email: emailExists?.email,
+                            rank: emailExists?.rank,
+                            name: emailExists?.user?.name,
+                            address: emailExists?.user?.address,
+                            phoneNumber: emailExists?.user?.phoneNumber,
+                        };
+                        const jwtToken = generateAccessToken(data);
+                        const refreshToken = generateRefreshToken(data);
+                        data.accessToken = jwtToken;
+                        data.refreshToken = refreshToken;
+                        emailExists.sessionActive = true;
+                        await emailExists.save();
+
+                        return sendResponse(
+                            res,
+                            HTTP_STATUS.OK,
+                            'Sign in successful',
+                            data
+                        );
+                    }
                 }
             }
         } catch (error) {
