@@ -15,7 +15,7 @@ app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 const bookRouter = require('./routes/book');
-
+const authRouter = require('./routes/auth');
 //! Invalid json handler
 app.use((err, req, res, next) => {
     if (err instanceof SyntaxError && err.status === 400 && 'body' in err) {
@@ -25,6 +25,7 @@ app.use((err, req, res, next) => {
 });
 
 app.use('/api/books', bookRouter.router);
+app.use('/api/auth', authRouter.router);
 
 app.get('/', (req, res) => {
     return sendResponse(res, HTTP_STATUS.OK, 'This is the base route');
