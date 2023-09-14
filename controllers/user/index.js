@@ -2,6 +2,7 @@ const { validationResult } = require('express-validator');
 const HTTP_STATUS = require('../../constants/statusCode');
 const userModel = require('../../models/user');
 const { sendResponse } = require('../../util/response');
+const databaseLogger = require('../../util/dbLogger');
 
 class UserController {
     async addBalance(req, res) {
@@ -48,6 +49,34 @@ class UserController {
                 res,
                 HTTP_STATUS.BAD_REQUEST,
                 'Something went wrong.Please try again later.'
+            );
+        } catch (error) {
+            databaseLogger(error.message);
+            return sendResponse(
+                res,
+                HTTP_STATUS.INTERNAL_SERVER_ERROR,
+                'Internal server error'
+            );
+        }
+    }
+
+    async viewAllUserData(req, res) {
+        try {
+            const users = await userModel.find({});
+            if (!users.length) {
+                return sendResponse(
+                    res,
+                    HTTP_STATUS.BAD_REQUEST,
+                    'No data found',
+                    []
+                );
+            }
+
+            return sendResponse(
+                res,
+                HTTP_STATUS.OK,
+                'Successfully get all the data',
+                users
             );
         } catch (error) {
             databaseLogger(error.message);

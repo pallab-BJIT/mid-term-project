@@ -69,7 +69,7 @@ const isAdmin = (req, res, next) => {
             return sendResponse(
                 res,
                 HTTP_STATUS.UNAUTHORIZED,
-                'Unable to access.You are not a admin'
+                'Unable to access.'
             );
         }
     } catch (error) {
