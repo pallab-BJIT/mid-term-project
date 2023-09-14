@@ -10,10 +10,11 @@ const HTTP_STATUS = require('../../constants/statusCode');
 const generateAccessToken = require('../../util/accessTokenGenerator');
 const generateRefreshToken = require('../../util/refreshTokenGenerator');
 const jwt = require('jsonwebtoken');
+const databaseLogger = require('../../util/dbLogger');
 class AuthController {
     async signUp(req, res) {
-        //
         try {
+            databaseLogger(req.url);
             const {
                 email,
                 password,
@@ -99,7 +100,7 @@ class AuthController {
                 }
             }
         } catch (error) {
-            console.log(error);
+            databaseLogger(error.message);
             return sendResponse(
                 res,
                 HTTP_STATUS.INTERNAL_SERVER_ERROR,
@@ -110,6 +111,7 @@ class AuthController {
 
     async login(req, res) {
         try {
+            databaseLogger(req.url);
             const validation = validationResult(req).array();
             if (validation.length) {
                 const error = {};
@@ -172,7 +174,7 @@ class AuthController {
                 }
             }
         } catch (error) {
-            console.log(error);
+            databaseLogger(error.message);
             return sendResponse(
                 res,
                 HTTP_STATUS.INTERNAL_SERVER_ERROR,
@@ -183,6 +185,7 @@ class AuthController {
 
     async refreshToken(req, res) {
         try {
+            databaseLogger(req.url);
             const token = req.headers.authorization?.split(' ')[1];
             if (!token || token === undefined) {
                 return res.status(401).json(failure('Token Cannot be Null'));
@@ -209,7 +212,7 @@ class AuthController {
                 );
             }
         } catch (error) {
-            console.log(error);
+            databaseLogger(error.message);
             if (error instanceof jwt.TokenExpiredError) {
                 return sendResponse(
                     res,

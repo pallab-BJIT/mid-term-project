@@ -6,6 +6,7 @@ const { sendResponse } = require('../../util/response');
 class UserController {
     async addBalance(req, res) {
         try {
+            databaseLogger(req.url);
             const { email } = req.user;
             const { amount } = req.body;
 
@@ -49,7 +50,7 @@ class UserController {
                 'Something went wrong.Please try again later.'
             );
         } catch (error) {
-            console.log(error);
+            databaseLogger(error.message);
             return sendResponse(
                 res,
                 HTTP_STATUS.INTERNAL_SERVER_ERROR,

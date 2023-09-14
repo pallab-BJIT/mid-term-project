@@ -3,10 +3,12 @@ const bookModel = require('../../models/book');
 const { sendResponse } = require('../../util/response');
 const mongoose = require('mongoose');
 const { validationResult } = require('express-validator');
+const databaseLogger = require('../../util/dbLogger');
 
 class BookController {
     async getAllBooks(req, res) {
         try {
+            databaseLogger(req.url);
             const validation = validationResult(req).array();
             if (validation.length) {
                 const error = {};
@@ -115,6 +117,7 @@ class BookController {
                 return sendResponse(res, 200, 'No data found', []);
             }
         } catch (error) {
+            databaseLogger(error.message);
             return sendResponse(
                 res,
                 HTTP_STATUS.INTERNAL_SERVER_ERROR,
@@ -125,6 +128,7 @@ class BookController {
 
     async getBookById(req, res) {
         try {
+            databaseLogger(req.url);
             const { bookId } = req.params;
             if (!mongoose.Types.ObjectId.isValid(bookId)) {
                 return sendResponse(
@@ -144,6 +148,7 @@ class BookController {
             }
             return sendResponse(res, HTTP_STATUS.BAD_REQUEST, 'No data found');
         } catch (error) {
+            databaseLogger(error.message);
             return sendResponse(
                 res,
                 HTTP_STATUS.INTERNAL_SERVER_ERROR,
@@ -154,6 +159,7 @@ class BookController {
 
     async createBook(req, res) {
         try {
+            databaseLogger(req.url);
             const validation = validationResult(req).array();
             if (validation.length) {
                 const error = {};
@@ -222,7 +228,7 @@ class BookController {
                 }
             }
         } catch (error) {
-            console.log(error);
+            databaseLogger(error.message);
             return sendResponse(res, 500, 'Internal server error');
         }
     }
