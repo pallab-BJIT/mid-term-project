@@ -410,13 +410,11 @@ const validator = {
         body('amount')
             .exists()
             .withMessage('Amount is required')
-            .custom((value, { req }) => {
+            .custom((value) => {
                 if (value <= 0 || isNaN(value) || value > 30000) {
                     throw new Error(
                         'Amount must be a positive value less than 30000'
                     );
-                } else if (req.user.rank === 1) {
-                    throw new Error('You are not allowed to access this');
                 } else {
                     return true;
                 }

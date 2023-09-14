@@ -8,7 +8,7 @@ class UserController {
     async addBalance(req, res) {
         try {
             databaseLogger(req.url);
-            const { email } = req.user;
+            const { email, rank } = req.user;
             const { amount } = req.body;
 
             const validation = validationResult(req).array();
@@ -25,13 +25,27 @@ class UserController {
                     error
                 );
             }
+            if (rank === 1) {
+                return sendResponse(
+                    res,
+                    HTTP_STATUS.BAD_REQUEST,
+                    'You are not allowed to access this'
+                );
+            }
             const user = await userModel.findOne({ email });
-
             if (!user) {
                 return sendResponse(
                     res,
                     HTTP_STATUS.NOT_FOUND,
                     'No user found'
+                );
+            }
+
+            if (user.balance >= 100) {
+                return sendResponse(
+                    res,
+                    HTTP_STATUS.BAD_REQUEST,
+                    'You can only add amount when your balance less than 100'
                 );
             }
 
