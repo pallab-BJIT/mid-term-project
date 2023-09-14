@@ -177,6 +177,8 @@ class BookController {
                     rating,
                     stock,
                     category,
+                    publishedAt,
+                    isbn,
                 } = req.body;
                 const existingBook = await bookModel.findOne({
                     $or: [{ title: title }, { description: description }],
@@ -205,6 +207,8 @@ class BookController {
                     rating,
                     stock,
                     category,
+                    isbn,
+                    publishedAt,
                 });
                 if (result) {
                     return sendResponse(

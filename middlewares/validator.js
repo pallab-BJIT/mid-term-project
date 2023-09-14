@@ -173,11 +173,6 @@ const validator = {
         body('price')
             .isFloat({ min: 0, max: 10000 })
             .withMessage('Price must be a valid number between 0 and 100.'),
-        body('discount_price')
-            .isFloat({ min: 0, max: 50 })
-            .withMessage(
-                'Discount Price is required and must be less than 50.'
-            ),
         body('rating')
             .isFloat({ min: 0, max: 5 })
             .withMessage('Rating is required and must be between 0 and 5.'),
@@ -186,6 +181,48 @@ const validator = {
             .withMessage('Stock must be a valid number between 0 and 300.'),
         body('author').notEmpty().withMessage('Author is required.'),
         body('category').notEmpty().withMessage('Category is required.'),
+        body('publishedAt')
+            .not()
+            .equals('')
+            .withMessage('Published At cannot be empty')
+            .bail()
+            .isDate()
+            .withMessage('Published at must be of type Date'),
+        body('isbn')
+            .not()
+            .equals()
+            .withMessage('ISBN number cannot be empty')
+            .bail()
+            .isISBN()
+            .withMessage('Invalid ISBN number'),
+        body('discount_price.price').custom((value, { req }) => {
+            if (isNaN(value) || value <= 0) {
+                throw new Error('Price must be a valid positive number');
+            }
+            if (value > req.body.price) {
+                throw new Error(
+                    "Discount price can't be greater than book's original price"
+                );
+            } else {
+                return true;
+            }
+        }),
+        body('discount_price.startTime')
+            .exists()
+            .not()
+            .equals('')
+            .withMessage('Discount price start time is required')
+            .bail()
+            .isDate()
+            .withMessage('Discount price start time must be a valid date'),
+        body('discount_price.endTime')
+            .exists()
+            .not()
+            .equals('')
+            .withMessage('Discount price end time is required')
+            .bail()
+            .isDate()
+            .withMessage('Discount price end time must be a valid date'),
     ],
 
     signUpUser: [

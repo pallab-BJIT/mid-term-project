@@ -18,9 +18,20 @@ const bookSchema = new Schema({
         max: [10000, 'price must be maximum 100'],
     },
     discount_price: {
-        type: Number,
-        required: [true, 'Price is required'],
-        max: [50, 'Discount cannot be greater than 50'],
+        type: {
+            price: {
+                type: Number,
+                required: [true, 'Discount price is required'],
+            },
+            startTime: {
+                type: Date,
+                required: [true, 'StartTime is required'],
+            },
+            endTime: {
+                type: Date,
+                required: [true, 'EndTime is required'],
+            },
+        },
     },
     description: {
         type: String,
@@ -41,6 +52,14 @@ const bookSchema = new Schema({
     category: {
         type: String,
         required: [true, 'Category is required'],
+    },
+    publishedAt: {
+        type: Date,
+        required: [true, 'PublishedAt is required'],
+    },
+    isbn: {
+        type: String,
+        required: [true, 'ISBN number is required'],
     },
 });
 const bookModel = mongoose.model('Book', bookSchema);
