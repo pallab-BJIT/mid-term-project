@@ -446,6 +446,28 @@ const validator = {
                 }
             }),
     ],
+
+    updateUser: [
+        body('name')
+            .optional()
+            .not()
+            .equals('')
+            .withMessage('Name is required')
+            .bail()
+            .isString()
+            .withMessage('Name only be of type string'),
+        body('rank')
+            .optional()
+            .custom((value) => {
+                if (rank != 1 || rank != 2) {
+                    throw new Error('Invalid rank provided');
+                } else if (!rank) {
+                    throw new Error('Rank can not be empty');
+                } else {
+                    return true;
+                }
+            }),
+    ],
 };
 
 module.exports = validator;

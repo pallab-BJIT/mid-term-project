@@ -152,6 +152,30 @@ class UserController {
             return sendResponse(res, 500, 'Internal server error');
         }
     }
+
+    async updateUser(req, res) {
+        try {
+            databaseLogger(req.originalUrl);
+            const validation = validationResult(req).array();
+            if (validation.length) {
+                const error = {};
+                validation.forEach((ele) => {
+                    const property = ele.path;
+                    error[property] = ele.msg;
+                });
+                return sendResponse(
+                    res,
+                    HTTP_STATUS.UNPROCESSABLE_ENTITY,
+                    'Unprocessable Entity',
+                    error
+                );
+            }
+            const { name, rank, isVerified } = req.body;
+        } catch (error) {
+            databaseLogger(error.message);
+            return sendResponse(res, 500, 'Internal server error');
+        }
+    }
 }
 
 module.exports = new UserController();
