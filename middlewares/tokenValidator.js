@@ -18,6 +18,7 @@ const tokenAuthorization = (req, res, next) => {
         const secretKey = process.env.ACCESS_TOKEN_SECRET;
         const validate = jwt.verify(token, secretKey);
         if (validate) {
+            req.user = validate;
             next();
         } else {
             return sendResponse(

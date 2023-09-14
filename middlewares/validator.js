@@ -405,6 +405,23 @@ const validator = {
                 'Password must be at least 8 characters with a lowercase ,a uppercase,a number and a special character'
             ),
     ],
+
+    addBalance: [
+        body('amount')
+            .exists()
+            .withMessage('Amount is required')
+            .custom((value, { req }) => {
+                if (value <= 0 || isNaN(value) || value > 30000) {
+                    throw new Error(
+                        'Amount must be a positive value less than 30000'
+                    );
+                } else if (req.user.rank === 1) {
+                    throw new Error('You are not allowed to access this');
+                } else {
+                    return true;
+                }
+            }),
+    ],
 };
 
 module.exports = validator;

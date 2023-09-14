@@ -44,6 +44,10 @@ const userSchema = new Schema(
                 required: true,
             },
         },
+        balance: {
+            type: Number,
+            required: false,
+        },
     },
     { timestamps: true }
 );
