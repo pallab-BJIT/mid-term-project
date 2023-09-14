@@ -6,8 +6,8 @@ const validator = require('../../middlewares/validator');
 
 router
     .post('/sign-up', [validator.signUpUser], AuthController.signUp)
-    .post('/login', [validator.loginUser], AuthController.login);
-// .post('/refreshToken', AuthController.refreshToken)
+    .post('/login', [validator.loginUser], AuthController.login)
+    .post('/refreshToken', AuthController.refreshToken);
 // .delete('/logout', AuthController.logOut);
 
 exports.router = router;

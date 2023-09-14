@@ -167,6 +167,27 @@ const validator = {
             }),
     ],
 
+    createBook: [
+        body('title').notEmpty().withMessage('Title is required.'),
+        body('description').notEmpty().withMessage('Description is required.'),
+        body('price')
+            .isFloat({ min: 0, max: 10000 })
+            .withMessage('Price must be a valid number between 0 and 100.'),
+        body('discount_price')
+            .isFloat({ min: 0, max: 50 })
+            .withMessage(
+                'Discount Price is required and must be less than 50.'
+            ),
+        body('rating')
+            .isFloat({ min: 0, max: 5 })
+            .withMessage('Rating is required and must be between 0 and 5.'),
+        body('stock')
+            .isFloat({ min: 0, max: 300 })
+            .withMessage('Stock must be a valid number between 0 and 300.'),
+        body('author').notEmpty().withMessage('Author is required.'),
+        body('category').notEmpty().withMessage('Category is required.'),
+    ],
+
     signUpUser: [
         body('name')
             .exists()

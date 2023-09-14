@@ -9,7 +9,7 @@ const { sendResponse } = require('../../util/response');
 const HTTP_STATUS = require('../../constants/statusCode');
 const generateAccessToken = require('../../util/accessTokenGenerator');
 const generateRefreshToken = require('../../util/refreshTokenGenerator');
-
+const jwt = require('jsonwebtoken');
 class AuthController {
     async signUp(req, res) {
         //
@@ -177,6 +177,57 @@ class AuthController {
                 res,
                 HTTP_STATUS.INTERNAL_SERVER_ERROR,
                 'Internal server error'
+            );
+        }
+    }
+
+    async refreshToken(req, res) {
+        try {
+            const token = req.headers.authorization?.split(' ')[1];
+            if (!token || token === undefined) {
+                return res.status(401).json(failure('Token Cannot be Null'));
+            }
+            const secretKey = process.env.REFRESH_TOKEN_SECRET;
+
+            const decoded = await jwt.verify(token, secretKey);
+            delete decoded.iat;
+            delete decoded.exp;
+            if (decoded) {
+                const accessToken = generateAccessToken(decoded);
+                if (accessToken) {
+                    return sendResponse(
+                        res,
+                        HTTP_STATUS.OK,
+                        'Access token generated successfully',
+                        accessToken
+                    );
+                }
+                return sendResponse(
+                    res,
+                    HTTP_STATUS.BAD_REQUEST,
+                    'Something went wrong'
+                );
+            }
+        } catch (error) {
+            console.log(error);
+            if (error instanceof jwt.TokenExpiredError) {
+                return sendResponse(
+                    res,
+                    HTTP_STATUS.UNAUTHORIZED,
+                    'Please login again'
+                );
+            }
+            if (error instanceof jwt.JsonWebTokenError) {
+                return sendResponse(
+                    res,
+                    HTTP_STATUS.UNAUTHORIZED,
+                    'Unauthorized access'
+                );
+            }
+            return sendResponse(
+                res,
+                HTTP_STATUS.UNAUTHORIZED,
+                'Unauthorized access'
             );
         }
     }
