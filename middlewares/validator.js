@@ -459,9 +459,9 @@ const validator = {
         body('rank')
             .optional()
             .custom((value) => {
-                if (rank != 1 || rank != 2) {
+                if (value != 1 || value != 2) {
                     throw new Error('Invalid rank provided');
-                } else if (!rank) {
+                } else if (!value) {
                     throw new Error('Rank can not be empty');
                 } else {
                     return true;
