@@ -433,6 +433,19 @@ const validator = {
                 }
             }),
     ],
+
+    deleteUser: [
+        param('userId')
+            .exists()
+            .withMessage('Please provide user id')
+            .custom((value) => {
+                if (!mongoose.Types.ObjectId.isValid(value)) {
+                    throw new Error('Invalid object Id provided');
+                } else {
+                    return true;
+                }
+            }),
+    ],
 };
 
 module.exports = validator;

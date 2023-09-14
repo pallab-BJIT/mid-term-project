@@ -13,6 +13,11 @@ router
         [tokenAuthorization, validator.addBalance],
         UserController.addBalance
     )
-    .get('/all', [tokenAuthorization, isAdmin], UserController.viewAllUserData);
+    .get('/all', [tokenAuthorization, isAdmin], UserController.viewAllUserData)
+    .delete(
+        '/delete/:userId',
+        [tokenAuthorization, isAdmin, validator.deleteUser],
+        UserController.deleteUser
+    );
 
 exports.router = router;

@@ -3,6 +3,7 @@ const HTTP_STATUS = require('../../constants/statusCode');
 const userModel = require('../../models/user');
 const { sendResponse } = require('../../util/response');
 const databaseLogger = require('../../util/dbLogger');
+const authModel = require('../../models/auth');
 
 class UserController {
     async addBalance(req, res) {
@@ -48,7 +49,8 @@ class UserController {
                     'You can only add amount when your balance less than 100'
                 );
             }
-
+            user.balance = 0;
+            await user.save();
             user.balance += amount;
             const addedBalance = await user.save();
             if (addedBalance) {
@@ -65,6 +67,7 @@ class UserController {
                 'Something went wrong.Please try again later.'
             );
         } catch (error) {
+            console.log(error);
             databaseLogger(error.message);
             return sendResponse(
                 res,
@@ -100,6 +103,53 @@ class UserController {
                 HTTP_STATUS.INTERNAL_SERVER_ERROR,
                 'Internal server error'
             );
+        }
+    }
+
+    async deleteUser(req, res) {
+        try {
+            databaseLogger(req.originalUrl);
+            const validation = validationResult(req).array();
+            if (validation.length) {
+                const error = {};
+                validation.forEach((ele) => {
+                    const property = ele.path;
+                    error[property] = ele.msg;
+                });
+                return sendResponse(
+                    res,
+                    HTTP_STATUS.UNPROCESSABLE_ENTITY,
+                    'Unprocessable Entity',
+                    error
+                );
+            }
+            const { userId } = req.params;
+            const result = await authModel.findByIdAndDelete(userId);
+            if (!result) {
+                return sendResponse(
+                    res,
+                    HTTP_STATUS.BAD_REQUEST,
+                    'No user associated with this id'
+                );
+            }
+            const user = await userModel.findByIdAndDelete(result.user);
+            console.log({ user });
+            if (!user) {
+                return sendResponse(
+                    res,
+                    HTTP_STATUS.BAD_REQUEST,
+                    'No user associated with this id'
+                );
+            }
+            return sendResponse(
+                res,
+                HTTP_STATUS.OK,
+                'Deleted user successfully',
+                result
+            );
+        } catch (error) {
+            databaseLogger(error.message);
+            return sendResponse(res, 500, 'Internal server error');
         }
     }
 }
