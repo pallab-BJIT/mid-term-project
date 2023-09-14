@@ -13,6 +13,11 @@ router
         '/create',
         [tokenAuthorization, isAdmin, validator.createBook],
         BookController.createBook
+    )
+    .delete(
+        '/delete/:bookId',
+        [tokenAuthorization, isAdmin, validator.deleteBook],
+        BookController.deleteBook
     );
 
 exports.router = router;

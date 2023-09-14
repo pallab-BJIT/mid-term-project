@@ -1,6 +1,6 @@
-const { query, body } = require('express-validator');
+const { query, body, param } = require('express-validator');
 const { PHONE_REGEX } = require('../constants/regex');
-
+const mongoose = require('mongoose');
 const validator = {
     getAllProductsFilter: [
         query('offset')
@@ -415,6 +415,19 @@ const validator = {
                     throw new Error(
                         'Amount must be a positive value less than 30000'
                     );
+                } else {
+                    return true;
+                }
+            }),
+    ],
+
+    deleteBook: [
+        param('bookId')
+            .exists()
+            .withMessage('Please provide book id')
+            .custom((value) => {
+                if (!mongoose.Types.ObjectId.isValid(value)) {
+                    throw new Error('Invalid object Id provided');
                 } else {
                     return true;
                 }

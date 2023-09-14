@@ -8,7 +8,7 @@ const databaseLogger = require('../../util/dbLogger');
 class BookController {
     async getAllBooks(req, res) {
         try {
-            databaseLogger(req.url);
+            databaseLogger(req.originalUrl);
             const validation = validationResult(req).array();
             if (validation.length) {
                 const error = {};
@@ -128,7 +128,7 @@ class BookController {
 
     async getBookById(req, res) {
         try {
-            databaseLogger(req.url);
+            databaseLogger(req.originalUrl);
             const { bookId } = req.params;
             if (!mongoose.Types.ObjectId.isValid(bookId)) {
                 return sendResponse(
@@ -159,7 +159,7 @@ class BookController {
 
     async createBook(req, res) {
         try {
-            databaseLogger(req.url);
+            databaseLogger(req.originalUrl);
             const validation = validationResult(req).array();
             if (validation.length) {
                 const error = {};
@@ -227,6 +227,44 @@ class BookController {
                     return sendResponse(res, 400, 'Cannot add a new book');
                 }
             }
+        } catch (error) {
+            databaseLogger(error.message);
+            return sendResponse(res, 500, 'Internal server error');
+        }
+    }
+
+    async deleteBook(req, res) {
+        try {
+            databaseLogger(req.originalUrl);
+            const validation = validationResult(req).array();
+            if (validation.length) {
+                const error = {};
+                validation.forEach((ele) => {
+                    const property = ele.path;
+                    error[property] = ele.msg;
+                });
+                return sendResponse(
+                    res,
+                    HTTP_STATUS.UNPROCESSABLE_ENTITY,
+                    'Unprocessable Entity',
+                    error
+                );
+            }
+            const { bookId } = req.params;
+            const result = await bookModel.findByIdAndDelete(bookId);
+            if (!result) {
+                return sendResponse(
+                    res,
+                    HTTP_STATUS.BAD_REQUEST,
+                    'No book associated with this id'
+                );
+            }
+            return sendResponse(
+                res,
+                HTTP_STATUS.OK,
+                'Deleted book successfully',
+                result
+            );
         } catch (error) {
             databaseLogger(error.message);
             return sendResponse(res, 500, 'Internal server error');

@@ -14,7 +14,7 @@ const databaseLogger = require('../../util/dbLogger');
 class AuthController {
     async signUp(req, res) {
         try {
-            databaseLogger(req.url);
+            databaseLogger(req.originalUrl);
             const {
                 email,
                 password,
@@ -111,7 +111,7 @@ class AuthController {
 
     async login(req, res) {
         try {
-            databaseLogger(req.url);
+            databaseLogger(req.originalUrl);
             const validation = validationResult(req).array();
             if (validation.length) {
                 const error = {};
@@ -185,7 +185,7 @@ class AuthController {
 
     async refreshToken(req, res) {
         try {
-            databaseLogger(req.url);
+            databaseLogger(req.originalUrl);
             const token = req.headers.authorization?.split(' ')[1];
             if (!token || token === undefined) {
                 return res.status(401).json(failure('Token Cannot be Null'));

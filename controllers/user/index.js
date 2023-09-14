@@ -7,7 +7,7 @@ const databaseLogger = require('../../util/dbLogger');
 class UserController {
     async addBalance(req, res) {
         try {
-            databaseLogger(req.url);
+            databaseLogger(req.originalUrl);
             const { email, rank } = req.user;
             const { amount } = req.body;
 
@@ -76,6 +76,7 @@ class UserController {
 
     async viewAllUserData(req, res) {
         try {
+            databaseLogger(req.originalUrl);
             const users = await userModel.find({});
             if (!users.length) {
                 return sendResponse(
