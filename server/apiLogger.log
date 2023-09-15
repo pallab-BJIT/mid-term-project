@@ -116,3 +116,155 @@ Book validation failed: publishedAt: PublishedAt is required  ( Time -> Septembe
 
 /api/review/update  ( Time -> September 15, 2023 11:06 AM)
 
+/api/auth/refreshToken  ( Time -> September 15, 2023 11:21 AM)
+
+/api/review/update/6502fa36b45b576cb8547ad2  ( Time -> September 15, 2023 11:22 AM)
+
+book is not defined  ( Time -> September 15, 2023 11:22 AM)
+
+/api/review/update/6502fa36b45b576cb8547ad2  ( Time -> September 15, 2023 11:22 AM)
+
+bookID is not defined  ( Time -> September 15, 2023 11:22 AM)
+
+/api/review/update/6502fa36b45b576cb8547ad2  ( Time -> September 15, 2023 11:22 AM)
+
+/api/review/delete/6502fa36b45b576cb8547ad2  ( Time -> September 15, 2023 11:26 AM)
+
+/api/review/delete/6502fa36b45b576cb8547ad2  ( Time -> September 15, 2023 11:27 AM)
+
+/api/review/delete/6502fa36b45b576cb8547ad2  ( Time -> September 15, 2023 11:32 AM)
+
+/api/books/details/6502fa36b45b576cb8547ad2  ( Time -> September 15, 2023 11:36 AM)
+
+/api/review/create  ( Time -> September 15, 2023 11:37 AM)
+
+/api/review/update/6502fa36b45b576cb8547ad2  ( Time -> September 15, 2023 11:38 AM)
+
+/api/review/delete/6502fa36b45b576cb8547ad2  ( Time -> September 15, 2023 11:41 AM)
+
+/api/review/delete/6502fa36b45b576cb8547ad2  ( Time -> September 15, 2023 11:41 AM)
+
+/api/review/delete/6502fa36b45b576cb8547ad2  ( Time -> September 15, 2023 11:41 AM)
+
+/api/review/create  ( Time -> September 15, 2023 11:42 AM)
+
+/api/review/update/6502fa36b45b576cb8547ad2  ( Time -> September 15, 2023 11:43 AM)
+
+/api/review/delete/6502fa36b45b576cb8547ad  ( Time -> September 15, 2023 11:45 AM)
+
+Cast to ObjectId failed for value "6502fa36b45b576cb8547ad" (type string) at path "_id" for model "Book"  ( Time -> September 15, 2023 11:45 AM)
+
+/api/review/delete/6502fa36b45b576cb8547ad  ( Time -> September 15, 2023 11:47 AM)
+
+/api/review/delete/6502fa36b45b576cb8547ad2  ( Time -> September 15, 2023 11:47 AM)
+
+/api/review/create  ( Time -> September 15, 2023 11:47 AM)
+
+/api/review/create  ( Time -> September 15, 2023 11:48 AM)
+
+/api/review/create  ( Time -> September 15, 2023 11:48 AM)
+
+/api/review/create  ( Time -> September 15, 2023 11:48 AM)
+
+/api/review/update/6502fa36b45b576cb8547ad  ( Time -> September 15, 2023 11:48 AM)
+
+Cast to ObjectId failed for value "6502fa36b45b576cb8547ad" (type string) at path "_id" for model "Book"  ( Time -> September 15, 2023 11:48 AM)
+
+/api/review/update/6502fa36b45b576cb8547ad  ( Time -> September 15, 2023 11:49 AM)
+
+/api/review/update/6502fa36b45b576cb8547ad2  ( Time -> September 15, 2023 11:49 AM)
+
+/api/review/update/6502fa36b45b576cb8547ad2  ( Time -> September 15, 2023 11:49 AM)
+
+/api/review/delete/6502fa36b45b576cb8547ad2  ( Time -> September 15, 2023 11:49 AM)
+
+/api/auth/login  ( Time -> September 15, 2023 11:57 AM)
+
+/api/review/delete/6502fa36b45b576cb8547ad2  ( Time -> September 15, 2023 11:58 AM)
+
+/api/review/delete/6502fa36b45b576cb8547ad2  ( Time -> September 15, 2023 11:59 AM)
+
+Book validation failed: rating: Cast to Number failed for value "NaN" (type number) at path "rating"  ( Time -> September 15, 2023 11:59 AM)
+
+/api/review/delete/6502fa36b45b576cb8547ad2  ( Time -> September 15, 2023 12:01 PM)
+
+Book validation failed: rating: Cast to Number failed for value "NaN" (type number) at path "rating"  ( Time -> September 15, 2023 12:01 PM)
+
+/api/review/delete/6502fa36b45b576cb8547ad2  ( Time -> September 15, 2023 12:02 PM)
+
+/api/review/delete/6502fa36b45b576cb8547ad2  ( Time -> September 15, 2023 12:03 PM)
+
+/api/review/create  ( Time -> September 15, 2023 12:06 PM)
+
+/api/review/update/6502fa36b45b576cb8547ad2  ( Time -> September 15, 2023 12:09 PM)
+
+/api/review/delete/6502fa36b45b576cb8547ad2  ( Time -> September 15, 2023 12:09 PM)
+
+/api/review/delete/6502fa36b45b576cb8547ad2  ( Time -> September 15, 2023 12:10 PM)
+
+/api/review/create  ( Time -> September 15, 2023 12:11 PM)
+
+/api/review/update/6502fa36b45b576cb8547ad2  ( Time -> September 15, 2023 12:12 PM)
+
+/api/review/delete/6502fa36b45b576cb8547ad2  ( Time -> September 15, 2023 12:12 PM)
+
+/api/review/create  ( Time -> September 15, 2023 12:14 PM)
+
+/api/review/update/6502fa36b45b576cb8547ad2  ( Time -> September 15, 2023 12:14 PM)
+
+/api/auth/login  ( Time -> September 15, 2023 12:15 PM)
+
+/api/review/create  ( Time -> September 15, 2023 12:15 PM)
+
+/api/review/update/6502fa36b45b576cb8547ad2  ( Time -> September 15, 2023 12:16 PM)
+
+/api/review/delete/6502fa36b45b576cb8547ad2  ( Time -> September 15, 2023 12:16 PM)
+
+/api/review/delete/6502fa36b45b576cb8547ad2  ( Time -> September 15, 2023 12:16 PM)
+
+/api/auth/login  ( Time -> September 15, 2023 12:17 PM)
+
+/api/review/create  ( Time -> September 15, 2023 12:18 PM)
+
+/api/review/update/6502fa36b45b576cb8547ad2  ( Time -> September 15, 2023 12:18 PM)
+
+/api/review/update/6502fa36b45b576cb8547ad2  ( Time -> September 15, 2023 12:18 PM)
+
+/api/review/delete/6502fa36b45b576cb8547ad2  ( Time -> September 15, 2023 12:19 PM)
+
+/api/review/delete/6502fa36b45b576cb8547ad2  ( Time -> September 15, 2023 12:19 PM)
+
+/api/review/create  ( Time -> September 15, 2023 12:21 PM)
+
+/api/review/delete/6502fa36b45b576cb8547ad2  ( Time -> September 15, 2023 12:23 PM)
+
+/api/review/create  ( Time -> September 15, 2023 12:25 PM)
+
+/api/review/delete/6502fa36b45b576cb8547ad2  ( Time -> September 15, 2023 12:25 PM)
+
+res.status is not a function  ( Time -> September 15, 2023 12:25 PM)
+
+/api/review/create  ( Time -> September 15, 2023 12:26 PM)
+
+/api/review/delete/6502fa36b45b576cb8547ad2  ( Time -> September 15, 2023 12:27 PM)
+
+res.status is not a function  ( Time -> September 15, 2023 12:27 PM)
+
+/api/review/create  ( Time -> September 15, 2023 12:28 PM)
+
+/api/review/delete/6502fa36b45b576cb8547ad2  ( Time -> September 15, 2023 12:28 PM)
+
+res.status is not a function  ( Time -> September 15, 2023 12:28 PM)
+
+/api/review/create  ( Time -> September 15, 2023 12:30 PM)
+
+/api/review/delete/6502fa36b45b576cb8547ad2  ( Time -> September 15, 2023 12:32 PM)
+
+res.status is not a function  ( Time -> September 15, 2023 12:32 PM)
+
+/api/review/create  ( Time -> September 15, 2023 12:34 PM)
+
+/api/review/delete/6502fa36b45b576cb8547ad2  ( Time -> September 15, 2023 12:34 PM)
+
+/api/review/delete/6502fa36b45b576cb8547ad2  ( Time -> September 15, 2023 12:34 PM)
+

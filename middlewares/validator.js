@@ -480,7 +480,7 @@ const validator = {
             .withMessage('Invalid value provided'),
     ],
 
-    addProductReview: [
+    addBookReview: [
         body('book')
             .exists()
             .not()
@@ -514,8 +514,8 @@ const validator = {
             }),
     ],
 
-    updateProductReview: [
-        body('book')
+    updateBookReview: [
+        param('bookId')
             .optional()
             .not()
             .equals('')
@@ -538,6 +538,22 @@ const validator = {
                     throw new Error('Rating must be between 1 and 5');
                 } else {
                     throw new Error('Rating only accepts numeric values');
+                }
+            }),
+    ],
+
+    deleteBookReview: [
+        param('bookId')
+            .optional()
+            .not()
+            .equals('')
+            .withMessage('book id cannot be empty')
+            .bail()
+            .custom((value) => {
+                if (mongoose.Types.ObjectId.isValid(value)) {
+                    return true;
+                } else {
+                    throw new Error('Invalid book id');
                 }
             }),
     ],

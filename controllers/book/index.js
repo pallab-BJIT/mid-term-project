@@ -137,7 +137,7 @@ class BookController {
                     'Invalid objectId provided'
                 );
             }
-            const result = await bookModel.findById(bookId);
+            const result = await bookModel.findById(bookId).populate('reviews');
             if (result) {
                 return sendResponse(
                     res,

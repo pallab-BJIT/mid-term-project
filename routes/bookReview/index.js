@@ -11,30 +11,18 @@ const router = express.Router();
 router
     .post(
         '/create',
-        [tokenAuthorization, isUser],
-        validator.addProductReview,
+        [tokenAuthorization, isUser, validator.addBookReview],
         BookReviewController.createReview
     )
     .patch(
-        '/update',
-        [tokenAuthorization, isUser],
-        validator.updateProductReview,
+        '/update/:bookId',
+        [tokenAuthorization, isUser, validator.updateBookReview],
         BookReviewController.updateReview
+    )
+    .delete(
+        '/delete/:bookId',
+        [tokenAuthorization, isUser, validator.deleteBookReview],
+        BookReviewController.deleteReview
     );
-// .get(
-//     '/getReviewByProduct/:productId',
-//     tokenAuthorization,
-//     productReview.getReviewByProduct
-// )
-// .get(
-//     '/getReviewByUser/:userId',
-//     tokenAuthorization,
-//     productReview.getReviewByUser
-// )
-// .delete(
-//     '/deleteReview/:productId',
-//     tokenAuthorization,
-//     productReview.deleteReview
-// );
 
 exports.router = router;

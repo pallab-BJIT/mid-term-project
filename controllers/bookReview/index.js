@@ -108,7 +108,7 @@ class BookReviewController {
 
                 await bookExistInReview.save();
 
-                bookFound.reviews.push(bookExistInReview._id);
+                // bookFound.reviews.push(bookExistInReview._id);
                 const sum = bookExistInReview.reviews.reduce(
                     (accumulator, review) => accumulator + review.rating,
                     0
@@ -141,7 +141,8 @@ class BookReviewController {
     async updateReview(req, res) {
         try {
             databaseLogger(req.originalUrl);
-            const { book, message, rating } = req.body;
+            const { message, rating } = req.body;
+            const { bookId } = req.params;
             const validation = validationResult(req).array();
             if (validation.length) {
                 const error = {};
@@ -156,7 +157,7 @@ class BookReviewController {
                     error
                 );
             }
-            const bookFound = await bookModel.findById(book);
+            const bookFound = await bookModel.findById(bookId);
             const userFoundInAuth = await authModel.findById(req.user._id);
             const userFoundInUser = await userModel.findById(
                 userFoundInAuth.user
@@ -177,7 +178,7 @@ class BookReviewController {
             }
 
             const bookExistInReview = await bookReviewModel.findOne({
-                book: String(book),
+                book: bookId,
             });
 
             if (!bookExistInReview) {
@@ -193,7 +194,7 @@ class BookReviewController {
                 }
             );
 
-            if (!userIdInReviews) {
+            if (userIdInReviews === -1) {
                 return sendResponse(
                     res,
                     HTTP_STATUS.BAD_REQUEST,
@@ -221,6 +222,112 @@ class BookReviewController {
                 HTTP_STATUS.ACCEPTED,
                 'Successfully updated the review',
                 bookExistInReview
+            );
+        } catch (error) {
+            console.log(error);
+            databaseLogger(error.message);
+            return sendResponse(
+                res,
+                HTTP_STATUS.INTERNAL_SERVER_ERROR,
+                'Internal server error'
+            );
+        }
+    }
+
+    async deleteReview(req, res) {
+        try {
+            databaseLogger(req.originalUrl);
+            const { bookId } = req.params;
+            const validation = validationResult(req).array();
+            if (validation.length) {
+                const error = {};
+                validation.forEach((validationError) => {
+                    const property = validationError.path;
+                    error[property] = validationError.msg;
+                });
+                return sendResponse(
+                    res,
+                    HTTP_STATUS.UNPROCESSABLE_ENTITY,
+                    'Unprocessable Entity',
+                    error
+                );
+            }
+            const bookFound = await bookModel.findById(bookId);
+            const userFoundInAuth = await authModel.findById(req.user._id);
+            const userFoundInUser = await userModel.findById(
+                userFoundInAuth.user
+            );
+            if (!userFoundInAuth || !userFoundInUser) {
+                return sendResponse(
+                    res,
+                    HTTP_STATUS.BAD_REQUEST,
+                    'No user found'
+                );
+            }
+            if (!bookFound) {
+                return sendResponse(
+                    res,
+                    HTTP_STATUS.BAD_REQUEST,
+                    'No book found'
+                );
+            }
+
+            const bookExistInReview = await bookReviewModel.findOne({
+                book: String(bookId),
+            });
+
+            if (!bookExistInReview) {
+                return sendResponse(
+                    res,
+                    HTTP_STATUS.BAD_REQUEST,
+                    'Invalid book id for delete review'
+                );
+            }
+            const userIdInReviews = bookExistInReview.reviews.findIndex(
+                (ele) => {
+                    return String(ele.user) === String(userFoundInUser._id);
+                }
+            );
+
+            if (userIdInReviews === -1) {
+                return sendResponse(
+                    res,
+                    HTTP_STATUS.BAD_REQUEST,
+                    'Invalid user id for delete review'
+                );
+            }
+            bookExistInReview.reviews.splice(userIdInReviews, 1);
+            await bookExistInReview.save();
+            if (!bookExistInReview.reviews.length) {
+                console.log('ffff');
+                const deleteBookReview = await bookModel.findOneAndUpdate(
+                    { _id: bookId },
+                    { $unset: { reviews: 1 } },
+                    { new: true }
+                );
+                bookFound.rating = 0;
+                await bookFound.save();
+                await bookReviewModel.findByIdAndDelete(bookExistInReview._id);
+                return sendResponse(
+                    res,
+                    HTTP_STATUS.OK,
+                    'Deleted review successfully'
+                );
+            }
+            const sum = bookExistInReview.reviews.reduce(
+                (accumulator, review) => accumulator + review.rating,
+                0
+            );
+            const avg = sum / bookExistInReview.reviews.length;
+
+            bookFound.rating = avg;
+            console.log('hhhh', bookFound);
+            await bookFound.save();
+            await bookExistInReview.save();
+            return sendResponse(
+                res,
+                HTTP_STATUS.OK,
+                'Deleted review successfully'
             );
         } catch (error) {
             console.log(error);
