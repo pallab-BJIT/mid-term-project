@@ -195,34 +195,6 @@ const validator = {
             .bail()
             .isISBN()
             .withMessage('Invalid ISBN number'),
-        body('discount_price.price').custom((value, { req }) => {
-            if (isNaN(value) || value <= 0) {
-                throw new Error('Price must be a valid positive number');
-            }
-            if (value > req.body.price) {
-                throw new Error(
-                    "Discount price can't be greater than book's original price"
-                );
-            } else {
-                return true;
-            }
-        }),
-        body('discount_price.startTime')
-            .exists()
-            .not()
-            .equals('')
-            .withMessage('Discount price start time is required')
-            .bail()
-            .isDate()
-            .withMessage('Discount price start time must be a valid date'),
-        body('discount_price.endTime')
-            .exists()
-            .not()
-            .equals('')
-            .withMessage('Discount price end time is required')
-            .bail()
-            .isDate()
-            .withMessage('Discount price end time must be a valid date'),
     ],
 
     signUpUser: [
