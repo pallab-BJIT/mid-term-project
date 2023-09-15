@@ -513,6 +513,34 @@ const validator = {
                 }
             }),
     ],
+
+    updateProductReview: [
+        body('book')
+            .optional()
+            .not()
+            .equals('')
+            .withMessage('book id cannot be empty')
+            .bail()
+            .custom((value) => {
+                if (mongoose.Types.ObjectId.isValid(value)) {
+                    return true;
+                } else {
+                    throw new Error('Invalid book id');
+                }
+            }),
+        body('rating')
+            .exists()
+            .withMessage('Rating can not be null')
+            .bail()
+            .custom((value) => {
+                if (!isNaN(value)) {
+                    if (value >= 1 && value <= 5) return true;
+                    throw new Error('Rating must be between 1 and 5');
+                } else {
+                    throw new Error('Rating only accepts numeric values');
+                }
+            }),
+    ],
 };
 
 module.exports = validator;

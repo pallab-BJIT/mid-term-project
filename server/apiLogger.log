@@ -20,3 +20,99 @@ ProductModel is not defined  ( Time -> September 15, 2023 8:32 AM)
 
 /api/review/create  ( Time -> September 15, 2023 10:19 AM)
 
+/api/review/create  ( Time -> September 15, 2023 10:20 AM)
+
+/api/review/create  ( Time -> September 15, 2023 10:20 AM)
+
+/api/review/create  ( Time -> September 15, 2023 10:20 AM)
+
+/api/review/create  ( Time -> September 15, 2023 10:24 AM)
+
+/api/review/update  ( Time -> September 15, 2023 10:25 AM)
+
+Cannot read properties of undefined (reading '_id')  ( Time -> September 15, 2023 10:25 AM)
+
+/api/review/update  ( Time -> September 15, 2023 10:25 AM)
+
+Cannot read properties of undefined (reading '_id')  ( Time -> September 15, 2023 10:25 AM)
+
+/api/review/update  ( Time -> September 15, 2023 10:26 AM)
+
+Cannot read properties of undefined (reading '_id')  ( Time -> September 15, 2023 10:26 AM)
+
+/api/review/update  ( Time -> September 15, 2023 10:27 AM)
+
+Cannot read properties of undefined (reading '_id')  ( Time -> September 15, 2023 10:27 AM)
+
+/api/review/update  ( Time -> September 15, 2023 10:28 AM)
+
+/api/review/update  ( Time -> September 15, 2023 10:30 AM)
+
+/api/review/update  ( Time -> September 15, 2023 10:30 AM)
+
+/api/review/update  ( Time -> September 15, 2023 10:31 AM)
+
+/api/review/create  ( Time -> September 15, 2023 10:31 AM)
+
+Book validation failed: discount_price: Tried to set nested object field `discount_price` to primitive value `18.99`, publishedAt: PublishedAt is required, title: Title cannot be greater than 30  ( Time -> September 15, 2023 10:31 AM)
+
+/api/review/create  ( Time -> September 15, 2023 10:32 AM)
+
+/api/review/create  ( Time -> September 15, 2023 10:32 AM)
+
+Book validation failed: discount_price: Tried to set nested object field `discount_price` to primitive value `18.99`, publishedAt: PublishedAt is required  ( Time -> September 15, 2023 10:33 AM)
+
+/api/review/create  ( Time -> September 15, 2023 10:36 AM)
+
+Book validation failed: discount_price: Tried to set nested object field `discount_price` to primitive value `18.99`, publishedAt: PublishedAt is required  ( Time -> September 15, 2023 10:36 AM)
+
+/api/review/create  ( Time -> September 15, 2023 10:37 AM)
+
+/api/review/create  ( Time -> September 15, 2023 10:37 AM)
+
+Book validation failed: publishedAt: PublishedAt is required  ( Time -> September 15, 2023 10:37 AM)
+
+/api/review/create  ( Time -> September 15, 2023 10:38 AM)
+
+Book validation failed: publishedAt: PublishedAt is required  ( Time -> September 15, 2023 10:38 AM)
+
+/api/review/create  ( Time -> September 15, 2023 10:40 AM)
+
+/api/review/create  ( Time -> September 15, 2023 10:40 AM)
+
+/api/review/update  ( Time -> September 15, 2023 10:41 AM)
+
+/api/review/update  ( Time -> September 15, 2023 10:42 AM)
+
+/api/review/update  ( Time -> September 15, 2023 10:44 AM)
+
+/api/review/update  ( Time -> September 15, 2023 10:45 AM)
+
+/api/review/update  ( Time -> September 15, 2023 10:46 AM)
+
+/api/review/update  ( Time -> September 15, 2023 10:47 AM)
+
+/api/review/update  ( Time -> September 15, 2023 10:48 AM)
+
+/api/review/update  ( Time -> September 15, 2023 10:55 AM)
+
+/api/review/update  ( Time -> September 15, 2023 10:55 AM)
+
+/api/review/update  ( Time -> September 15, 2023 10:57 AM)
+
+/api/review/update  ( Time -> September 15, 2023 10:57 AM)
+
+/api/review/update  ( Time -> September 15, 2023 10:57 AM)
+
+/api/review/update  ( Time -> September 15, 2023 10:57 AM)
+
+/api/review/update  ( Time -> September 15, 2023 10:57 AM)
+
+/api/review/update  ( Time -> September 15, 2023 11:04 AM)
+
+/api/review/update  ( Time -> September 15, 2023 11:05 AM)
+
+/api/review/update  ( Time -> September 15, 2023 11:06 AM)
+
+/api/review/update  ( Time -> September 15, 2023 11:06 AM)
+

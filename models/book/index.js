@@ -5,7 +5,7 @@ const bookSchema = new Schema({
         type: String,
         required: [true, 'Title is required'],
         unique: true,
-        maxLength: [30, 'Title cannot be greater than 30'],
+        maxLength: [100, 'Title cannot be greater than 30'],
     },
     author: {
         type: String,
@@ -17,22 +17,7 @@ const bookSchema = new Schema({
         min: [10, 'price must be minimum 10'],
         max: [10000, 'price must be maximum 100'],
     },
-    discount_price: {
-        type: {
-            price: {
-                type: Number,
-                required: [true, 'Discount price is required'],
-            },
-            startTime: {
-                type: Date,
-                required: [true, 'StartTime is required'],
-            },
-            endTime: {
-                type: Date,
-                required: [true, 'EndTime is required'],
-            },
-        },
-    },
+
     description: {
         type: String,
         required: [true, 'Description is required'],

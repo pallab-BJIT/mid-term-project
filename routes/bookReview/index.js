@@ -8,12 +8,19 @@ const {
 
 const router = express.Router();
 
-router.post(
-    '/create',
-    [tokenAuthorization, isUser],
-    validator.addProductReview,
-    BookReviewController.createReview
-);
+router
+    .post(
+        '/create',
+        [tokenAuthorization, isUser],
+        validator.addProductReview,
+        BookReviewController.createReview
+    )
+    .patch(
+        '/update',
+        [tokenAuthorization, isUser],
+        validator.updateProductReview,
+        BookReviewController.updateReview
+    );
 // .get(
 //     '/getReviewByProduct/:productId',
 //     tokenAuthorization,

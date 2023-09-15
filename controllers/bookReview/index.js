@@ -137,6 +137,101 @@ class BookReviewController {
             );
         }
     }
+
+    async updateReview(req, res) {
+        try {
+            databaseLogger(req.originalUrl);
+            const { book, message, rating } = req.body;
+            const validation = validationResult(req).array();
+            if (validation.length) {
+                const error = {};
+                validation.forEach((validationError) => {
+                    const property = validationError.path;
+                    error[property] = validationError.msg;
+                });
+                return sendResponse(
+                    res,
+                    HTTP_STATUS.UNPROCESSABLE_ENTITY,
+                    'Unprocessable Entity',
+                    error
+                );
+            }
+            const bookFound = await bookModel.findById(book);
+            const userFoundInAuth = await authModel.findById(req.user._id);
+            const userFoundInUser = await userModel.findById(
+                userFoundInAuth.user
+            );
+            if (!userFoundInAuth || !userFoundInUser) {
+                return sendResponse(
+                    res,
+                    HTTP_STATUS.BAD_REQUEST,
+                    'No user found'
+                );
+            }
+            if (!bookFound) {
+                return sendResponse(
+                    res,
+                    HTTP_STATUS.BAD_REQUEST,
+                    'No book found'
+                );
+            }
+
+            const bookExistInReview = await bookReviewModel.findOne({
+                book: String(book),
+            });
+
+            if (!bookExistInReview) {
+                return sendResponse(
+                    res,
+                    HTTP_STATUS.BAD_REQUEST,
+                    'Invalid book id for review'
+                );
+            }
+            const userIdInReviews = bookExistInReview.reviews.findIndex(
+                (ele) => {
+                    return String(ele.user) === String(userFoundInUser._id);
+                }
+            );
+
+            if (!userIdInReviews) {
+                return sendResponse(
+                    res,
+                    HTTP_STATUS.BAD_REQUEST,
+                    'Invalid user id for update review'
+                );
+            }
+
+            bookExistInReview.reviews[userIdInReviews].message = message;
+
+            if (rating) {
+                bookExistInReview.reviews[userIdInReviews].rating = rating;
+                const sum = bookExistInReview.reviews.reduce(
+                    (accumulator, review) => accumulator + review.rating,
+                    0
+                );
+                const avg = sum / bookExistInReview.reviews.length;
+
+                bookFound.rating = avg;
+                await bookFound.save();
+            }
+            await bookExistInReview.save();
+
+            return sendResponse(
+                res,
+                HTTP_STATUS.ACCEPTED,
+                'Successfully updated the review',
+                bookExistInReview
+            );
+        } catch (error) {
+            console.log(error);
+            databaseLogger(error.message);
+            return sendResponse(
+                res,
+                HTTP_STATUS.INTERNAL_SERVER_ERROR,
+                'Internal server error'
+            );
+        }
+    }
 }
 
 module.exports = new BookReviewController();
