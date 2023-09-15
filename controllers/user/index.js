@@ -171,7 +171,60 @@ class UserController {
                 );
             }
             const { name, rank, isVerified } = req.body;
+            const { userId } = req.params;
+            const allowedProperties = ['name', 'rank', 'isVerified'];
+
+            for (const key in req.body) {
+                if (!allowedProperties.includes(key)) {
+                    return sendResponse(
+                        res,
+                        HTTP_STATUS.BAD_REQUEST,
+                        'Invalid property provided for user update: ' + key
+                    );
+                }
+            }
+
+            const result = await authModel.findById(userId);
+            if (!result) {
+                return sendResponse(
+                    res,
+                    HTTP_STATUS.BAD_REQUEST,
+                    'No user associated with this id'
+                );
+            }
+            const user = await userModel.findById(result.user);
+            if (name) {
+                user.name = name;
+            }
+            if (rank) {
+                result.rank = rank;
+            }
+            if (isVerified === true || isVerified === false) {
+                result.isVerified = isVerified;
+                console.log(result);
+            }
+            const updatedUser = await user.save();
+            const updatedResult = await result.save();
+
+            if (updatedResult || updatedUser) {
+                const newResult = await authModel
+                    .findById(userId)
+                    .select('-password')
+                    .populate('user', '-email -phoneNumber');
+                return sendResponse(
+                    res,
+                    HTTP_STATUS.OK,
+                    'Updated user successfully',
+                    newResult
+                );
+            }
+            return sendResponse(
+                res,
+                HTTP_STATUS.BAD_REQUEST,
+                'Something went wrong.'
+            );
         } catch (error) {
+            console.log(error);
             databaseLogger(error.message);
             return sendResponse(res, 500, 'Internal server error');
         }

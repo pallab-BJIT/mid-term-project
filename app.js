@@ -21,7 +21,11 @@ const userRouter = require('./routes/user');
 //! Invalid json handler
 app.use((err, req, res, next) => {
     if (err instanceof SyntaxError && err.status === 400 && 'body' in err) {
-        return res.status(400).json({ error: 'Invalid JSON' });
+        return sendResponse(
+            res,
+            HTTP_STATUS.UNPROCESSABLE_ENTITY,
+            'Invalid JSON provided'
+        );
     }
     next();
 });

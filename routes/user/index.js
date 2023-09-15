@@ -14,6 +14,11 @@ router
         UserController.addBalance
     )
     .get('/all', [tokenAuthorization, isAdmin], UserController.viewAllUserData)
+    .patch(
+        '/update/:userId',
+        [tokenAuthorization, isAdmin, validator.updateUser],
+        UserController.updateUser
+    )
     .delete(
         '/delete/:userId',
         [tokenAuthorization, isAdmin, validator.deleteUser],

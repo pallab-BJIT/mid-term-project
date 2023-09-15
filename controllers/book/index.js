@@ -187,7 +187,11 @@ class BookController {
                     isbn,
                 } = req.body;
                 const existingBook = await bookModel.findOne({
-                    $or: [{ title: title }, { description: description }],
+                    $or: [
+                        { title: title },
+                        { description: description },
+                        { isbn: isbn },
+                    ],
                 });
                 if (existingBook) {
                     if (existingBook.title === title) {
@@ -201,6 +205,12 @@ class BookController {
                             res,
                             HTTP_STATUS.BAD_REQUEST,
                             'Book with the same description already exists'
+                        );
+                    } else if (existingBook.isbn === isbn) {
+                        return sendResponse(
+                            res,
+                            HTTP_STATUS.BAD_REQUEST,
+                            'Book with the same ISBN already exists'
                         );
                     }
                 }

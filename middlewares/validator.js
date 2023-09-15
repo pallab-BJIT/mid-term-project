@@ -450,23 +450,34 @@ const validator = {
     updateUser: [
         body('name')
             .optional()
-            .not()
-            .equals('')
-            .withMessage('Name is required')
-            .bail()
             .isString()
-            .withMessage('Name only be of type string'),
-        body('rank')
-            .optional()
+            .withMessage('Name only be of type string')
+            .bail()
             .custom((value) => {
-                if (value != 1 || value != 2) {
-                    throw new Error('Invalid rank provided');
-                } else if (!value) {
-                    throw new Error('Rank can not be empty');
+                if (value.trim() === '') {
+                    throw new Error('Name is required');
                 } else {
                     return true;
                 }
             }),
+        body('rank')
+            .optional()
+            .custom((value) => {
+                console.log(typeof value);
+                if (value > 2) {
+                    throw new Error('Invalid rank provided');
+                } else if (!value) {
+                    throw new Error('Rank can not be empty');
+                } else if (typeof value != 'number') {
+                    throw new Error('Rank must be of type number');
+                } else {
+                    return true;
+                }
+            }),
+        body('isVerified')
+            .optional()
+            .isBoolean()
+            .withMessage('Invalid value provided'),
     ],
 };
 

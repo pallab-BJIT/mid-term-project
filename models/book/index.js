@@ -59,6 +59,7 @@ const bookSchema = new Schema({
     },
     isbn: {
         type: String,
+        unique: true,
         required: [true, 'ISBN number is required'],
     },
 });
