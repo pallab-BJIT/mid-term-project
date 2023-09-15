@@ -136,6 +136,21 @@ class UserController {
                 );
             }
             const { userId } = req.params;
+            const findUserFromAuth = await authModel.findById(userId);
+            if (!findUserFromAuth) {
+                return sendResponse(
+                    res,
+                    HTTP_STATUS.BAD_REQUEST,
+                    'No user associated with this id'
+                );
+            }
+            if (findUserFromAuth.rank === 1) {
+                return sendResponse(
+                    res,
+                    HTTP_STATUS.BAD_REQUEST,
+                    'You can not perform this action'
+                );
+            }
             const result = await authModel.findByIdAndDelete(userId);
             if (!result) {
                 return sendResponse(
@@ -144,6 +159,7 @@ class UserController {
                     'No user associated with this id'
                 );
             }
+
             const user = await userModel.findByIdAndDelete(result.user);
             console.log({ user });
             if (!user) {
@@ -160,6 +176,7 @@ class UserController {
                 result
             );
         } catch (error) {
+            console.log(error);
             databaseLogger(error.message);
             return sendResponse(res, 500, 'Internal server error');
         }
