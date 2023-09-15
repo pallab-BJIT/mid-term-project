@@ -306,3 +306,31 @@ res.status is not a function  ( Time -> September 15, 2023 12:32 PM)
 
 /api/review/delete/6502fa36b45b576cb8547ad2  ( Time -> September 15, 2023 1:49 PM)
 
+/api/books/all?offset=1&limit=5  ( Time -> September 15, 2023 2:00 PM)
+
+/api/books/all?offset=1&limi=5  ( Time -> September 15, 2023 2:00 PM)
+
+/api/books/all?offset=1&limit=5&search=Great%20Gatsby  ( Time -> September 15, 2023 2:01 PM)
+
+/api/books/all?offset=1&limit=5&searc=Great%20Gatsby  ( Time -> September 15, 2023 2:01 PM)
+
+/api/books/all?offset=1&limit=5&searc=Great%20Gatsby  ( Time -> September 15, 2023 2:03 PM)
+
+/api/books/all?offset=1&limit=5&searc=Great%20Gatsby  ( Time -> September 15, 2023 2:04 PM)
+
+/api/books/all?offset=1&limit=5&searc=Great%20Gatsby  ( Time -> September 15, 2023 2:04 PM)
+
+/api/books/all?offset=1&limit=5&search=Great%20Gatsby  ( Time -> September 15, 2023 2:04 PM)
+
+/api/books/all?offset=1&limit=5&search=Great%20Gatsby  ( Time -> September 15, 2023 2:04 PM)
+
+/api/books/all?offset=1&limit=5  ( Time -> September 15, 2023 2:05 PM)
+
+/api/books/all?offset=1&limit=5  ( Time -> September 15, 2023 2:05 PM)
+
+/api/books/all?offset=1&limit=5  ( Time -> September 15, 2023 2:06 PM)
+
+/api/books/all?offset=1&limit=5&search=Great%20Gatsby  ( Time -> September 15, 2023 2:06 PM)
+
+/api/books/all?offset=1&limit=10&search=Great%20Gatsby  ( Time -> September 15, 2023 2:06 PM)
+

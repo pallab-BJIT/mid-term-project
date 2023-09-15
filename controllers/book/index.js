@@ -37,6 +37,29 @@ class BookController {
                 category,
             } = req.query;
 
+            const allowedProperties = [
+                'offset',
+                'limit',
+                'search',
+                'sortBy',
+                'sortOrder',
+                'filter',
+                'filterOrder',
+                'filterValue',
+                'category',
+                'category',
+            ];
+
+            for (const key in req.query) {
+                if (!allowedProperties.includes(key)) {
+                    return sendResponse(
+                        res,
+                        HTTP_STATUS.BAD_REQUEST,
+                        'Invalid property provided book filtering '
+                    );
+                }
+            }
+
             let baseQuery = bookModel.find();
             if (!search && !sortBy && !filter && !category) {
                 const skip = (page - 1) * limit;
