@@ -63,6 +63,13 @@ class BookReviewController {
                 await result.save();
 
                 bookFound.reviews.push(result._id);
+                const sum = result.reviews.reduce(
+                    (accumulator, review) => accumulator + review.rating,
+                    0
+                );
+                const avg = sum / result.reviews.length;
+
+                bookFound.rating = avg;
                 await bookFound.save();
 
                 if (result) {
@@ -102,6 +109,13 @@ class BookReviewController {
                 await bookExistInReview.save();
 
                 bookFound.reviews.push(bookExistInReview._id);
+                const sum = bookExistInReview.reviews.reduce(
+                    (accumulator, review) => accumulator + review.rating,
+                    0
+                );
+                const avg = sum / bookExistInReview.reviews.length;
+
+                bookFound.rating = avg;
                 await bookFound.save();
 
                 if (bookExistInReview) {
