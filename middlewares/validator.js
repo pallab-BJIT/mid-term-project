@@ -196,6 +196,76 @@ const validator = {
             .isISBN()
             .withMessage('Invalid ISBN number'),
     ],
+    updateBook: [
+        param('bookId')
+            .exists()
+            .withMessage('Please provide book id')
+            .bail()
+            .custom((value) => {
+                if (!mongoose.Types.ObjectId.isValid(value)) {
+                    throw new Error('Invalid object Id provided');
+                } else {
+                    return true;
+                }
+            }),
+        body('title')
+            .optional()
+            .optional()
+            .isString()
+            .withMessage('Title must be of type string')
+            .bail()
+            .custom((value) => typeof value === 'string' && value.trim() !== '')
+            .withMessage('Title is required.'),
+        body('description')
+            .optional()
+            .optional()
+            .isString()
+            .withMessage('Description must be of type string')
+            .bail()
+            .custom((value) => typeof value === 'string' && value.trim() !== '')
+            .withMessage('Description is required.'),
+        body('price')
+            .optional()
+            .isFloat({ min: 10, max: 10000 })
+            .withMessage('Price must be a valid number between 0 and 100.'),
+        body('rating')
+            .optional()
+            .isFloat({ min: 1, max: 5 })
+            .withMessage('Rating must be a valid number between 1 and 5.'),
+        body('stock')
+            .optional()
+            .isFloat({ min: 10, max: 500 })
+            .withMessage('Stock must be a valid number between 10 and 500.'),
+        body('author')
+            .optional()
+            .optional()
+            .isString()
+            .withMessage('Author must be of type string')
+            .bail()
+            .custom((value) => typeof value === 'string' && value.trim() !== '')
+            .withMessage('Author is required.'),
+        body('category')
+            .optional()
+            .optional()
+            .isString()
+            .withMessage('Category must be of type string')
+            .bail()
+            .custom((value) => typeof value === 'string' && value.trim() !== '')
+            .withMessage('Category is required.'),
+        body('publishedAt')
+            .optional()
+            .isDate()
+            .withMessage('Invalid published At date provided')
+            .custom((value) => value.trim() !== '')
+            .withMessage('publishedAt is required.'),
+        body('isbn')
+            .optional()
+            .isISBN()
+            .withMessage('Invalid ISBN provided')
+            .bail()
+            .custom((value) => value.trim() !== '')
+            .withMessage('ISBN is required.'),
+    ],
 
     signUpUser: [
         body('name')

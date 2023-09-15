@@ -287,6 +287,123 @@ class BookController {
         }
     }
 
+    async updateBook(req, res) {
+        try {
+            databaseLogger(req.originalUrl);
+            const validation = validationResult(req).array();
+            if (validation.length) {
+                const error = {};
+                validation.forEach((ele) => {
+                    const property = ele.path;
+                    error[property] = ele.msg;
+                });
+                return sendResponse(
+                    res,
+                    HTTP_STATUS.UNPROCESSABLE_ENTITY,
+                    'Unprocessable Entity',
+                    error
+                );
+            }
+
+            const {
+                title,
+                description,
+                author,
+                price,
+                rating,
+                stock,
+                category,
+                publishedAt,
+                isbn,
+            } = req.body;
+
+            const allowedProperties = [
+                'title',
+                'description',
+                'author',
+                'price',
+                'rating',
+                'stock',
+                'category',
+                'publishedAt',
+                'isbn',
+            ];
+
+            for (const key in req.body) {
+                if (!allowedProperties.includes(key)) {
+                    return sendResponse(
+                        res,
+                        HTTP_STATUS.BAD_REQUEST,
+                        'Invalid property provided for book create'
+                    );
+                }
+            }
+
+            const { bookId } = req.params;
+
+            const result = await bookModel.findById(bookId);
+            if (!result) {
+                return sendResponse(
+                    res,
+                    HTTP_STATUS.BAD_REQUEST,
+                    'No book found associated with this id'
+                );
+            }
+            if (
+                !title &&
+                !description &&
+                !author &&
+                !price &&
+                !rating &&
+                !stock &&
+                !category &&
+                !publishedAt &&
+                !isbn
+            ) {
+                return sendResponse(
+                    res,
+                    HTTP_STATUS.BAD_REQUEST,
+                    'Can not update the book with an empty data'
+                );
+            }
+            const duplicateBook = await bookModel.findOne({
+                $or: [{ title }, { description }, { isbn }],
+            });
+
+            if (duplicateBook && String(duplicateBook._id) !== String(bookId)) {
+                return sendResponse(
+                    res,
+                    HTTP_STATUS.BAD_REQUEST,
+                    'Another book already has the same title, description, or isbn'
+                );
+            }
+
+            const updatedBook = await bookModel.findByIdAndUpdate(
+                bookId,
+                {
+                    title,
+                    description,
+                    author,
+                    price,
+                    rating,
+                    stock,
+                    category,
+                    publishedAt,
+                },
+                { new: true }
+            );
+            return sendResponse(
+                res,
+                HTTP_STATUS.OK,
+                'Book updated successfully',
+                updatedBook
+            );
+        } catch (error) {
+            databaseLogger(error.message);
+            return sendResponse(res, 500, 'Internal server error');
+        }
+    }
+
     async deleteBook(req, res) {
         try {
             databaseLogger(req.originalUrl);

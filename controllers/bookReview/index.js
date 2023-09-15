@@ -324,8 +324,7 @@ class BookReviewController {
             bookExistInReview.reviews.splice(userIdInReviews, 1);
             await bookExistInReview.save();
             if (!bookExistInReview.reviews.length) {
-                console.log('ffff');
-                const deleteBookReview = await bookModel.findOneAndUpdate(
+                await bookModel.findOneAndUpdate(
                     { _id: bookId },
                     { $unset: { reviews: 1 } },
                     { new: true }

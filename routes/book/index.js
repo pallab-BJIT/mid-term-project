@@ -14,6 +14,11 @@ router
         [tokenAuthorization, isAdmin, validator.createBook],
         BookController.createBook
     )
+    .patch(
+        '/update/:bookId',
+        [tokenAuthorization, isAdmin, validator.updateBook],
+        BookController.updateBook
+    )
     .delete(
         '/delete/:bookId',
         [tokenAuthorization, isAdmin, validator.deleteBook],
