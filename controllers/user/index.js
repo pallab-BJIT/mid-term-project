@@ -33,6 +33,18 @@ class UserController {
                     'You are not allowed to access this'
                 );
             }
+            const allowedProperties = ['amount'];
+
+            for (const key in req.body) {
+                if (!allowedProperties.includes(key)) {
+                    return sendResponse(
+                        res,
+                        HTTP_STATUS.BAD_REQUEST,
+                        'Invalid property provided for user update: '
+                    );
+                }
+            }
+
             const user = await userModel.findOne({ email });
             if (!user) {
                 return sendResponse(

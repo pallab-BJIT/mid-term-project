@@ -179,13 +179,35 @@ class BookController {
                     description,
                     author,
                     price,
-                    discount_price,
                     rating,
                     stock,
                     category,
                     publishedAt,
                     isbn,
                 } = req.body;
+
+                const allowedProperties = [
+                    'title',
+                    'description',
+                    'author',
+                    'price',
+                    'rating',
+                    'stock',
+                    'category',
+                    'publishedAt',
+                    'isbn',
+                ];
+
+                for (const key in req.body) {
+                    if (!allowedProperties.includes(key)) {
+                        return sendResponse(
+                            res,
+                            HTTP_STATUS.BAD_REQUEST,
+                            'Invalid property provided for book create'
+                        );
+                    }
+                }
+
                 const existingBook = await bookModel.findOne({
                     $or: [
                         { title: title },
@@ -219,7 +241,6 @@ class BookController {
                     description,
                     author,
                     price,
-                    discount_price,
                     rating,
                     stock,
                     category,

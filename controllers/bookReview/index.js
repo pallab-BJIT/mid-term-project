@@ -27,6 +27,18 @@ class BookReviewController {
                     error
                 );
             }
+
+            const allowedProperties = ['book', 'message', 'rating'];
+
+            for (const key in req.body) {
+                if (!allowedProperties.includes(key)) {
+                    return sendResponse(
+                        res,
+                        HTTP_STATUS.BAD_REQUEST,
+                        'Invalid property provided for book create'
+                    );
+                }
+            }
             const bookFound = await bookModel.findById(book);
             const userFoundInAuth = await authModel.findById(req.user._id);
             const userFoundInUser = await userModel.findById(
@@ -157,6 +169,19 @@ class BookReviewController {
                     error
                 );
             }
+
+            const allowedProperties = ['message', 'rating'];
+
+            for (const key in req.body) {
+                if (!allowedProperties.includes(key)) {
+                    return sendResponse(
+                        res,
+                        HTTP_STATUS.BAD_REQUEST,
+                        'Invalid property provided for book create'
+                    );
+                }
+            }
+
             const bookFound = await bookModel.findById(bookId);
             const userFoundInAuth = await authModel.findById(req.user._id);
             const userFoundInUser = await userModel.findById(
@@ -257,6 +282,17 @@ class BookReviewController {
             const userFoundInUser = await userModel.findById(
                 userFoundInAuth.user
             );
+            const bookExistInReview = await bookReviewModel.findOne({
+                book: String(bookId),
+            });
+
+            if (!bookExistInReview) {
+                return sendResponse(
+                    res,
+                    HTTP_STATUS.BAD_REQUEST,
+                    'Invalid book id for delete review'
+                );
+            }
             if (!userFoundInAuth || !userFoundInUser) {
                 return sendResponse(
                     res,
@@ -272,17 +308,6 @@ class BookReviewController {
                 );
             }
 
-            const bookExistInReview = await bookReviewModel.findOne({
-                book: String(bookId),
-            });
-
-            if (!bookExistInReview) {
-                return sendResponse(
-                    res,
-                    HTTP_STATUS.BAD_REQUEST,
-                    'Invalid book id for delete review'
-                );
-            }
             const userIdInReviews = bookExistInReview.reviews.findIndex(
                 (ele) => {
                     return String(ele.user) === String(userFoundInUser._id);

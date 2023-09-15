@@ -38,6 +38,25 @@ class AuthController {
                     error
                 );
             } else {
+                const allowedProperties = [
+                    'email',
+                    'password',
+                    'confirmPassword',
+                    'rank',
+                    'name',
+                    'phoneNumber',
+                    'address',
+                ];
+
+                for (const key in req.body) {
+                    if (!allowedProperties.includes(key)) {
+                        return sendResponse(
+                            res,
+                            HTTP_STATUS.BAD_REQUEST,
+                            'Invalid property provided for book create'
+                        );
+                    }
+                }
                 const emailExists = await authModel.findOne({ email: email });
                 const emailExistsAtUser = await userModel.findOne({
                     email: email,
@@ -127,6 +146,17 @@ class AuthController {
                 );
             } else {
                 const { email, password } = req.body;
+                const allowedProperties = ['email', 'password'];
+
+                for (const key in req.body) {
+                    if (!allowedProperties.includes(key)) {
+                        return sendResponse(
+                            res,
+                            HTTP_STATUS.BAD_REQUEST,
+                            'Invalid property provided for user update: '
+                        );
+                    }
+                }
                 const emailExists = await authModel
                     .findOne({ email: email })
                     .populate('user');
