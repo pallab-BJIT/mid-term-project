@@ -62,6 +62,15 @@ const bookSchema = new Schema({
         unique: true,
         required: [true, 'ISBN number is required'],
     },
+    reviews: {
+        type: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: 'Review',
+                required: false,
+            },
+        ],
+    },
 });
 const bookModel = mongoose.model('Book', bookSchema);
 module.exports = bookModel;

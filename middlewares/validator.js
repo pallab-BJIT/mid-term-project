@@ -479,6 +479,40 @@ const validator = {
             .isBoolean()
             .withMessage('Invalid value provided'),
     ],
+
+    addProductReview: [
+        body('book')
+            .exists()
+            .not()
+            .equals('')
+            .withMessage('book id cannot be empty')
+            .bail()
+            .custom((value) => {
+                if (mongoose.Types.ObjectId.isValid(value)) {
+                    return true;
+                } else {
+                    throw new Error('Invalid book id');
+                }
+            }),
+        body('message')
+            .optional()
+            .not()
+            .equals('')
+            .withMessage('Message  cannot be empty')
+            .bail(),
+        body('rating')
+            .exists()
+            .withMessage('Rating can not be null')
+            .bail()
+            .custom((value) => {
+                if (!isNaN(value)) {
+                    if (value >= 1 && value <= 5) return true;
+                    throw new Error('Rating must be between 1 and 5');
+                } else {
+                    throw new Error('Rating only accepts numeric values');
+                }
+            }),
+    ],
 };
 
 module.exports = validator;
