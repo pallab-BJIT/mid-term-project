@@ -5,12 +5,13 @@ const validator = require('../../middlewares/validator');
 const {
     tokenAuthorization,
     isUser,
+    isAdmin,
 } = require('../../middlewares/tokenValidator');
 
 router
     .get(
         '/all',
-        [tokenAuthorization, isUser],
+        [tokenAuthorization, isAdmin],
         TransactionController.getAllTransaction
     )
     .post(
@@ -18,10 +19,5 @@ router
         [tokenAuthorization, isUser, validator.createTransaction],
         TransactionController.createTransaction
     );
-// .patch(
-//     '/update',
-//     [tokenAuthorization, isUser, validator.updateCart],
-//     CartController.updateCart
-// );
 
 module.exports = router;

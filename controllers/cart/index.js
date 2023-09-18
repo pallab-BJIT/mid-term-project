@@ -154,12 +154,47 @@ class CartController {
                         'Something went wrong'
                     );
                 }
+                const bookIds = saveToCart.books.map(
+                    (ele) => new mongoose.Types.ObjectId(ele.book)
+                );
+                const query = {
+                    $and: [
+                        { startDate: { $lte: new Date() } },
+                        { endDate: { $gte: new Date() } },
+                    ],
+                    $or: [
+                        { bookIds: { $in: bookIds } },
+                        { counties: { $eq: userExists.address.country } },
+                    ],
+                };
+                const discountPrice = await DiscountPrice.find(query);
 
+                const allBooks = await bookModel
+                    .find({
+                        _id: { $in: bookIds },
+                    })
+                    .sort({ _id: 1 });
+
+                bookIds.sort();
+
+                let totalPrice = 0;
+                saveToCart.books.forEach((item, index) => {
+                    const bookId = item.book;
+                    const quantity = item.quantity;
+                    const book = allBooks[index];
+                    totalPrice += calculateTotalPrice(
+                        book,
+                        discountPrice,
+                        bookId,
+                        quantity
+                    );
+                });
+                const data = { data: saveToCart, totalPrice };
                 return sendResponse(
                     res,
                     HTTP_STATUS.CREATED,
                     'Added to new cart',
-                    saveToCart
+                    data
                 );
             } else {
                 const bookExistsInCart = cartExistsForUser.books.findIndex(
@@ -181,11 +216,46 @@ class CartController {
                         quantity;
                     await cartExistsForUser.save();
 
+                    const bookIds = cartExistsForUser.books.map(
+                        (ele) => new mongoose.Types.ObjectId(ele.book)
+                    );
+                    const query = {
+                        $and: [
+                            { startDate: { $lte: new Date() } },
+                            { endDate: { $gte: new Date() } },
+                        ],
+                        $or: [
+                            { bookIds: { $in: bookIds } },
+                            { counties: { $eq: userExists.address.country } },
+                        ],
+                    };
+                    const discountPrice = await DiscountPrice.find(query);
+
+                    const allBooks = await bookModel
+                        .find({
+                            _id: { $in: bookIds },
+                        })
+                        .sort({ _id: 1 });
+
+                    bookIds.sort();
+
+                    let totalPrice = 0;
+                    cartExistsForUser.books.forEach((item, index) => {
+                        const bookId = item.book;
+                        const quantity = item.quantity;
+                        const book = allBooks[index];
+                        totalPrice += calculateTotalPrice(
+                            book,
+                            discountPrice,
+                            bookId,
+                            quantity
+                        );
+                    });
                     return sendResponse(
                         res,
                         HTTP_STATUS.ACCEPTED,
                         'Quantity updated in the existing cart',
-                        cartExistsForUser
+                        { cartExistsForUser, totalPrice }
                     );
                 }
                 if (bookExists.stock < quantity) {
@@ -198,11 +268,47 @@ class CartController {
 
                 cartExistsForUser.books.push({ book, quantity });
                 await cartExistsForUser.save();
+                const bookIds = cartExistsForUser.books.map(
+                    (ele) => new mongoose.Types.ObjectId(ele.book)
+                );
+                const query = {
+                    $and: [
+                        { startDate: { $lte: new Date() } },
+                        { endDate: { $gte: new Date() } },
+                    ],
+                    $or: [
+                        { bookIds: { $in: bookIds } },
+                        { counties: { $eq: userExists.address.country } },
+                    ],
+                };
+                const discountPrice = await DiscountPrice.find(query);
+
+                const allBooks = await bookModel
+                    .find({
+                        _id: { $in: bookIds },
+                    })
+                    .sort({ _id: 1 });
+
+                bookIds.sort();
+
+                let totalPrice = 0;
+                cartExistsForUser.books.forEach((item, index) => {
+                    const bookId = item.book;
+                    const quantity = item.quantity;
+                    const book = allBooks[index];
+                    totalPrice += calculateTotalPrice(
+                        book,
+                        discountPrice,
+                        bookId,
+                        quantity
+                    );
+                });
+                console.log('existing cart');
                 return sendResponse(
                     res,
                     HTTP_STATUS.ACCEPTED,
                     'Added to existing cart',
-                    cartExistsForUser
+                    { cartExistsForUser, totalPrice }
                 );
             }
         } catch (error) {
@@ -276,11 +382,46 @@ class CartController {
             if (quantity < cartExistsForUser.books[bookExistsInCart].quantity) {
                 cartExistsForUser.books[bookExistsInCart].quantity -= quantity;
                 await cartExistsForUser.save();
+                const bookIds = cartExistsForUser.books.map(
+                    (ele) => new mongoose.Types.ObjectId(ele.book)
+                );
+                const query = {
+                    $and: [
+                        { startDate: { $lte: new Date() } },
+                        { endDate: { $gte: new Date() } },
+                    ],
+                    $or: [
+                        { bookIds: { $in: bookIds } },
+                        { counties: { $eq: userExists.address.country } },
+                    ],
+                };
+                const discountPrice = await DiscountPrice.find(query);
+
+                const allBooks = await bookModel
+                    .find({
+                        _id: { $in: bookIds },
+                    })
+                    .sort({ _id: 1 });
+
+                bookIds.sort();
+
+                let totalPrice = 0;
+                cartExistsForUser.books.forEach((item, index) => {
+                    const bookId = item.book;
+                    const quantity = item.quantity;
+                    const book = allBooks[index];
+                    totalPrice += calculateTotalPrice(
+                        book,
+                        discountPrice,
+                        bookId,
+                        quantity
+                    );
+                });
                 return sendResponse(
                     res,
                     HTTP_STATUS.ACCEPTED,
                     'Book quantity reduced from the cart',
-                    cartExistsForUser
+                    { cartExistsForUser, totalPrice }
                 );
             }
             if (
@@ -288,11 +429,46 @@ class CartController {
             ) {
                 cartExistsForUser.books.splice(bookExistsInCart);
                 await cartExistsForUser.save();
+                const bookIds = cartExistsForUser.books.map(
+                    (ele) => new mongoose.Types.ObjectId(ele.book)
+                );
+                const query = {
+                    $and: [
+                        { startDate: { $lte: new Date() } },
+                        { endDate: { $gte: new Date() } },
+                    ],
+                    $or: [
+                        { bookIds: { $in: bookIds } },
+                        { counties: { $eq: userExists.address.country } },
+                    ],
+                };
+                const discountPrice = await DiscountPrice.find(query);
+
+                const allBooks = await bookModel
+                    .find({
+                        _id: { $in: bookIds },
+                    })
+                    .sort({ _id: 1 });
+
+                bookIds.sort();
+
+                let totalPrice = 0;
+                cartExistsForUser.books.forEach((item, index) => {
+                    const bookId = item.book;
+                    const quantity = item.quantity;
+                    const book = allBooks[index];
+                    totalPrice += calculateTotalPrice(
+                        book,
+                        discountPrice,
+                        bookId,
+                        quantity
+                    );
+                });
                 return sendResponse(
                     res,
                     HTTP_STATUS.ACCEPTED,
                     'Book successfully removed from the cart',
-                    cartExistsForUser
+                    { cartExistsForUser, totalPrice }
                 );
             }
         } catch (error) {
