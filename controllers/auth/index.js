@@ -43,7 +43,7 @@ class AuthController {
                 if (!allowedProperties.includes(key)) {
                     return sendResponse(
                         res,
-                        HTTP_STATUS.BAD_REQUEST,
+                        HTTP_STATUS.UNPROCESSABLE_ENTITY,
                         'Invalid property provided for book create'
                     );
                 }
@@ -131,7 +131,7 @@ class AuthController {
                 if (!allowedProperties.includes(key)) {
                     return sendResponse(
                         res,
-                        HTTP_STATUS.BAD_REQUEST,
+                        HTTP_STATUS.UNPROCESSABLE_ENTITY,
                         'Invalid property provided for user update: '
                     );
                 }

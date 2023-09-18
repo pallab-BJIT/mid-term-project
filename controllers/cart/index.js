@@ -19,7 +19,7 @@ class CartController {
             if (!userExists) {
                 return sendResponse(
                     res,
-                    HTTP_STATUS.BAD_REQUEST,
+                    HTTP_STATUS.NOT_FOUND,
                     'No user Found'
                 );
             }
@@ -70,7 +70,7 @@ class CartController {
             if (!cartExistsForUser) {
                 return sendResponse(
                     res,
-                    HTTP_STATUS.BAD_REQUEST,
+                    HTTP_STATUS.NOT_FOUND,
                     'No data found',
                     []
                 );
@@ -108,7 +108,7 @@ class CartController {
             if (!req.body) {
                 return sendResponse(
                     res,
-                    HTTP_STATUS.BAD_REQUEST,
+                    HTTP_STATUS.UNPROCESSABLE_ENTITY,
                     'Can not process empty data'
                 );
             }
@@ -118,14 +118,14 @@ class CartController {
             if (!userExists) {
                 return sendResponse(
                     res,
-                    HTTP_STATUS.BAD_REQUEST,
+                    HTTP_STATUS.NOT_FOUND,
                     'No user Found'
                 );
             }
             if (!bookExists) {
                 return sendResponse(
                     res,
-                    HTTP_STATUS.BAD_REQUEST,
+                    HTTP_STATUS.NOT_FOUND,
                     'No book Found'
                 );
             }
@@ -136,7 +136,7 @@ class CartController {
                 if (quantity > bookExists.stock) {
                     return sendResponse(
                         res,
-                        HTTP_STATUS.BAD_REQUEST,
+                        HTTP_STATUS.UNPROCESSABLE_ENTITY,
                         'The given quantity exceed the book stock'
                     );
                 }
@@ -173,7 +173,7 @@ class CartController {
                     ) {
                         return sendResponse(
                             res,
-                            HTTP_STATUS.BAD_REQUEST,
+                            HTTP_STATUS.UNPROCESSABLE_ENTITY,
                             'Not Enough stock'
                         );
                     }
@@ -191,7 +191,7 @@ class CartController {
                 if (bookExists.stock < quantity) {
                     return sendResponse(
                         res,
-                        HTTP_STATUS.BAD_REQUEST,
+                        HTTP_STATUS.UNPROCESSABLE_ENTITY,
                         'Not enough stock'
                     );
                 }
@@ -231,14 +231,14 @@ class CartController {
             if (!userExists) {
                 return sendResponse(
                     res,
-                    HTTP_STATUS.BAD_REQUEST,
+                    HTTP_STATUS.NOT_FOUND,
                     'No user Found'
                 );
             }
             if (!bookExists) {
                 return sendResponse(
                     res,
-                    HTTP_STATUS.BAD_REQUEST,
+                    HTTP_STATUS.NOT_FOUND,
                     'No book Found'
                 );
             }
@@ -249,7 +249,7 @@ class CartController {
             if (!cartExistsForUser) {
                 return sendResponse(
                     res,
-                    HTTP_STATUS.BAD_REQUEST,
+                    HTTP_STATUS.NOT_FOUND,
                     'No cart exist for this user'
                 );
             }
@@ -262,14 +262,14 @@ class CartController {
             if (bookExistsInCart === -1) {
                 return sendResponse(
                     res,
-                    HTTP_STATUS.BAD_REQUEST,
+                    HTTP_STATUS.UNPROCESSABLE_ENTITY,
                     'This book do not exist in the cart'
                 );
             }
             if (quantity > cartExistsForUser.books[bookExistsInCart].quantity) {
                 return sendResponse(
                     res,
-                    HTTP_STATUS.BAD_REQUEST,
+                    HTTP_STATUS.UNPROCESSABLE_ENTITY,
                     'The provided quantity exceed the quantity available in the cart'
                 );
             }

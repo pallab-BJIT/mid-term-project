@@ -21,7 +21,7 @@ class UserController {
             if (rank === 1) {
                 return sendResponse(
                     res,
-                    HTTP_STATUS.BAD_REQUEST,
+                    HTTP_STATUS.UNAUTHORIZED,
                     'You are not allowed to access this'
                 );
             }
@@ -31,7 +31,7 @@ class UserController {
                 if (!allowedProperties.includes(key)) {
                     return sendResponse(
                         res,
-                        HTTP_STATUS.BAD_REQUEST,
+                        HTTP_STATUS.UNPROCESSABLE_ENTITY,
                         'Invalid property provided for user update: '
                     );
                 }
@@ -46,13 +46,6 @@ class UserController {
                 );
             }
 
-            // if (user.balance >= 100) {
-            //     return sendResponse(
-            //         res,
-            //         HTTP_STATUS.BAD_REQUEST,
-            //         'You can only add amount when your balance less than 100'
-            //     );
-            // }
             if (!user.balance) {
                 user.balance = 0;
             }
@@ -90,7 +83,7 @@ class UserController {
             if (!users.length) {
                 return sendResponse(
                     res,
-                    HTTP_STATUS.BAD_REQUEST,
+                    HTTP_STATUS.NOT_FOUND,
                     'No data found',
                     []
                 );
@@ -125,14 +118,14 @@ class UserController {
             if (!findUserFromAuth) {
                 return sendResponse(
                     res,
-                    HTTP_STATUS.BAD_REQUEST,
+                    HTTP_STATUS.UNPROCESSABLE_ENTITY,
                     'No user associated with this id'
                 );
             }
             if (findUserFromAuth.rank === 1) {
                 return sendResponse(
                     res,
-                    HTTP_STATUS.BAD_REQUEST,
+                    HTTP_STATUS.UNAUTHORIZED,
                     'You can not perform this action'
                 );
             }
@@ -140,7 +133,7 @@ class UserController {
             if (!result) {
                 return sendResponse(
                     res,
-                    HTTP_STATUS.BAD_REQUEST,
+                    HTTP_STATUS.UNPROCESSABLE_ENTITY,
                     'No user associated with this id'
                 );
             }
@@ -150,7 +143,7 @@ class UserController {
             if (!user) {
                 return sendResponse(
                     res,
-                    HTTP_STATUS.BAD_REQUEST,
+                    HTTP_STATUS.UNPROCESSABLE_ENTITY,
                     'No user associated with this id'
                 );
             }
@@ -183,8 +176,8 @@ class UserController {
                 if (!allowedProperties.includes(key)) {
                     return sendResponse(
                         res,
-                        HTTP_STATUS.BAD_REQUEST,
-                        'Invalid property provided for user update: ' + key
+                        HTTP_STATUS.UNPROCESSABLE_ENTITY,
+                        'Invalid property provided for user update: '
                     );
                 }
             }
@@ -193,7 +186,7 @@ class UserController {
             if (!result) {
                 return sendResponse(
                     res,
-                    HTTP_STATUS.BAD_REQUEST,
+                    HTTP_STATUS.UNPROCESSABLE_ENTITY,
                     'No user associated with this id'
                 );
             }

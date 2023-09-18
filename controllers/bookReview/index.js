@@ -25,7 +25,7 @@ class BookReviewController {
                 if (!allowedProperties.includes(key)) {
                     return sendResponse(
                         res,
-                        HTTP_STATUS.BAD_REQUEST,
+                        HTTP_STATUS.UNPROCESSABLE_ENTITY,
                         'Invalid property provided for book create'
                     );
                 }
@@ -38,14 +38,14 @@ class BookReviewController {
             if (!userFoundInAuth || !userFoundInUser) {
                 return sendResponse(
                     res,
-                    HTTP_STATUS.BAD_REQUEST,
+                    HTTP_STATUS.NOT_FOUND,
                     'No user found'
                 );
             }
             if (!bookFound) {
                 return sendResponse(
                     res,
-                    HTTP_STATUS.BAD_REQUEST,
+                    HTTP_STATUS.NOT_FOUND,
                     'No book found'
                 );
             }
@@ -97,7 +97,7 @@ class BookReviewController {
                 if (userRatingExist != -1) {
                     return sendResponse(
                         res,
-                        HTTP_STATUS.BAD_REQUEST,
+                        HTTP_STATUS.UNPROCESSABLE_ENTITY,
                         'You can not add more than one review'
                     );
                 }
@@ -155,7 +155,7 @@ class BookReviewController {
                 if (!allowedProperties.includes(key)) {
                     return sendResponse(
                         res,
-                        HTTP_STATUS.BAD_REQUEST,
+                        HTTP_STATUS.UNPROCESSABLE_ENTITY,
                         'Invalid property provided for book create'
                     );
                 }
@@ -169,14 +169,14 @@ class BookReviewController {
             if (!userFoundInAuth || !userFoundInUser) {
                 return sendResponse(
                     res,
-                    HTTP_STATUS.BAD_REQUEST,
+                    HTTP_STATUS.NOT_FOUND,
                     'No user found'
                 );
             }
             if (!bookFound) {
                 return sendResponse(
                     res,
-                    HTTP_STATUS.BAD_REQUEST,
+                    HTTP_STATUS.NOT_FOUND,
                     'No book found'
                 );
             }
@@ -188,7 +188,7 @@ class BookReviewController {
             if (!bookExistInReview) {
                 return sendResponse(
                     res,
-                    HTTP_STATUS.BAD_REQUEST,
+                    HTTP_STATUS.UNPROCESSABLE_ENTITY,
                     'Invalid book id for review'
                 );
             }
@@ -201,7 +201,7 @@ class BookReviewController {
             if (userIdInReviews === -1) {
                 return sendResponse(
                     res,
-                    HTTP_STATUS.BAD_REQUEST,
+                    HTTP_STATUS.UNPROCESSABLE_ENTITY,
                     'Invalid user id for update review'
                 );
             }
@@ -265,14 +265,14 @@ class BookReviewController {
             if (!userFoundInAuth || !userFoundInUser) {
                 return sendResponse(
                     res,
-                    HTTP_STATUS.BAD_REQUEST,
+                    HTTP_STATUS.NOT_FOUND,
                     'No user found'
                 );
             }
             if (!bookFound) {
                 return sendResponse(
                     res,
-                    HTTP_STATUS.BAD_REQUEST,
+                    HTTP_STATUS.NOT_FOUND,
                     'No book found'
                 );
             }
@@ -286,7 +286,7 @@ class BookReviewController {
             if (userIdInReviews === -1) {
                 return sendResponse(
                     res,
-                    HTTP_STATUS.BAD_REQUEST,
+                    HTTP_STATUS.UNPROCESSABLE_ENTITY,
                     'Invalid user id for delete review'
                 );
             }

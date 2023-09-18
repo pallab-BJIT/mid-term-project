@@ -49,7 +49,7 @@ class DiscountPriceController {
             if (hasDuplicateBookIds) {
                 return sendResponse(
                     res,
-                    HTTP_STATUS.BAD_REQUEST,
+                    HTTP_STATUS.UNPROCESSABLE_ENTITY,
                     'Can not accept duplicate book id'
                 );
             }
@@ -64,7 +64,7 @@ class DiscountPriceController {
             if (bookAvailable.length != bookId.length) {
                 return sendResponse(
                     res,
-                    HTTP_STATUS.BAD_REQUEST,
+                    HTTP_STATUS.UNPROCESSABLE_ENTITY,
                     'Some of the book maybe not available'
                 );
             }
@@ -74,7 +74,7 @@ class DiscountPriceController {
                 if (!availableCountry.includes(uppercaseCountry)) {
                     return sendResponse(
                         res,
-                        HTTP_STATUS.BAD_REQUEST,
+                        HTTP_STATUS.UNPROCESSABLE_ENTITY,
                         'Some country maybe not available'
                     );
                 }
@@ -87,7 +87,7 @@ class DiscountPriceController {
             if (discountExistForBook.length) {
                 return sendResponse(
                     res,
-                    HTTP_STATUS.BAD_REQUEST,
+                    HTTP_STATUS.UNPROCESSABLE_ENTITY,
                     'Can not add multiple discount for a book'
                 );
             }
@@ -97,7 +97,7 @@ class DiscountPriceController {
             if (newEndDate < newStartDate) {
                 return sendResponse(
                     res,
-                    HTTP_STATUS.BAD_REQUEST,
+                    HTTP_STATUS.UNPROCESSABLE_ENTITY,
                     'End date cannot be less than start date.'
                 );
             }
@@ -108,7 +108,7 @@ class DiscountPriceController {
             if (daysUntilStartDate < -1) {
                 return sendResponse(
                     res,
-                    HTTP_STATUS.BAD_REQUEST,
+                    HTTP_STATUS.UNPROCESSABLE_ENTITY,
                     'Start date cannot be less than today.'
                 );
             } else {
@@ -119,7 +119,7 @@ class DiscountPriceController {
                 if (daysDifference >= 5) {
                     return sendResponse(
                         res,
-                        HTTP_STATUS.BAD_REQUEST,
+                        HTTP_STATUS.UNPROCESSABLE_ENTITY,
                         'EndDate can not exceed 5 days from startDate'
                     );
                 }
@@ -175,7 +175,7 @@ class DiscountPriceController {
             if (!Object.keys(req.body).length) {
                 return sendResponse(
                     res,
-                    HTTP_STATUS.BAD_REQUEST,
+                    HTTP_STATUS.UNPROCESSABLE_ENTITY,
                     'Can not accept empty data'
                 );
             }
@@ -185,7 +185,7 @@ class DiscountPriceController {
                 if (hasDuplicateBookIds) {
                     return sendResponse(
                         res,
-                        HTTP_STATUS.BAD_REQUEST,
+                        HTTP_STATUS.UNPROCESSABLE_ENTITY,
                         'Can not accept duplicate book id'
                     );
                 }
@@ -201,7 +201,7 @@ class DiscountPriceController {
             if (bookId?.length && bookAvailable?.length != bookId?.length) {
                 return sendResponse(
                     res,
-                    HTTP_STATUS.BAD_REQUEST,
+                    HTTP_STATUS.UNPROCESSABLE_ENTITY,
                     'Some of the book maybe not available'
                 );
             }
@@ -212,7 +212,7 @@ class DiscountPriceController {
                     if (!availableCountry.includes(uppercaseCountry)) {
                         return sendResponse(
                             res,
-                            HTTP_STATUS.BAD_REQUEST,
+                            HTTP_STATUS.UNPROCESSABLE_ENTITY,
                             'Some country maybe not available'
                         );
                     }
@@ -226,7 +226,7 @@ class DiscountPriceController {
             if (discountExistForBook.length) {
                 return sendResponse(
                     res,
-                    HTTP_STATUS.BAD_REQUEST,
+                    HTTP_STATUS.UNPROCESSABLE_ENTITY,
                     'Can not add multiple discount for a book'
                 );
             }
@@ -236,7 +236,7 @@ class DiscountPriceController {
             if (newEndDate < newStartDate) {
                 return sendResponse(
                     res,
-                    HTTP_STATUS.BAD_REQUEST,
+                    HTTP_STATUS.UNPROCESSABLE_ENTITY,
                     'End date cannot be less than start date.'
                 );
             }
@@ -247,7 +247,7 @@ class DiscountPriceController {
             if (daysUntilStartDate < -1) {
                 return sendResponse(
                     res,
-                    HTTP_STATUS.BAD_REQUEST,
+                    HTTP_STATUS.UNPROCESSABLE_ENTITY,
                     'Start date cannot be less than today.'
                 );
             } else {
@@ -258,7 +258,7 @@ class DiscountPriceController {
                 if (daysDifference >= 5) {
                     return sendResponse(
                         res,
-                        HTTP_STATUS.BAD_REQUEST,
+                        HTTP_STATUS.UNPROCESSABLE_ENTITY,
                         'EndDate can not exceed 5 days from startDate'
                     );
                 }
@@ -268,7 +268,7 @@ class DiscountPriceController {
             if (!discountById) {
                 return sendResponse(
                     res,
-                    HTTP_STATUS.BAD_REQUEST,
+                    HTTP_STATUS.NOT_FOUND,
                     'No discount associated by this id'
                 );
             }
@@ -333,7 +333,7 @@ class DiscountPriceController {
                 if (hasDuplicateBookIds) {
                     return sendResponse(
                         res,
-                        HTTP_STATUS.BAD_REQUEST,
+                        HTTP_STATUS.UNPROCESSABLE_ENTITY,
                         'Can not accept duplicate book id'
                     );
                 }
@@ -348,7 +348,7 @@ class DiscountPriceController {
             if (bookId?.length && bookAvailable?.length != bookId?.length) {
                 return sendResponse(
                     res,
-                    HTTP_STATUS.BAD_REQUEST,
+                    HTTP_STATUS.UNPROCESSABLE_ENTITY,
                     'Some of the book maybe not available'
                 );
             }
@@ -358,7 +358,7 @@ class DiscountPriceController {
             if (!discountById) {
                 return sendResponse(
                     res,
-                    HTTP_STATUS.BAD_REQUEST,
+                    HTTP_STATUS.UNPROCESSABLE_ENTITY,
                     'No discount associated by this id'
                 );
             }
@@ -371,7 +371,7 @@ class DiscountPriceController {
                     if (!bookIdArray.includes(ele)) {
                         return sendResponse(
                             res,
-                            HTTP_STATUS.BAD_REQUEST,
+                            HTTP_STATUS.UNPROCESSABLE_ENTITY,
                             'Some book id maybe not available in the discount'
                         );
                     }

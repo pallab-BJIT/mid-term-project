@@ -46,7 +46,7 @@ class BookController {
                 if (!allowedProperties.includes(key)) {
                     return sendResponse(
                         res,
-                        HTTP_STATUS.BAD_REQUEST,
+                        HTTP_STATUS.UNPROCESSABLE_ENTITY,
                         'Invalid property provided book filtering '
                     );
                 }
@@ -222,7 +222,7 @@ class BookController {
                 if (!allowedProperties.includes(key)) {
                     return sendResponse(
                         res,
-                        HTTP_STATUS.BAD_REQUEST,
+                        HTTP_STATUS.UNPROCESSABLE_ENTITY,
                         'Invalid property provided for book create'
                     );
                 }
@@ -239,19 +239,19 @@ class BookController {
                 if (existingBook.title === title) {
                     return sendResponse(
                         res,
-                        HTTP_STATUS.BAD_REQUEST,
+                        HTTP_STATUS.UNPROCESSABLE_ENTITY,
                         'Book with the same title already exists'
                     );
                 } else if (existingBook.description === description) {
                     return sendResponse(
                         res,
-                        HTTP_STATUS.BAD_REQUEST,
+                        HTTP_STATUS.UNPROCESSABLE_ENTITY,
                         'Book with the same description already exists'
                     );
                 } else if (existingBook.isbn === isbn) {
                     return sendResponse(
                         res,
-                        HTTP_STATUS.BAD_REQUEST,
+                        HTTP_STATUS.UNPROCESSABLE_ENTITY,
                         'Book with the same ISBN already exists'
                     );
                 }
@@ -275,11 +275,19 @@ class BookController {
                     result
                 );
             } else {
-                return sendResponse(res, 400, 'Cannot add a new book');
+                return sendResponse(
+                    res,
+                    HTTP_STATUS.BAD_REQUEST,
+                    'Cannot add a new book'
+                );
             }
         } catch (error) {
             databaseLogger(error.message);
-            return sendResponse(res, 500, 'Internal server error');
+            return sendResponse(
+                res,
+                HTTP_STATUS.INTERNAL_SERVER_ERROR,
+                'Internal server error'
+            );
         }
     }
 
@@ -319,7 +327,7 @@ class BookController {
                 if (!allowedProperties.includes(key)) {
                     return sendResponse(
                         res,
-                        HTTP_STATUS.BAD_REQUEST,
+                        HTTP_STATUS.UNPROCESSABLE_ENTITY,
                         'Invalid property provided for book create'
                     );
                 }
@@ -331,7 +339,7 @@ class BookController {
             if (!result) {
                 return sendResponse(
                     res,
-                    HTTP_STATUS.BAD_REQUEST,
+                    HTTP_STATUS.UNPROCESSABLE_ENTITY,
                     'No book found associated with this id'
                 );
             }
@@ -348,7 +356,7 @@ class BookController {
             ) {
                 return sendResponse(
                     res,
-                    HTTP_STATUS.BAD_REQUEST,
+                    HTTP_STATUS.UNPROCESSABLE_ENTITY,
                     'Can not update the book with an empty data'
                 );
             }
@@ -359,7 +367,7 @@ class BookController {
             if (duplicateBook && String(duplicateBook._id) !== String(bookId)) {
                 return sendResponse(
                     res,
-                    HTTP_STATUS.BAD_REQUEST,
+                    HTTP_STATUS.UNPROCESSABLE_ENTITY,
                     'Another book already has the same title, description, or isbn'
                 );
             }
@@ -403,7 +411,7 @@ class BookController {
             if (!result) {
                 return sendResponse(
                     res,
-                    HTTP_STATUS.BAD_REQUEST,
+                    HTTP_STATUS.UNPROCESSABLE_ENTITY,
                     'No book associated with this id'
                 );
             }
