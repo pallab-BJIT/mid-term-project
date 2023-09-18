@@ -30,7 +30,6 @@ class CartController {
             const bookIds = cartExistsForUser.books.map(
                 (ele) => new mongoose.Types.ObjectId(ele.book)
             );
-            // const currentDate
             const discountPrice = await DiscountPrice.find({
                 $and: [
                     { bookIds: { $in: bookIds } },
@@ -39,53 +38,28 @@ class CartController {
                     { counties: { $eq: userExists.address.country } },
                 ],
             });
-            // let totalPrice = 0;
 
-            const allBooks = await bookModel.find({
-                _id: { $in: bookIds },
-            });
-            // console.log('ffff', discountPrice);
-            // console.log('gg', cartExistsForUser);
-            // console.log('jj', allBooks);
+            const allBooks = await bookModel
+                .find({
+                    _id: { $in: bookIds },
+                })
+                .sort({ _id: 1 });
+
+            bookIds.sort();
+
             let totalPrice = 0;
-
-            cartExistsForUser.books.forEach((item) => {
+            cartExistsForUser.books.forEach((item, index) => {
                 const bookId = item.book;
                 const quantity = item.quantity;
+                const book = allBooks[index];
                 totalPrice += calculateTotalPrice(
-                    allBooks,
+                    book,
                     discountPrice,
                     bookId,
                     quantity
                 );
             });
 
-            console.log(totalPrice);
-            // if (discountPrice.length === cartExistsForUser.books.length) {
-            //     // let totalPrice = 0;
-            //     // discountPrice.map((ele) => {
-            //     //     cartExistsForUser.books.map((x) => {
-            //     //         console.log('discountPrice', ele);
-            //     //         console.log('cartExistsForUser', x);
-            //     //     });
-            //     // });
-            //     // for()
-            //     // console.log(totalPrice);
-            //     for (let i = 0; i < cartExistsForUser.books.length; i++) {
-            //         console.log('gggg', discountPrice[i].bookIds);
-            //         console.log('fff', cartExistsForUser.books[i]);
-            //         if (
-            //             discountPrice[i].bookIds.includes(
-            //                 cartExistsForUser.books[i].book
-            //             )
-            //         ) {
-            //             console.log(
-            //                 'xxxxx',
-            //                 cartExistsForUser.books[i].quantity
-            //             );
-            //         }
-            //     }
-            // }
             if (!cartExistsForUser) {
                 return sendResponse(
                     res,
@@ -94,11 +68,15 @@ class CartController {
                     []
                 );
             }
+            const data = {
+                cartExistsForUser,
+                totalPrice,
+            };
             return sendResponse(
                 res,
                 HTTP_STATUS.OK,
                 'Successfully get the data',
-                cartExistsForUser
+                data
             );
         } catch (error) {
             console.log(error);
