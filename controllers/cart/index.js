@@ -483,7 +483,3 @@ class CartController {
 }
 
 module.exports = new CartController();
-
-// total = bookExists.price * quantity * (1 - ele.discountPercentage / 100);
-
-// availableForDiscount = true;
