@@ -102,3 +102,109 @@ undefined is not iterable (cannot read property Symbol(Symbol.iterator))  ( Time
 
 /api/cart/cartByUser  ( Time -> September 18, 2023 8:39 AM)
 
+/api/auth/login  ( Time -> September 18, 2023 8:54 AM)
+
+/api/cart/cartByUser  ( Time -> September 18, 2023 8:54 AM)
+
+/api/transaction/create  ( Time -> September 18, 2023 8:58 AM)
+
+Cannot destructure property 'email' of 'req.user' as it is undefined.  ( Time -> September 18, 2023 8:58 AM)
+
+/api/transaction/create  ( Time -> September 18, 2023 8:59 AM)
+
+userModel is not defined  ( Time -> September 18, 2023 8:59 AM)
+
+/api/transaction/create  ( Time -> September 18, 2023 8:59 AM)
+
+/api/transaction/create  ( Time -> September 18, 2023 9:02 AM)
+
+/api/transaction/create  ( Time -> September 18, 2023 9:03 AM)
+
+/api/transaction/create  ( Time -> September 18, 2023 9:03 AM)
+
+/api/transaction/create  ( Time -> September 18, 2023 9:06 AM)
+
+mongoose is not defined  ( Time -> September 18, 2023 9:06 AM)
+
+/api/transaction/create  ( Time -> September 18, 2023 9:07 AM)
+
+/api/transaction/create  ( Time -> September 18, 2023 9:11 AM)
+
+/api/user/add-balance  ( Time -> September 18, 2023 9:17 AM)
+
+/api/user/add-balance  ( Time -> September 18, 2023 9:27 AM)
+
+/api/user/add-balance  ( Time -> September 18, 2023 9:28 AM)
+
+/api/transaction/create  ( Time -> September 18, 2023 9:29 AM)
+
+/api/transaction/create  ( Time -> September 18, 2023 9:29 AM)
+
+/api/user/add-balance  ( Time -> September 18, 2023 9:29 AM)
+
+/api/transaction/create  ( Time -> September 18, 2023 9:37 AM)
+
+Cannot read properties of undefined (reading 'map')  ( Time -> September 18, 2023 9:37 AM)
+
+/api/transaction/create  ( Time -> September 18, 2023 9:38 AM)
+
+/api/transaction/create  ( Time -> September 18, 2023 9:40 AM)
+
+productsList is not defined  ( Time -> September 18, 2023 9:40 AM)
+
+/api/transaction/create  ( Time -> September 18, 2023 9:40 AM)
+
+/api/transaction/create  ( Time -> September 18, 2023 9:43 AM)
+
+Cannot read properties of undefined (reading '_id')  ( Time -> September 18, 2023 9:43 AM)
+
+/api/transaction/create  ( Time -> September 18, 2023 9:43 AM)
+
+Cannot read properties of undefined (reading '_id')  ( Time -> September 18, 2023 9:43 AM)
+
+/api/transaction/create  ( Time -> September 18, 2023 9:44 AM)
+
+/api/transaction/create  ( Time -> September 18, 2023 9:45 AM)
+
+/api/transaction/create  ( Time -> September 18, 2023 9:46 AM)
+
+Cannot read properties of undefined (reading 'book')  ( Time -> September 18, 2023 9:46 AM)
+
+/api/transaction/create  ( Time -> September 18, 2023 9:46 AM)
+
+/api/transaction/create  ( Time -> September 18, 2023 9:47 AM)
+
+/api/transaction/create  ( Time -> September 18, 2023 9:48 AM)
+
+/api/transaction/create  ( Time -> September 18, 2023 9:50 AM)
+
+Cannot set headers after they are sent to the client  ( Time -> September 18, 2023 9:50 AM)
+
+/api/transaction/create  ( Time -> September 18, 2023 9:50 AM)
+
+/api/transaction/create  ( Time -> September 18, 2023 9:53 AM)
+
+productFound is not defined  ( Time -> September 18, 2023 9:53 AM)
+
+/api/auth/login  ( Time -> September 18, 2023 9:54 AM)
+
+/api/transaction/create  ( Time -> September 18, 2023 9:54 AM)
+
+/api/transaction/create  ( Time -> September 18, 2023 9:55 AM)
+
+/api/transaction/create  ( Time -> September 18, 2023 9:58 AM)
+
+/api/transaction/create  ( Time -> September 18, 2023 10:38 AM)
+
+Transaction validation failed: total: Path `total` is required.  ( Time -> September 18, 2023 10:38 AM)
+
+/api/transaction/create  ( Time -> September 18, 2023 10:38 AM)
+
+/api/transaction/create  ( Time -> September 18, 2023 10:42 AM)
+
+/api/transaction/create  ( Time -> September 18, 2023 10:43 AM)
+
+/api/cart/create  ( Time -> September 18, 2023 10:43 AM)
+
+/api/transaction/create  ( Time -> September 18, 2023 10:44 AM)
+

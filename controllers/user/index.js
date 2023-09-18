@@ -53,7 +53,9 @@ class UserController {
             //         'You can only add amount when your balance less than 100'
             //     );
             // }
-            user.balance = 0;
+            if (!user.balance) {
+                user.balance = 0;
+            }
             await user.save();
             user.balance += amount;
             const addedBalance = await user.save();
