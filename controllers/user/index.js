@@ -4,6 +4,7 @@ const userModel = require('../../models/user');
 const { sendResponse } = require('../../util/response');
 const databaseLogger = require('../../util/dbLogger');
 const authModel = require('../../models/auth');
+const { sendValidationError } = require('../../util/validationErrorHelper');
 
 class UserController {
     async addBalance(req, res) {
@@ -14,18 +15,9 @@ class UserController {
 
             const validation = validationResult(req).array();
             if (validation.length) {
-                const error = {};
-                validation.forEach((validationError) => {
-                    const property = validationError.path;
-                    error[property] = validationError.msg;
-                });
-                return sendResponse(
-                    res,
-                    HTTP_STATUS.UNPROCESSABLE_ENTITY,
-                    'Unprocessable Entity',
-                    error
-                );
+                return sendValidationError(res, validation);
             }
+
             if (rank === 1) {
                 return sendResponse(
                     res,
@@ -54,13 +46,13 @@ class UserController {
                 );
             }
 
-            if (user.balance >= 100) {
-                return sendResponse(
-                    res,
-                    HTTP_STATUS.BAD_REQUEST,
-                    'You can only add amount when your balance less than 100'
-                );
-            }
+            // if (user.balance >= 100) {
+            //     return sendResponse(
+            //         res,
+            //         HTTP_STATUS.BAD_REQUEST,
+            //         'You can only add amount when your balance less than 100'
+            //     );
+            // }
             user.balance = 0;
             await user.save();
             user.balance += amount;
@@ -123,18 +115,9 @@ class UserController {
             databaseLogger(req.originalUrl);
             const validation = validationResult(req).array();
             if (validation.length) {
-                const error = {};
-                validation.forEach((ele) => {
-                    const property = ele.path;
-                    error[property] = ele.msg;
-                });
-                return sendResponse(
-                    res,
-                    HTTP_STATUS.UNPROCESSABLE_ENTITY,
-                    'Unprocessable Entity',
-                    error
-                );
+                return sendValidationError(res, validation);
             }
+
             const { userId } = req.params;
             const findUserFromAuth = await authModel.findById(userId);
             if (!findUserFromAuth) {
@@ -187,18 +170,9 @@ class UserController {
             databaseLogger(req.originalUrl);
             const validation = validationResult(req).array();
             if (validation.length) {
-                const error = {};
-                validation.forEach((ele) => {
-                    const property = ele.path;
-                    error[property] = ele.msg;
-                });
-                return sendResponse(
-                    res,
-                    HTTP_STATUS.UNPROCESSABLE_ENTITY,
-                    'Unprocessable Entity',
-                    error
-                );
+                return sendValidationError(res, validation);
             }
+
             const { name, rank, isVerified } = req.body;
             const { userId } = req.params;
             const allowedProperties = ['name', 'rank', 'isVerified'];
@@ -253,7 +227,6 @@ class UserController {
                 'Something went wrong.'
             );
         } catch (error) {
-            console.log(error);
             databaseLogger(error.message);
             return sendResponse(res, 500, 'Internal server error');
         }

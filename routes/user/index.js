@@ -25,4 +25,4 @@ router
         UserController.deleteUser
     );
 
-exports.router = router;
+module.exports = router;

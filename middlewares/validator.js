@@ -518,12 +518,17 @@ const validator = {
             }),
         body('isVerified')
             .optional()
-            .isBoolean()
-            .withMessage('Invalid value provided'),
+            .custom((value) => {
+                if (typeof value === 'boolean') {
+                    return true;
+                } else {
+                    throw new Error('Invalid value provided');
+                }
+            }),
     ],
 
     addBookReview: [
-        body('book')
+        param('book')
             .exists()
             .not()
             .equals('')
@@ -596,6 +601,302 @@ const validator = {
                     return true;
                 } else {
                     throw new Error('Invalid book id');
+                }
+            }),
+    ],
+
+    addDiscount: [
+        body('discountPercentage')
+            .exists()
+            .withMessage('Discount Percentage is required')
+            .bail()
+            .isNumeric()
+            .withMessage('Discount Percentage can only be of type number')
+            .bail()
+            .custom((value) => {
+                if (value < 5) {
+                    throw new Error(
+                        'Discount Percentage can not be less than 5'
+                    );
+                }
+                if (value > 40) {
+                    throw new Error(
+                        'Discount Percentage can not be greater than 40'
+                    );
+                } else {
+                    return true;
+                }
+            }),
+        body('bookId')
+            .exists()
+            .withMessage('Book ID is required')
+            .bail()
+            .custom((value) => {
+                const allBookIdAvailable = value.every(
+                    (ele) => ele.trim() != ''
+                );
+                const allBookIdType = value.every((ele) =>
+                    mongoose.Types.ObjectId.isValid(ele)
+                );
+                if (!value.length) {
+                    throw new Error('Book ID is required');
+                }
+                if (!allBookIdAvailable) {
+                    throw new Error('Book ID is required');
+                }
+                if (allBookIdType) {
+                    return true;
+                } else {
+                    throw new Error('Invalid Book id');
+                }
+            }),
+        body('startDate')
+            .exists()
+            .withMessage('Start Date is required')
+            .bail()
+            .isDate()
+            .withMessage('Start date can only be of type of date')
+            .custom((value) => {
+                if (value.trim() === '') {
+                    throw new Error('Start date is required');
+                } else {
+                    return true;
+                }
+            }),
+        body('endDate')
+            .exists()
+            .withMessage('End Date is required')
+            .bail()
+            .isDate()
+            .withMessage('End date can only be of type of date')
+            .custom((value) => {
+                if (value.trim() === '') {
+                    throw new Error('End date is required');
+                } else {
+                    return true;
+                }
+            }),
+        body('country')
+            .exists()
+            .withMessage('County is required')
+            .bail()
+            .custom((value) => {
+                const allCountryType = value.every(
+                    (ele) => typeof ele === 'string'
+                );
+                let allCountyAvailable;
+                if (allCountryType) {
+                    allCountyAvailable = value.every(
+                        (ele) => ele?.trim() != ''
+                    );
+                }
+                if (!value.length) {
+                    throw new Error('Country is required');
+                }
+                if (!allCountyAvailable) {
+                    throw new Error('Country is required');
+                } else if (!allCountryType) {
+                    throw new Error('Country type must be string');
+                } else {
+                    return true;
+                }
+            }),
+    ],
+
+    updateDiscount: [
+        param('discountId')
+            .exists()
+            .withMessage('Discount id is required')
+            .custom((value) => {
+                if (!mongoose.Types.ObjectId.isValid(value)) {
+                    throw new Error('Invalid discount id provided');
+                } else {
+                    return true;
+                }
+            }),
+        body('discountPercentage')
+            .optional()
+            .isNumeric()
+            .withMessage('Discount Percentage can only be of type number')
+            .bail()
+            .custom((value) => {
+                if (value < 5) {
+                    throw new Error(
+                        'Discount Percentage can not be less than 5'
+                    );
+                }
+                if (value > 40) {
+                    throw new Error(
+                        'Discount Percentage can not be greater than 40'
+                    );
+                } else {
+                    return true;
+                }
+            }),
+        body('bookId')
+            .optional()
+            .custom((value) => {
+                const allBookIdAvailable = value.every(
+                    (ele) => ele.trim() != ''
+                );
+                const allBookIdType = value.every((ele) =>
+                    mongoose.Types.ObjectId.isValid(ele)
+                );
+                if (!value.length) {
+                    throw new Error('Book ID is required');
+                }
+                if (!allBookIdAvailable) {
+                    throw new Error('Book ID is required');
+                }
+                if (allBookIdType) {
+                    return true;
+                } else {
+                    throw new Error('Invalid Book id');
+                }
+            }),
+        body('startDate')
+            .optional()
+            .isDate()
+            .withMessage('Start date can only be of type of date')
+            .custom((value) => {
+                if (value.trim() === '') {
+                    throw new Error('Start date is required');
+                } else {
+                    return true;
+                }
+            }),
+        body('endDate')
+            .optional()
+            .isDate()
+            .withMessage('End date can only be of type of date')
+            .custom((value) => {
+                if (value.trim() === '') {
+                    throw new Error('End date is required');
+                } else {
+                    return true;
+                }
+            }),
+        body('country')
+            .optional()
+            .custom((value) => {
+                const allCountryType = value.every(
+                    (ele) => typeof ele === 'string'
+                );
+                let allCountyAvailable;
+                if (allCountryType) {
+                    allCountyAvailable = value.every(
+                        (ele) => ele?.trim() != ''
+                    );
+                }
+                if (!value.length) {
+                    throw new Error('Country is required');
+                }
+                if (!allCountyAvailable) {
+                    throw new Error('Country is required');
+                } else if (!allCountryType) {
+                    throw new Error('Country type must be string');
+                } else {
+                    return true;
+                }
+            }),
+    ],
+
+    deleteDiscount: [
+        param('discountId')
+            .exists()
+            .withMessage('Discount id is required')
+            .custom((value) => {
+                if (!mongoose.Types.ObjectId.isValid(value)) {
+                    throw new Error('Invalid discount id provided');
+                } else {
+                    return true;
+                }
+            }),
+        body('bookId')
+            .optional()
+            .custom((value) => {
+                const allBookIdAvailable = value.every(
+                    (ele) => ele.trim() != ''
+                );
+                const allBookIdType = value.every((ele) =>
+                    mongoose.Types.ObjectId.isValid(ele)
+                );
+                if (!value.length) {
+                    throw new Error('Book ID is required');
+                }
+                if (!allBookIdAvailable) {
+                    throw new Error('Book ID is required');
+                }
+                if (allBookIdType) {
+                    return true;
+                } else {
+                    throw new Error('Invalid Book id');
+                }
+            }),
+    ],
+
+    addToCart: [
+        body('book')
+            .exists()
+            .withMessage('Book id is required')
+            .bail()
+            .not()
+            .equals('')
+            .withMessage('Book id is required')
+            .bail()
+            .custom((value) => {
+                if (!mongoose.Types.ObjectId.isValid(value)) {
+                    throw new Error('Invalid book id provided');
+                } else {
+                    return true;
+                }
+            }),
+        body('quantity')
+            .exists()
+            .withMessage('Quantity is required')
+            .bail()
+            .custom((value) => {
+                if (value <= 0) {
+                    throw new Error('Quantity can not be less than 0');
+                } else if (value > 10000000) {
+                    throw new Error(
+                        'Quantity can not be greater than 10000000'
+                    );
+                } else {
+                    return true;
+                }
+            }),
+    ],
+
+    updateCart: [
+        body('book')
+            .exists()
+            .withMessage('Book id is required')
+            .bail()
+            .not()
+            .equals('')
+            .withMessage('Book id is required')
+            .bail()
+            .custom((value) => {
+                if (!mongoose.Types.ObjectId.isValid(value)) {
+                    throw new Error('Invalid book id provided');
+                } else {
+                    return true;
+                }
+            }),
+        body('quantity')
+            .exists()
+            .withMessage('Quantity is required')
+            .bail()
+            .custom((value) => {
+                if (value <= 0) {
+                    throw new Error('Quantity can not be less than 0');
+                } else if (value > 10000000) {
+                    throw new Error(
+                        'Quantity can not be greater than 10000000'
+                    );
+                } else {
+                    return true;
                 }
             }),
     ],

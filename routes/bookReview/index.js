@@ -10,7 +10,7 @@ const router = express.Router();
 
 router
     .post(
-        '/create',
+        '/create/:book',
         [tokenAuthorization, isUser, validator.addBookReview],
         BookReviewController.createReview
     )
@@ -25,4 +25,4 @@ router
         BookReviewController.deleteReview
     );
 
-exports.router = router;
+module.exports = router;

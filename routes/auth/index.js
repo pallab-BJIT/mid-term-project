@@ -10,4 +10,4 @@ router
     .post('/refreshToken', AuthController.refreshToken);
 // .delete('/logout', AuthController.logOut);
 
-exports.router = router;
+module.exports = router;

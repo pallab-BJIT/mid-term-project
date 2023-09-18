@@ -25,4 +25,4 @@ router
         BookController.deleteBook
     );
 
-exports.router = router;
+module.exports = router;

@@ -11,6 +11,7 @@ const generateAccessToken = require('../../util/accessTokenGenerator');
 const generateRefreshToken = require('../../util/refreshTokenGenerator');
 const jwt = require('jsonwebtoken');
 const databaseLogger = require('../../util/dbLogger');
+const { sendValidationError } = require('../../util/validationErrorHelper');
 class AuthController {
     async signUp(req, res) {
         try {
@@ -26,83 +27,65 @@ class AuthController {
             } = req.body;
             const validation = validationResult(req).array();
             if (validation.length) {
-                const error = {};
-                validation.forEach((ele) => {
-                    const property = ele.path;
-                    error[property] = ele.msg;
-                });
-                return sendResponse(
-                    res,
-                    HTTP_STATUS.UNPROCESSABLE_ENTITY,
-                    'Unprocessable entity',
-                    error
-                );
-            } else {
-                const allowedProperties = [
-                    'email',
-                    'password',
-                    'confirmPassword',
-                    'rank',
-                    'name',
-                    'phoneNumber',
-                    'address',
-                ];
+                return sendValidationError(res, validation);
+            }
+            const allowedProperties = [
+                'email',
+                'password',
+                'confirmPassword',
+                'rank',
+                'name',
+                'phoneNumber',
+                'address',
+            ];
 
-                for (const key in req.body) {
-                    if (!allowedProperties.includes(key)) {
-                        return sendResponse(
-                            res,
-                            HTTP_STATUS.BAD_REQUEST,
-                            'Invalid property provided for book create'
-                        );
-                    }
+            for (const key in req.body) {
+                if (!allowedProperties.includes(key)) {
+                    return sendResponse(
+                        res,
+                        HTTP_STATUS.BAD_REQUEST,
+                        'Invalid property provided for book create'
+                    );
                 }
-                const emailExists = await authModel.findOne({ email: email });
-                const emailExistsAtUser = await userModel.findOne({
-                    email: email,
+            }
+            const emailExists = await authModel.findOne({ email: email });
+            const emailExistsAtUser = await userModel.findOne({
+                email: email,
+            });
+            if (!emailExists && !emailExistsAtUser) {
+                const newUser = await userModel.create({
+                    email,
+                    name,
+                    phoneNumber,
+                    address,
                 });
-                if (!emailExists && !emailExistsAtUser) {
-                    const newUser = await userModel.create({
+                if (password != confirmPassword) {
+                    return sendResponse(
+                        res,
+                        HTTP_STATUS.BAD_REQUEST,
+                        'Password and confirm password should be same'
+                    );
+                }
+                const hashedPassword = await hashPasswordUsingBcrypt(password);
+                if (newUser && hashedPassword) {
+                    const newRegistration = await authModel.create({
                         email,
-                        name,
-                        phoneNumber,
-                        address,
+                        password: hashedPassword,
+                        rank,
+                        user: newUser._id,
                     });
-                    if (password != confirmPassword) {
+
+                    const savedRegistration = await authModel
+                        .findById(newRegistration._id)
+                        .select('-password')
+                        .exec();
+                    if (newRegistration && savedRegistration) {
                         return sendResponse(
                             res,
-                            HTTP_STATUS.BAD_REQUEST,
-                            'Password and confirm password should be same'
+                            HTTP_STATUS.CREATED,
+                            'Sign up successfully',
+                            savedRegistration
                         );
-                    }
-                    const hashedPassword =
-                        await hashPasswordUsingBcrypt(password);
-                    if (newUser && hashedPassword) {
-                        const newRegistration = await authModel.create({
-                            email,
-                            password: hashedPassword,
-                            rank,
-                            user: newUser._id,
-                        });
-
-                        const savedRegistration = await authModel
-                            .findById(newRegistration._id)
-                            .select('-password')
-                            .exec();
-                        if (newRegistration && savedRegistration) {
-                            return sendResponse(
-                                res,
-                                HTTP_STATUS.CREATED,
-                                'Sign up successfully',
-                                savedRegistration
-                            );
-                        } else {
-                            return sendResponse(
-                                res,
-                                HTTP_STATUS.BAD_REQUEST,
-                                'Something went wrong'
-                            );
-                        }
                     } else {
                         return sendResponse(
                             res,
@@ -114,9 +97,15 @@ class AuthController {
                     return sendResponse(
                         res,
                         HTTP_STATUS.BAD_REQUEST,
-                        'The email is already in use'
+                        'Something went wrong'
                     );
                 }
+            } else {
+                return sendResponse(
+                    res,
+                    HTTP_STATUS.BAD_REQUEST,
+                    'The email is already in use'
+                );
             }
         } catch (error) {
             databaseLogger(error.message);
@@ -133,74 +122,63 @@ class AuthController {
             databaseLogger(req.originalUrl);
             const validation = validationResult(req).array();
             if (validation.length) {
-                const error = {};
-                validation.forEach((validationError) => {
-                    const property = validationError.path;
-                    error[property] = validationError.msg;
-                });
-                return sendResponse(
-                    res,
-                    HTTP_STATUS.UNPROCESSABLE_ENTITY,
-                    'Unprocessable Entity',
-                    error
-                );
-            } else {
-                const { email, password } = req.body;
-                const allowedProperties = ['email', 'password'];
+                return sendValidationError(res, validation);
+            }
+            const { email, password } = req.body;
+            const allowedProperties = ['email', 'password'];
 
-                for (const key in req.body) {
-                    if (!allowedProperties.includes(key)) {
-                        return sendResponse(
-                            res,
-                            HTTP_STATUS.BAD_REQUEST,
-                            'Invalid property provided for user update: '
-                        );
-                    }
-                }
-                const emailExists = await authModel
-                    .findOne({ email: email })
-                    .populate('user');
-                if (!emailExists) {
+            for (const key in req.body) {
+                if (!allowedProperties.includes(key)) {
                     return sendResponse(
                         res,
                         HTTP_STATUS.BAD_REQUEST,
-                        'You are not registered'
+                        'Invalid property provided for user update: '
+                    );
+                }
+            }
+            const emailExists = await authModel
+                .findOne({ email: email })
+                .populate('user');
+            if (!emailExists) {
+                return sendResponse(
+                    res,
+                    HTTP_STATUS.BAD_REQUEST,
+                    'You are not registered'
+                );
+            } else {
+                const passwordExists = await comparePasswords(
+                    password,
+                    emailExists?.password
+                );
+
+                if (!passwordExists) {
+                    return sendResponse(
+                        res,
+                        HTTP_STATUS.BAD_REQUEST,
+                        'Wrong credentials'
                     );
                 } else {
-                    const passwordExists = await comparePasswords(
-                        password,
-                        emailExists?.password
+                    const data = {
+                        _id: emailExists?._id,
+                        email: emailExists?.email,
+                        rank: emailExists?.rank,
+                        name: emailExists?.user?.name,
+                        address: emailExists?.user?.address,
+                        phoneNumber: emailExists?.user?.phoneNumber,
+                    };
+                    const jwtToken = generateAccessToken(data);
+                    const refreshToken = generateRefreshToken(data);
+                    data.accessToken = jwtToken;
+                    data.refreshToken = refreshToken;
+                    emailExists.sessionActive = true;
+                    await emailExists.save();
+
+                    return sendResponse(
+                        res,
+                        HTTP_STATUS.OK,
+                        'Sign in successful',
+                        data
                     );
-
-                    if (!passwordExists) {
-                        return sendResponse(
-                            res,
-                            HTTP_STATUS.BAD_REQUEST,
-                            'Wrong credentials'
-                        );
-                    } else {
-                        const data = {
-                            _id: emailExists?._id,
-                            email: emailExists?.email,
-                            rank: emailExists?.rank,
-                            name: emailExists?.user?.name,
-                            address: emailExists?.user?.address,
-                            phoneNumber: emailExists?.user?.phoneNumber,
-                        };
-                        const jwtToken = generateAccessToken(data);
-                        const refreshToken = generateRefreshToken(data);
-                        data.accessToken = jwtToken;
-                        data.refreshToken = refreshToken;
-                        emailExists.sessionActive = true;
-                        await emailExists.save();
-
-                        return sendResponse(
-                            res,
-                            HTTP_STATUS.OK,
-                            'Sign in successful',
-                            data
-                        );
-                    }
                 }
             }
         } catch (error) {

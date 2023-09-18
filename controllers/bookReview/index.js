@@ -6,26 +6,17 @@ const bookReviewModel = require('../../models/bookReview');
 const bookModel = require('../../models/book');
 const authModel = require('../../models/auth');
 const userModel = require('../../models/user');
-
+const { sendValidationError } = require('../../util/validationErrorHelper');
 class BookReviewController {
     async createReview(req, res) {
         try {
             databaseLogger(req.originalUrl);
 
-            const { book, message, rating } = req.body;
+            const { message, rating } = req.body;
+            const { book } = req.params;
             const validation = validationResult(req).array();
             if (validation.length) {
-                const error = {};
-                validation.forEach((validationError) => {
-                    const property = validationError.path;
-                    error[property] = validationError.msg;
-                });
-                return sendResponse(
-                    res,
-                    HTTP_STATUS.UNPROCESSABLE_ENTITY,
-                    'Unprocessable Entity',
-                    error
-                );
+                return sendValidationError(res, validation);
             }
 
             const allowedProperties = ['book', 'message', 'rating'];
@@ -88,8 +79,7 @@ class BookReviewController {
                     return sendResponse(
                         res,
                         HTTP_STATUS.CREATED,
-                        'Review added successfully',
-                        result
+                        'Review added successfully'
                     );
                 }
                 return sendResponse(
@@ -134,8 +124,7 @@ class BookReviewController {
                     return sendResponse(
                         res,
                         HTTP_STATUS.CREATED,
-                        'Review added successfully',
-                        bookExistInReview
+                        'Review added successfully'
                     );
                 }
             }
@@ -157,17 +146,7 @@ class BookReviewController {
             const { bookId } = req.params;
             const validation = validationResult(req).array();
             if (validation.length) {
-                const error = {};
-                validation.forEach((validationError) => {
-                    const property = validationError.path;
-                    error[property] = validationError.msg;
-                });
-                return sendResponse(
-                    res,
-                    HTTP_STATUS.UNPROCESSABLE_ENTITY,
-                    'Unprocessable Entity',
-                    error
-                );
+                return sendValidationError(res, validation);
             }
 
             const allowedProperties = ['message', 'rating'];
@@ -245,8 +224,7 @@ class BookReviewController {
             return sendResponse(
                 res,
                 HTTP_STATUS.ACCEPTED,
-                'Successfully updated the review',
-                bookExistInReview
+                'Successfully updated the review'
             );
         } catch (error) {
             console.log(error);
@@ -265,18 +243,9 @@ class BookReviewController {
             const { bookId } = req.params;
             const validation = validationResult(req).array();
             if (validation.length) {
-                const error = {};
-                validation.forEach((validationError) => {
-                    const property = validationError.path;
-                    error[property] = validationError.msg;
-                });
-                return sendResponse(
-                    res,
-                    HTTP_STATUS.UNPROCESSABLE_ENTITY,
-                    'Unprocessable Entity',
-                    error
-                );
+                return sendValidationError(res, validation);
             }
+
             const bookFound = await bookModel.findById(bookId);
             const userFoundInAuth = await authModel.findById(req.user._id);
             const userFoundInUser = await userModel.findById(
@@ -354,7 +323,6 @@ class BookReviewController {
                 'Deleted review successfully'
             );
         } catch (error) {
-            console.log(error);
             databaseLogger(error.message);
             return sendResponse(
                 res,

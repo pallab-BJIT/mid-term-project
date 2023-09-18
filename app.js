@@ -9,16 +9,12 @@ const { sendResponse } = require('./util/response');
 const HTTP_STATUS = require('./constants/statusCode');
 const connectDB = require('./configs/databaseConnection');
 
+const routes = require('./routes');
 const port = process.env.PORT;
 app.use(cors({ origin: '*' }));
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-const bookRouter = require('./routes/book');
-const authRouter = require('./routes/auth');
-const userRouter = require('./routes/user');
-const bookReviewRouter = require('./routes/bookReview');
-//! Invalid json handler
 app.use((err, req, res, next) => {
     if (err instanceof SyntaxError && err.status === 400 && 'body' in err) {
         return sendResponse(
@@ -30,10 +26,7 @@ app.use((err, req, res, next) => {
     next();
 });
 
-app.use('/api/books', bookRouter.router);
-app.use('/api/auth', authRouter.router);
-app.use('/api/user', userRouter.router);
-app.use('/api/review', bookReviewRouter.router);
+app.use('/api', require('./routes'));
 
 app.get('/', (req, res) => {
     return sendResponse(res, HTTP_STATUS.OK, 'This is the base route');

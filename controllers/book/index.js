@@ -4,6 +4,7 @@ const { sendResponse } = require('../../util/response');
 const mongoose = require('mongoose');
 const { validationResult } = require('express-validator');
 const databaseLogger = require('../../util/dbLogger');
+const { sendValidationError } = require('../../util/validationErrorHelper');
 
 class BookController {
     async getAllBooks(req, res) {
@@ -11,17 +12,7 @@ class BookController {
             databaseLogger(req.originalUrl);
             const validation = validationResult(req).array();
             if (validation.length) {
-                const error = {};
-                validation.forEach((validationError) => {
-                    const property = validationError.path;
-                    error[property] = validationError.msg;
-                });
-                return sendResponse(
-                    res,
-                    HTTP_STATUS.UNPROCESSABLE_ENTITY,
-                    'Unprocessable Entity',
-                    error
-                );
+                return sendValidationError(res, validation);
             }
 
             let page = parseInt(req.query.offset);
@@ -69,7 +60,7 @@ class BookController {
                 if (!page && !limit) {
                     page = 1;
                     limit = 30;
-                    totalCount = limit;
+                    totalCount = totalCount;
                 } else {
                     totalCount = await bookModel.countDocuments();
                 }
@@ -185,101 +176,90 @@ class BookController {
             databaseLogger(req.originalUrl);
             const validation = validationResult(req).array();
             if (validation.length) {
-                const error = {};
-                validation.forEach((ele) => {
-                    const property = ele.path;
-                    error[property] = ele.msg;
-                });
-                return sendResponse(
-                    res,
-                    HTTP_STATUS.UNPROCESSABLE_ENTITY,
-                    'Unprocessable Entity',
-                    error
-                );
-            } else {
-                const {
-                    title,
-                    description,
-                    author,
-                    price,
-                    rating,
-                    stock,
-                    category,
-                    publishedAt,
-                    isbn,
-                } = req.body;
+                return sendValidationError(res, validation);
+            }
+            const {
+                title,
+                description,
+                author,
+                price,
+                rating,
+                stock,
+                category,
+                publishedAt,
+                isbn,
+            } = req.body;
 
-                const allowedProperties = [
-                    'title',
-                    'description',
-                    'author',
-                    'price',
-                    'rating',
-                    'stock',
-                    'category',
-                    'publishedAt',
-                    'isbn',
-                ];
+            const allowedProperties = [
+                'title',
+                'description',
+                'author',
+                'price',
+                'rating',
+                'stock',
+                'category',
+                'publishedAt',
+                'isbn',
+            ];
 
-                for (const key in req.body) {
-                    if (!allowedProperties.includes(key)) {
-                        return sendResponse(
-                            res,
-                            HTTP_STATUS.BAD_REQUEST,
-                            'Invalid property provided for book create'
-                        );
-                    }
-                }
-
-                const existingBook = await bookModel.findOne({
-                    $or: [
-                        { title: title },
-                        { description: description },
-                        { isbn: isbn },
-                    ],
-                });
-                if (existingBook) {
-                    if (existingBook.title === title) {
-                        return sendResponse(
-                            res,
-                            HTTP_STATUS.BAD_REQUEST,
-                            'Book with the same title already exists'
-                        );
-                    } else if (existingBook.description === description) {
-                        return sendResponse(
-                            res,
-                            HTTP_STATUS.BAD_REQUEST,
-                            'Book with the same description already exists'
-                        );
-                    } else if (existingBook.isbn === isbn) {
-                        return sendResponse(
-                            res,
-                            HTTP_STATUS.BAD_REQUEST,
-                            'Book with the same ISBN already exists'
-                        );
-                    }
-                }
-                const result = await bookModel.create({
-                    title,
-                    description,
-                    author,
-                    price,
-                    rating,
-                    stock,
-                    category,
-                    isbn,
-                    publishedAt,
-                });
-                if (result) {
+            for (const key in req.body) {
+                if (!allowedProperties.includes(key)) {
                     return sendResponse(
                         res,
-                        201,
-                        'Successfully added a new book',
-                        result
+                        HTTP_STATUS.BAD_REQUEST,
+                        'Invalid property provided for book create'
                     );
-                } else {
-                    return sendResponse(res, 400, 'Cannot add a new book');
                 }
+            }
+
+            const existingBook = await bookModel.findOne({
+                $or: [
+                    { title: title },
+                    { description: description },
+                    { isbn: isbn },
+                ],
+            });
+            if (existingBook) {
+                if (existingBook.title === title) {
+                    return sendResponse(
+                        res,
+                        HTTP_STATUS.BAD_REQUEST,
+                        'Book with the same title already exists'
+                    );
+                } else if (existingBook.description === description) {
+                    return sendResponse(
+                        res,
+                        HTTP_STATUS.BAD_REQUEST,
+                        'Book with the same description already exists'
+                    );
+                } else if (existingBook.isbn === isbn) {
+                    return sendResponse(
+                        res,
+                        HTTP_STATUS.BAD_REQUEST,
+                        'Book with the same ISBN already exists'
+                    );
+                }
+            }
+            const result = await bookModel.create({
+                title,
+                description,
+                author,
+                price,
+                rating,
+                stock,
+                category,
+                isbn,
+                publishedAt,
+            });
+            if (result) {
+                return sendResponse(
+                    res,
+                    201,
+                    'Successfully added a new book',
+                    result
+                );
+            } else {
+                return sendResponse(res, 400, 'Cannot add a new book');
             }
         } catch (error) {
             databaseLogger(error.message);
@@ -292,17 +272,7 @@ class BookController {
             databaseLogger(req.originalUrl);
             const validation = validationResult(req).array();
             if (validation.length) {
-                const error = {};
-                validation.forEach((ele) => {
-                    const property = ele.path;
-                    error[property] = ele.msg;
-                });
-                return sendResponse(
-                    res,
-                    HTTP_STATUS.UNPROCESSABLE_ENTITY,
-                    'Unprocessable Entity',
-                    error
-                );
+                return sendValidationError(res, validation);
             }
 
             const {
@@ -409,18 +379,9 @@ class BookController {
             databaseLogger(req.originalUrl);
             const validation = validationResult(req).array();
             if (validation.length) {
-                const error = {};
-                validation.forEach((ele) => {
-                    const property = ele.path;
-                    error[property] = ele.msg;
-                });
-                return sendResponse(
-                    res,
-                    HTTP_STATUS.UNPROCESSABLE_ENTITY,
-                    'Unprocessable Entity',
-                    error
-                );
+                return sendValidationError(res, validation);
             }
+
             const { bookId } = req.params;
             const result = await bookModel.findByIdAndDelete(bookId);
             if (!result) {
