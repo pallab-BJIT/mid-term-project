@@ -35,15 +35,17 @@ class CartController {
             const bookIds = cartExistsForUser.books.map(
                 (ele) => new mongoose.Types.ObjectId(ele.book)
             );
-            const discountPrice = await DiscountPrice.find({
+            const query = {
                 $and: [
-                    { bookIds: { $in: bookIds } },
                     { startDate: { $lte: new Date() } },
                     { endDate: { $gte: new Date() } },
+                ],
+                $or: [
+                    { bookIds: { $in: bookIds } },
                     { counties: { $eq: userExists.address.country } },
                 ],
-            });
-
+            };
+            const discountPrice = await DiscountPrice.find(query);
             const allBooks = await bookModel
                 .find({
                     _id: { $in: bookIds },

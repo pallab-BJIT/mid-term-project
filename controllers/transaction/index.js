@@ -57,7 +57,10 @@ class TransactionController {
             const { email } = req.user;
             const { cart, paymentMethod } = req.body;
             const userExists = await userModel.findOne({ email });
-            const cartExistsForUser = await cartModel.findById(cart);
+            const cartExistsForUser = await cartModel.findOne({
+                _id: cart,
+                user: userExists._id,
+            });
             if (!cartExistsForUser) {
                 return sendResponse(
                     res,
@@ -75,14 +78,17 @@ class TransactionController {
             const bookIds = cartExistsForUser.books.map(
                 (ele) => new mongoose.Types.ObjectId(ele.book)
             );
-            const discountPrice = await DiscountPrice.find({
+            const query = {
                 $and: [
-                    { bookIds: { $in: bookIds } },
                     { startDate: { $lte: new Date() } },
                     { endDate: { $gte: new Date() } },
+                ],
+                $or: [
+                    { bookIds: { $in: bookIds } },
                     { counties: { $eq: userExists.address.country } },
                 ],
-            });
+            };
+            const discountPrice = await DiscountPrice.find(query);
 
             const allBooks = await bookModel
                 .find({

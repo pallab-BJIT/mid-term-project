@@ -925,7 +925,8 @@ const validator = {
             .equals('')
             .withMessage('Payment method is required')
             .custom((value) => {
-                if (value != 'online' || value != 'cash' || value != 'card') {
+                const allowedPaymentMethods = ['online', 'cash', 'card'];
+                if (!allowedPaymentMethods.includes(value)) {
                     throw new Error('Invalid payment method provided');
                 } else if (value.length > 20) {
                     throw new Error(
