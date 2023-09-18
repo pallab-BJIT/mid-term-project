@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const { validationResult } = require('express-validator');
 const databaseLogger = require('../../util/dbLogger');
 const { sendValidationError } = require('../../util/validationErrorHelper');
+const DiscountPrice = require('../../models/discountPrice');
 
 class BookController {
     async getAllBooks(req, res) {
@@ -147,21 +148,36 @@ class BookController {
             if (!mongoose.Types.ObjectId.isValid(bookId)) {
                 return sendResponse(
                     res,
-                    HTTP_STATUS.BAD_REQUEST,
+                    HTTP_STATUS.UNPROCESSABLE_ENTITY,
                     'Invalid objectId provided'
                 );
             }
+            const discountPrice = await DiscountPrice.findOne({
+                $and: [
+                    { bookIds: { $eq: bookId } },
+                    { startDate: { $lte: new Date() } },
+                    { endDate: { $gte: new Date() } },
+                ],
+            });
             const result = await bookModel.findById(bookId).populate('reviews');
+            let data = { result };
+            if (discountPrice) {
+                const discountAmount =
+                    (result.price * discountPrice.discountPercentage) / 100;
+                const discountedPrice = result.price - discountAmount;
+                data.discountPrice = discountedPrice.toFixed(2);
+            }
             if (result) {
                 return sendResponse(
                     res,
                     HTTP_STATUS.OK,
                     'Successfully get all the data',
-                    result
+                    data
                 );
             }
-            return sendResponse(res, HTTP_STATUS.BAD_REQUEST, 'No data found');
+            return sendResponse(res, HTTP_STATUS.OK, 'No data found');
         } catch (error) {
+            console.log(error);
             databaseLogger(error.message);
             return sendResponse(
                 res,
