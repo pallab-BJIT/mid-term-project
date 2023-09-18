@@ -24,9 +24,14 @@ class CartController {
                 );
             }
 
-            const cartExistsForUser = await cartModel.findOne({
-                user: userExists._id,
-            });
+            const cartExistsForUser = await cartModel
+                .findOne({
+                    user: userExists._id,
+                })
+                .populate(
+                    'books.book',
+                    'title description price rating category'
+                );
             const bookIds = cartExistsForUser.books.map(
                 (ele) => new mongoose.Types.ObjectId(ele.book)
             );

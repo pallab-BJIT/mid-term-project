@@ -8,15 +8,14 @@ const {
 } = require('../../middlewares/tokenValidator');
 
 router
-    // .get(
-    //     '/cartByUser',
-    //     [tokenAuthorization, isUser],
-    //     CartController.getCartByUser
-    // )
+    .get(
+        '/all',
+        [tokenAuthorization, isUser],
+        TransactionController.getAllTransaction
+    )
     .post(
         '/create',
-        [tokenAuthorization, isUser],
-        // CartController.addToCart
+        [tokenAuthorization, isUser, validator.createTransaction],
         TransactionController.createTransaction
     );
 // .patch(

@@ -900,6 +900,42 @@ const validator = {
                 }
             }),
     ],
+
+    createTransaction: [
+        body('cart')
+            .exists()
+            .withMessage('Book id is required')
+            .bail()
+            .not()
+            .equals('')
+            .withMessage('Book id is required')
+            .bail()
+            .custom((value) => {
+                if (!mongoose.Types.ObjectId.isValid(value)) {
+                    throw new Error('Invalid book id provided');
+                } else {
+                    return true;
+                }
+            }),
+        body('paymentMethod')
+            .exists()
+            .withMessage('Payment method is required')
+            .bail()
+            .not()
+            .equals('')
+            .withMessage('Payment method is required')
+            .custom((value) => {
+                if (value != 'online' || value != 'cash' || value != 'card') {
+                    throw new Error('Invalid payment method provided');
+                } else if (value.length > 20) {
+                    throw new Error(
+                        'Payment method length can not be greater than 20'
+                    );
+                } else {
+                    return true;
+                }
+            }),
+    ],
 };
 
 module.exports = validator;

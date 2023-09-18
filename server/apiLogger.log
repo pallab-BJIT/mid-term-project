@@ -208,3 +208,49 @@ Transaction validation failed: total: Path `total` is required.  ( Time -> Septe
 
 /api/transaction/create  ( Time -> September 18, 2023 10:44 AM)
 
+Cannot read properties of undefined (reading 'originalUrl')  ( Time -> September 18, 2023 10:50 AM)
+
+/api/transaction/all  ( Time -> September 18, 2023 10:51 AM)
+
+/api/transaction/all  ( Time -> September 18, 2023 10:52 AM)
+
+/api/transaction/all  ( Time -> September 18, 2023 10:52 AM)
+
+/api/transaction/all  ( Time -> September 18, 2023 11:03 AM)
+
+/api/transaction/all  ( Time -> September 18, 2023 11:04 AM)
+
+/api/auth/login  ( Time -> September 18, 2023 11:05 AM)
+
+/api/transaction/create  ( Time -> September 18, 2023 11:05 AM)
+
+/api/cart/create  ( Time -> September 18, 2023 11:05 AM)
+
+/api/cart/cartByUser  ( Time -> September 18, 2023 11:05 AM)
+
+/api/transaction/create  ( Time -> September 18, 2023 11:06 AM)
+
+/api/transaction/create  ( Time -> September 18, 2023 11:07 AM)
+
+/api/cart/cartByUser  ( Time -> September 18, 2023 11:07 AM)
+
+/api/auth/login  ( Time -> September 18, 2023 11:07 AM)
+
+/api/cart/cartByUser  ( Time -> September 18, 2023 11:07 AM)
+
+/api/transaction/create  ( Time -> September 18, 2023 11:39 AM)
+
+Cast to ObjectId failed for value "" (type string) at path "_id" for model "Cart"  ( Time -> September 18, 2023 11:39 AM)
+
+/api/transaction/create  ( Time -> September 18, 2023 11:40 AM)
+
+sendValidationError is not defined  ( Time -> September 18, 2023 11:40 AM)
+
+/api/transaction/create  ( Time -> September 18, 2023 11:40 AM)
+
+/api/transaction/create  ( Time -> September 18, 2023 11:41 AM)
+
+/api/transaction/create  ( Time -> September 18, 2023 11:41 AM)
+
+/api/transaction/create  ( Time -> September 18, 2023 11:43 AM)
+

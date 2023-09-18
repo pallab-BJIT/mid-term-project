@@ -1,3 +1,4 @@
+const { validationResult } = require('express-validator');
 const HTTP_STATUS = require('../../constants/statusCode');
 const bookModel = require('../../models/book');
 const cartModel = require('../../models/cart');
@@ -8,10 +9,51 @@ const databaseLogger = require('../../util/dbLogger');
 const { sendResponse } = require('../../util/response');
 const calculateTotalPrice = require('../../util/totalPrice');
 const mongoose = require('mongoose');
+const { sendValidationError } = require('../../util/validationErrorHelper');
 class TransactionController {
+    async getAllTransaction(req, res) {
+        try {
+            databaseLogger(req.originalUrl);
+            const result = await transactionModel
+                .find({})
+                .populate(
+                    'books.book',
+                    'title description price rating category'
+                )
+                .select('-__v');
+            if (result.length) {
+                return sendResponse(
+                    res,
+                    HTTP_STATUS.OK,
+                    'Successfully received all transactions',
+                    result
+                );
+            }
+            return sendResponse(
+                res,
+                HTTP_STATUS.OK,
+                'No transactions were found',
+                []
+            );
+        } catch (error) {
+            console.log(error);
+            databaseLogger(error.message);
+            return sendResponse(
+                res,
+                HTTP_STATUS.INTERNAL_SERVER_ERROR,
+                'Internal server error'
+            );
+        }
+    }
     async createTransaction(req, res) {
         try {
             databaseLogger(req.originalUrl);
+            const validation = validationResult(req).array();
+
+            if (validation.length) {
+                return sendValidationError(res, validation);
+            }
+
             const { email } = req.user;
             const { cart, paymentMethod } = req.body;
             const userExists = await userModel.findOne({ email });
@@ -19,7 +61,7 @@ class TransactionController {
             if (!cartExistsForUser) {
                 return sendResponse(
                     res,
-                    HTTP_STATUS.BAD_REQUEST,
+                    HTTP_STATUS.UNPROCESSABLE_ENTITY,
                     'No cart exists for the user'
                 );
             }
@@ -65,7 +107,7 @@ class TransactionController {
             if (userExists.balance < totalPrice) {
                 return sendResponse(
                     res,
-                    HTTP_STATUS.CREATED,
+                    HTTP_STATUS.UNPROCESSABLE_ENTITY,
                     'Not enough balance.Please recharge and then place your order'
                 );
             }
@@ -119,8 +161,9 @@ class TransactionController {
             });
             cartExistsForUser.books = [];
             const cartSave = await cartExistsForUser.save();
-
-            if (cartSave && stockSave && newTransaction) {
+            userExists.balance -= totalPrice;
+            const saveUserBalance = await userExists.save();
+            if (cartSave && stockSave && saveUserBalance && newTransaction) {
                 return sendResponse(
                     res,
                     HTTP_STATUS.CREATED,
@@ -130,7 +173,7 @@ class TransactionController {
             }
             return sendResponse(
                 res,
-                HTTP_STATUS.CREATED,
+                HTTP_STATUS.BAD_REQUEST,
                 'Something went wrong'
             );
         } catch (error) {
