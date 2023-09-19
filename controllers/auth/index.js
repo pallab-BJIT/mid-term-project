@@ -194,6 +194,7 @@ class AuthController {
                 }
             }
         } catch (error) {
+            console.log(error);
             databaseLogger(error.message);
             return sendResponse(
                 res,
@@ -206,6 +207,10 @@ class AuthController {
     async refreshToken(req, res) {
         try {
             databaseLogger(req.originalUrl);
+            const validation = validationResult(req).array();
+            if (validation.length) {
+                return sendValidationError(res, validation);
+            }
             const token = req.headers.authorization?.split(' ')[1];
             if (!token || token === undefined) {
                 return res.status(401).json(failure('Token Cannot be Null'));

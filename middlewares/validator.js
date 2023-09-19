@@ -330,6 +330,20 @@ const validator = {
             .isLength({ max: 6 })
             .withMessage('Verification code is too long'),
     ],
+
+    refreshToken: [
+        body('token')
+            .exists()
+            .withMessage('Token is required')
+            .bail()
+            .not()
+            .equals('')
+            .withMessage('Token is required')
+            .bail()
+            .isJWT()
+            .withMessage('Invalid token provided'),
+    ],
+
     addBalance: [
         body('amount')
             .exists()

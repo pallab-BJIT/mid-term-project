@@ -942,3 +942,47 @@ ele is not defined  ( Time -> September 19, 2023 2:42 PM)
 
 /api/auth/login  ( Time -> September 19, 2023 3:55 PM)
 
+/api/auth/login  ( Time -> September 19, 2023 3:57 PM)
+
+Auth validation failed: verificationCode: Path `verificationCode` is required.  ( Time -> September 19, 2023 3:57 PM)
+
+/api/auth/login  ( Time -> September 19, 2023 3:58 PM)
+
+Auth validation failed: verificationCode: Path `verificationCode` is required.  ( Time -> September 19, 2023 3:58 PM)
+
+/api/auth/login  ( Time -> September 19, 2023 4:05 PM)
+
+/api/cart/cartByUser  ( Time -> September 19, 2023 4:05 PM)
+
+/api/cart/cartByUser  ( Time -> September 19, 2023 4:10 PM)
+
+/api/auth/login  ( Time -> September 19, 2023 4:12 PM)
+
+/api/user/update/65096bce4687666061bf947e  ( Time -> September 19, 2023 4:13 PM)
+
+/api/user/update/65096bce4687666061bf947e  ( Time -> September 19, 2023 4:13 PM)
+
+/api/user/delete/65096bce4687666061bf947e  ( Time -> September 19, 2023 4:13 PM)
+
+/api/auth/refreshToken  ( Time -> September 19, 2023 4:15 PM)
+
+/api/auth/refreshToken  ( Time -> September 19, 2023 4:15 PM)
+
+/api/auth/refreshToken  ( Time -> September 19, 2023 4:15 PM)
+
+/api/cart/cartByUser  ( Time -> September 19, 2023 4:16 PM)
+
+/api/auth/refreshToken  ( Time -> September 19, 2023 4:19 PM)
+
+/api/auth/refreshToken  ( Time -> September 19, 2023 4:19 PM)
+
+validation is not defined  ( Time -> September 19, 2023 4:19 PM)
+
+/api/auth/refreshToken  ( Time -> September 19, 2023 4:20 PM)
+
+/api/auth/refreshToken  ( Time -> September 19, 2023 4:20 PM)
+
+/api/auth/refreshToken  ( Time -> September 19, 2023 4:20 PM)
+
+/api/cart/cartByUser  ( Time -> September 19, 2023 4:21 PM)
+
