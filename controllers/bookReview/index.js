@@ -250,7 +250,6 @@ class BookReviewController {
                     return String(ele.user) === String(userFoundInUser._id);
                 }
             );
-
             if (userIdInReviews === -1) {
                 return sendResponse(
                     res,
@@ -259,8 +258,9 @@ class BookReviewController {
                 );
             }
 
-            bookExistInReview.reviews[userIdInReviews].message = message;
-
+            if (message) {
+                bookExistInReview.reviews[userIdInReviews].message = message;
+            }
             if (rating) {
                 bookExistInReview.reviews[userIdInReviews].rating = rating;
                 const sum = bookExistInReview.reviews.reduce(
@@ -273,11 +273,16 @@ class BookReviewController {
                 await bookFound.save();
             }
             await bookExistInReview.save();
-
+            const reviews = {
+                user: userFoundInAuth._id,
+                message,
+                rating,
+            };
             return sendResponse(
                 res,
                 HTTP_STATUS.ACCEPTED,
-                'Successfully updated the review'
+                'Successfully updated the review',
+                reviews
             );
         } catch (error) {
             console.log(error);
@@ -351,7 +356,7 @@ class BookReviewController {
                     { $unset: { reviews: 1 } },
                     { new: true }
                 );
-                bookFound.rating = 0;
+                bookFound.rating = 1;
                 await bookFound.save();
                 await bookReviewModel.findByIdAndDelete(bookExistInReview._id);
                 return sendResponse(

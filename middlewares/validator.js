@@ -150,7 +150,10 @@ const validator = {
             .withMessage('Name is required')
             .bail()
             .isString()
-            .withMessage('Name Must be of type string'),
+            .withMessage('Name Must be of type string')
+            .bail()
+            .isLength({ max: 50 })
+            .withMessage('Name cannot be greater than 50'),
         body('email')
             .exists()
             .not()
@@ -167,21 +170,6 @@ const validator = {
             .not()
             .equals('')
             .withMessage('Password is required')
-            .bail()
-            .custom((value, { req }) => {
-                let { name, email } = req.body;
-                name = name.replace(/\s+/g, '');
-                email = email.split('@')[0];
-                const nameRegex = new RegExp(name, 'i');
-                const emailRegex = new RegExp(email, 'i');
-                if (nameRegex.test(value) || emailRegex.test(value)) {
-                    throw new Error(
-                        'Password cannot contain your username or email'
-                    );
-                } else {
-                    return true;
-                }
-            })
             .bail()
             .isString()
             .withMessage('Password Must be of type string')
@@ -201,21 +189,6 @@ const validator = {
             .not()
             .equals('')
             .withMessage('Password is required')
-            .bail()
-            .custom((value, { req }) => {
-                let { name, email } = req.body;
-                name = name.replace(/\s+/g, '');
-                email = email.split('@')[0];
-                const nameRegex = new RegExp(name, 'i');
-                const emailRegex = new RegExp(email, 'i');
-                if (nameRegex.test(value) || emailRegex.test(value)) {
-                    throw new Error(
-                        'Password cannot contain your username or email'
-                    );
-                } else {
-                    return true;
-                }
-            })
             .bail()
             .isString()
             .withMessage('Password Must be of type string')
@@ -265,7 +238,10 @@ const validator = {
             .withMessage('Country is required')
             .bail()
             .isString()
-            .withMessage('Country only be string'),
+            .withMessage('Country only be string')
+            .bail()
+            .isLength({ max: 20 })
+            .withMessage('Country cannot be greater than 20'),
         body('address.city')
             .exists()
             .not()
@@ -273,7 +249,10 @@ const validator = {
             .withMessage('City is required')
             .bail()
             .isString()
-            .withMessage('City only be string'),
+            .withMessage('City only be string')
+            .bail()
+            .isLength({ max: 20 })
+            .withMessage('City cannot be greater than 20'),
         body('address.area')
             .exists()
             .not()
@@ -281,7 +260,10 @@ const validator = {
             .withMessage('Area is required')
             .bail()
             .isString()
-            .withMessage('Area only be string'),
+            .withMessage('Area only be string')
+            .bail()
+            .isLength({ max: 20 })
+            .withMessage('Area cannot be greater than 20'),
         body('address.street')
             .exists()
             .not()
@@ -289,7 +271,10 @@ const validator = {
             .withMessage('Street is required')
             .bail()
             .isString()
-            .withMessage('Street only be string'),
+            .withMessage('Street only be string')
+            .bail()
+            .isLength({ max: 20 })
+            .withMessage('Street cannot be greater than 20'),
     ],
 
     loginUser: [
@@ -330,7 +315,7 @@ const validator = {
             .custom((value) => {
                 if (value <= 0 || isNaN(value) || value > 30000) {
                     throw new Error(
-                        'Amount must be a positive value less than 30000'
+                        'Amount must be a positive number less than 30000'
                     );
                 } else {
                     return true;
@@ -421,7 +406,9 @@ const validator = {
             .not()
             .equals('')
             .withMessage('Message  cannot be empty')
-            .bail(),
+            .bail()
+            .isLength({ min: 5, max: 200 })
+            .withMessage('Review message must be between 5 to 200 words'),
         body('rating')
             .exists()
             .withMessage('Rating can not be null')
