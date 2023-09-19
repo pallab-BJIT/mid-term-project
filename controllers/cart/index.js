@@ -9,6 +9,7 @@ const cartModel = require('../../models/cart');
 const DiscountPrice = require('../../models/discountPrice');
 const mongoose = require('mongoose');
 const calculateTotalPrice = require('../../util/totalPrice');
+const calculateTotalPriceWithOutDiscount = require('../../util/actualTotalPrice');
 class CartController {
     async getCartByUser(req, res) {
         try {
@@ -55,6 +56,7 @@ class CartController {
             bookIds.sort();
 
             let totalPrice = 0;
+            let actualPrice = 0;
             cartExistsForUser.books.forEach((item, index) => {
                 const bookId = item.book;
                 const quantity = item.quantity;
@@ -63,6 +65,10 @@ class CartController {
                     book,
                     discountPrice,
                     bookId,
+                    quantity
+                );
+                actualPrice += calculateTotalPriceWithOutDiscount(
+                    book,
                     quantity
                 );
             });
@@ -75,15 +81,16 @@ class CartController {
                     []
                 );
             }
-            const data = {
-                cartExistsForUser,
-                totalPrice,
-            };
+
             return sendResponse(
                 res,
                 HTTP_STATUS.OK,
                 'Successfully get the data',
-                data
+                {
+                    cartExistsForUser,
+                    beforeDiscount: actualPrice.toFixed(2),
+                    afterDiscount: totalPrice.toFixed(2),
+                }
             );
         } catch (error) {
             console.log(error);
@@ -178,6 +185,7 @@ class CartController {
                 bookIds.sort();
 
                 let totalPrice = 0;
+                let actualPrice = 0;
                 saveToCart.books.forEach((item, index) => {
                     const bookId = item.book;
                     const quantity = item.quantity;
@@ -188,8 +196,16 @@ class CartController {
                         bookId,
                         quantity
                     );
+                    actualPrice += calculateTotalPriceWithOutDiscount(
+                        book,
+                        quantity
+                    );
                 });
-                const data = { data: saveToCart, totalPrice };
+                const data = {
+                    data: saveToCart,
+                    beforeDiscount: actualPrice.toFixed(2),
+                    afterDiscount: totalPrice.toFixed(2),
+                };
                 return sendResponse(
                     res,
                     HTTP_STATUS.CREATED,
@@ -240,6 +256,7 @@ class CartController {
                     bookIds.sort();
 
                     let totalPrice = 0;
+                    let actualPrice = 0;
                     cartExistsForUser.books.forEach((item, index) => {
                         const bookId = item.book;
                         const quantity = item.quantity;
@@ -250,12 +267,20 @@ class CartController {
                             bookId,
                             quantity
                         );
+                        actualPrice += calculateTotalPriceWithOutDiscount(
+                            book,
+                            quantity
+                        );
                     });
                     return sendResponse(
                         res,
                         HTTP_STATUS.ACCEPTED,
                         'Quantity updated in the existing cart',
-                        { cartExistsForUser, totalPrice }
+                        {
+                            cartExistsForUser,
+                            beforeDiscount: actualPrice.toFixed(2),
+                            afterDiscount: totalPrice.toFixed(2),
+                        }
                     );
                 }
                 if (bookExists.stock < quantity) {
@@ -292,6 +317,7 @@ class CartController {
                 bookIds.sort();
 
                 let totalPrice = 0;
+                let actualPrice = 0;
                 cartExistsForUser.books.forEach((item, index) => {
                     const bookId = item.book;
                     const quantity = item.quantity;
@@ -302,13 +328,21 @@ class CartController {
                         bookId,
                         quantity
                     );
+                    actualPrice += calculateTotalPriceWithOutDiscount(
+                        book,
+                        quantity
+                    );
                 });
                 console.log('existing cart');
                 return sendResponse(
                     res,
                     HTTP_STATUS.ACCEPTED,
                     'Added to existing cart',
-                    { cartExistsForUser, totalPrice }
+                    {
+                        cartExistsForUser,
+                        beforeDiscount: actualPrice.toFixed(2),
+                        afterDiscount: totalPrice.toFixed(2),
+                    }
                 );
             }
         } catch (error) {
@@ -406,6 +440,7 @@ class CartController {
                 bookIds.sort();
 
                 let totalPrice = 0;
+                let actualPrice = 0;
                 cartExistsForUser.books.forEach((item, index) => {
                     const bookId = item.book;
                     const quantity = item.quantity;
@@ -416,12 +451,20 @@ class CartController {
                         bookId,
                         quantity
                     );
+                    actualPrice += calculateTotalPriceWithOutDiscount(
+                        book,
+                        quantity
+                    );
                 });
                 return sendResponse(
                     res,
                     HTTP_STATUS.ACCEPTED,
                     'Book quantity reduced from the cart',
-                    { cartExistsForUser, totalPrice }
+                    {
+                        cartExistsForUser,
+                        beforeDiscount: actualPrice.toFixed(2),
+                        afterDiscount: totalPrice.toFixed(2),
+                    }
                 );
             }
             if (
@@ -453,6 +496,7 @@ class CartController {
                 bookIds.sort();
 
                 let totalPrice = 0;
+                let actualPrice = 0;
                 cartExistsForUser.books.forEach((item, index) => {
                     const bookId = item.book;
                     const quantity = item.quantity;
@@ -463,12 +507,20 @@ class CartController {
                         bookId,
                         quantity
                     );
+                    actualPrice += calculateTotalPriceWithOutDiscount(
+                        book,
+                        quantity
+                    );
                 });
                 return sendResponse(
                     res,
                     HTTP_STATUS.ACCEPTED,
                     'Book successfully removed from the cart',
-                    { cartExistsForUser, totalPrice }
+                    {
+                        cartExistsForUser,
+                        beforeDiscount: actualPrice.toFixed(2),
+                        afterDiscount: totalPrice.toFixed(2),
+                    }
                 );
             }
         } catch (error) {
