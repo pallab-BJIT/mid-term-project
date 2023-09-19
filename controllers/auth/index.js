@@ -12,6 +12,7 @@ const generateRefreshToken = require('../../util/refreshTokenGenerator');
 const jwt = require('jsonwebtoken');
 const databaseLogger = require('../../util/dbLogger');
 const { sendValidationError } = require('../../util/validationErrorHelper');
+const generateVerificationCode = require('../../util/generateVerificationCode');
 class AuthController {
     async signUp(req, res) {
         try {
@@ -53,9 +54,7 @@ class AuthController {
                 email: email,
             });
             if (!emailExists && !emailExistsAtUser) {
-                // address.country = address.country.ele.toUpperCase();
                 address.country = address.country.toUpperCase();
-                console.log({ address });
                 const newUser = await userModel.create({
                     email,
                     name,
@@ -83,6 +82,7 @@ class AuthController {
                         .select('-password')
                         .exec();
                     if (newRegistration && savedRegistration) {
+                        const verificationCode = generateVerificationCode();
                         return sendResponse(
                             res,
                             HTTP_STATUS.CREATED,

@@ -1,6 +1,3 @@
-const bookModel = require('../models/book');
-const DiscountPrice = require('../models/discountPrice');
-
 function calculateTotalPrice(book, discounts, bookId, quantity) {
     const discount = discounts.find((d) => {
         return d.bookIds.includes(bookId._id);
