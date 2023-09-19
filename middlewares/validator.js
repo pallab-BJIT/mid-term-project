@@ -37,7 +37,10 @@ const validator = {
             .withMessage('Author is required.')
             .bail()
             .isString()
-            .withMessage('Author must be a string'),
+            .withMessage('Author must be a string')
+            .bail()
+            .isLength({ max: 40 })
+            .withMessage('Author name is too long'),
         body('category')
             .exists()
             .notEmpty()
@@ -54,7 +57,10 @@ const validator = {
             .withMessage('Published At cannot be empty')
             .bail()
             .isDate()
-            .withMessage('Published at must be of type Date'),
+            .withMessage('Published at must be of type Date')
+            .bail()
+            .isLength({ max: 40 })
+            .withMessage('Date is too long'),
         body('isbn')
             .exists()
             .not()
@@ -62,7 +68,10 @@ const validator = {
             .withMessage('ISBN number cannot be empty')
             .bail()
             .isISBN()
-            .withMessage('Invalid ISBN number'),
+            .withMessage('Invalid ISBN number')
+            .bail()
+            .isLength({ max: 40 })
+            .withMessage('ISBN number is too long'),
     ],
 
     updateBook: [
@@ -115,7 +124,10 @@ const validator = {
             .withMessage('Author must be of type string')
             .bail()
             .custom((value) => typeof value === 'string' && value.trim() !== '')
-            .withMessage('Author is required.'),
+            .withMessage('Author is required.')
+            .bail()
+            .isLength({ max: 40 })
+            .withMessage('Date is too long'),
         body('category')
             .optional()
             .optional()
@@ -132,14 +144,20 @@ const validator = {
             .isDate()
             .withMessage('Invalid published At date provided')
             .custom((value) => value.trim() !== '')
-            .withMessage('publishedAt is required.'),
+            .withMessage('publishedAt is required.')
+            .bail()
+            .isLength({ max: 40 })
+            .withMessage('Date is too long'),
         body('isbn')
             .optional()
             .isISBN()
             .withMessage('Invalid ISBN provided')
             .bail()
             .custom((value) => value.trim() !== '')
-            .withMessage('ISBN is required.'),
+            .withMessage('ISBN is required.')
+            .bail()
+            .isLength({ max: 40 })
+            .withMessage('ISBN number is too long'),
     ],
 
     signUpUser: [
@@ -164,7 +182,10 @@ const validator = {
             .withMessage('Email Must be of type string')
             .bail()
             .isEmail()
-            .withMessage('Invalid email address'),
+            .withMessage('Invalid email address')
+            .bail()
+            .isLength({ max: 40 })
+            .withMessage('Email is too long'),
         body('password')
             .exists()
             .not()
@@ -287,7 +308,10 @@ const validator = {
             .withMessage('Email Must be of type string')
             .bail()
             .isEmail()
-            .withMessage('Invalid email address'),
+            .withMessage('Invalid email address')
+            .bail()
+            .isLength({ max: 40 })
+            .withMessage('Email is too long'),
         body('password')
             .not()
             .equals('')
@@ -319,7 +343,10 @@ const validator = {
             .withMessage('Email Must be of type string')
             .bail()
             .isEmail()
-            .withMessage('Invalid email address'),
+            .withMessage('Invalid email address')
+            .bail()
+            .isLength({ max: 40 })
+            .withMessage('Date is too long'),
         body('verificationCode')
             .exists()
             .withMessage('Verification code is required')
@@ -397,7 +424,10 @@ const validator = {
                 } else {
                     return true;
                 }
-            }),
+            })
+            .bail()
+            .isLength({ max: 50 })
+            .withMessage('Name cannot be greater than 50'),
         body('rank')
             .optional()
             .custom((value) => {

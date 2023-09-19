@@ -5,12 +5,13 @@ const validator = require('../../middlewares/validator');
 const {
     tokenAuthorization,
     isAdmin,
+    isUser,
 } = require('../../middlewares/tokenValidator');
 
 router
     .post(
         '/add-balance',
-        [tokenAuthorization, validator.addBalance],
+        [tokenAuthorization, isUser, validator.addBalance],
         UserController.addBalance
     )
     .get('/all', [tokenAuthorization, isAdmin], UserController.viewAllUserData)
