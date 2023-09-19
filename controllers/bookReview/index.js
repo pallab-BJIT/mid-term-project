@@ -7,7 +7,49 @@ const bookModel = require('../../models/book');
 const authModel = require('../../models/auth');
 const userModel = require('../../models/user');
 const { sendValidationError } = require('../../util/validationErrorHelper');
+const mongoose = require('mongoose');
 class BookReviewController {
+    async getReviewByBook(req, res) {
+        try {
+            databaseLogger(req.originalUrl);
+
+            const { bookId } = req.params;
+            if (!mongoose.Types.ObjectId.isValid(bookId)) {
+                return sendResponse(
+                    res,
+                    HTTP_STATUS.UNPROCESSABLE_ENTITY,
+                    'Invalid object id provided'
+                );
+            }
+            const result = await bookReviewModel
+                .findOne({ book: bookId })
+                .populate('book', 'title author publishedAt price description')
+                .populate('reviews.user', 'name email -_id');
+
+            if (!result) {
+                return sendResponse(
+                    res,
+                    HTTP_STATUS.NOT_FOUND,
+                    'No reviews found',
+                    []
+                );
+            }
+            return sendResponse(
+                res,
+                HTTP_STATUS.OK,
+                'Successfully get all the reviews',
+                result
+            );
+        } catch (error) {
+            console.log(error);
+            databaseLogger(error.message);
+            return sendResponse(
+                res,
+                HTTP_STATUS.INTERNAL_SERVER_ERROR,
+                'Internal server error'
+            );
+        }
+    }
     async createReview(req, res) {
         try {
             databaseLogger(req.originalUrl);
@@ -75,11 +117,18 @@ class BookReviewController {
                 bookFound.rating = avg;
                 await bookFound.save();
 
+                let reviews = {
+                    user: userFoundInUser._id,
+                    message,
+                    rating,
+                };
+
                 if (result) {
                     return sendResponse(
                         res,
                         HTTP_STATUS.CREATED,
-                        'Review added successfully'
+                        'Review added successfully',
+                        reviews
                     );
                 }
                 return sendResponse(
@@ -110,7 +159,6 @@ class BookReviewController {
 
                 await bookExistInReview.save();
 
-                // bookFound.reviews.push(bookExistInReview._id);
                 const sum = bookExistInReview.reviews.reduce(
                     (accumulator, review) => accumulator + review.rating,
                     0
@@ -119,12 +167,17 @@ class BookReviewController {
 
                 bookFound.rating = avg;
                 await bookFound.save();
-
+                const reviews = {
+                    user: userFoundInAuth._id,
+                    message,
+                    rating,
+                };
                 if (bookExistInReview) {
                     return sendResponse(
                         res,
                         HTTP_STATUS.CREATED,
-                        'Review added successfully'
+                        'Review added successfully',
+                        reviews
                     );
                 }
             }

@@ -10,6 +10,11 @@ const {
 
 router
     .get(
+        '/details',
+        [tokenAuthorization, isUser],
+        TransactionController.getTransactionByUser
+    )
+    .get(
         '/all',
         [tokenAuthorization, isAdmin],
         TransactionController.getAllTransaction

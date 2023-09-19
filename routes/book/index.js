@@ -6,8 +6,9 @@ const {
     tokenAuthorization,
     isAdmin,
 } = require('../../middlewares/tokenValidator');
+const getAllBooksValidation = require('../../middlewares/getAllBooksValidation');
 router
-    .get('/all', [validator.getAllProductsFilter], BookController.getAllBooks)
+    .get('/all', [getAllBooksValidation], BookController.getAllBooks)
     .get('/details/:bookId', BookController.getBookById)
     .post(
         '/create',

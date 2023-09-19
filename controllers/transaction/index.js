@@ -16,6 +16,7 @@ class TransactionController {
             databaseLogger(req.originalUrl);
             const result = await transactionModel
                 .find({})
+                .populate('user', '-address -balance')
                 .populate(
                     'books.book',
                     'title description price rating category'
@@ -34,6 +35,45 @@ class TransactionController {
                 HTTP_STATUS.OK,
                 'No transactions were found',
                 []
+            );
+        } catch (error) {
+            console.log(error);
+            databaseLogger(error.message);
+            return sendResponse(
+                res,
+                HTTP_STATUS.INTERNAL_SERVER_ERROR,
+                'Internal server error'
+            );
+        }
+    }
+
+    async getTransactionByUser(req, res) {
+        try {
+            databaseLogger(req.originalUrl);
+            const { email } = req.user;
+            const user = await userModel.findOne({ email });
+            const result = await transactionModel
+                .find({ user: user._id })
+                .populate('user', '-address -balance')
+                .populate(
+                    'books.book',
+                    'title description price rating category'
+                )
+                .select('-__v');
+
+            if (result.length <= 0) {
+                return sendResponse(
+                    res,
+                    HTTP_STATUS.NOT_FOUND,
+                    'No transaction found',
+                    []
+                );
+            }
+            return sendResponse(
+                res,
+                HTTP_STATUS.OK,
+                'No transaction found',
+                result
             );
         } catch (error) {
             console.log(error);
