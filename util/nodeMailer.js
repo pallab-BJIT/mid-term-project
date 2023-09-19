@@ -17,7 +17,6 @@ const sendVerificationEmail = async (email, verificationCode) => {
         subject: 'Signup verification ✔',
         text: `Thank you for the signing up.This is your verification code ${verificationCode}`,
     });
-    // console.log(info);
 };
 
 module.exports = sendVerificationEmail;
