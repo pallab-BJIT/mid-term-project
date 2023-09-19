@@ -33,6 +33,14 @@ class CartController {
                     'books.book',
                     'title description price rating category'
                 );
+            if (cartExistsForUser.books.length <= 0) {
+                return sendResponse(
+                    res,
+                    HTTP_STATUS.OK,
+                    'No items available in the cart',
+                    []
+                );
+            }
             const bookIds = cartExistsForUser.books.map(
                 (ele) => new mongoose.Types.ObjectId(ele.book)
             );
