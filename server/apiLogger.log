@@ -740,3 +740,21 @@ Cannot read properties of null (reading 'books')  ( Time -> September 19, 2023 1
 
 /api/cart/update  ( Time -> September 19, 2023 12:26 PM)
 
+/api/auth/login  ( Time -> September 19, 2023 1:10 PM)
+
+/api/cart/cartByUser  ( Time -> September 19, 2023 1:10 PM)
+
+/api/transaction/create  ( Time -> September 19, 2023 1:11 PM)
+
+/api/transaction/create  ( Time -> September 19, 2023 1:11 PM)
+
+/api/transaction/details  ( Time -> September 19, 2023 1:12 PM)
+
+/api/transaction/details  ( Time -> September 19, 2023 1:15 PM)
+
+/api/auth/login  ( Time -> September 19, 2023 1:23 PM)
+
+/api/transaction/all  ( Time -> September 19, 2023 1:23 PM)
+
+/api/transaction/create  ( Time -> September 19, 2023 1:29 PM)
+

@@ -72,7 +72,7 @@ class TransactionController {
             return sendResponse(
                 res,
                 HTTP_STATUS.OK,
-                'No transaction found',
+                'Successfully get the data',
                 result
             );
         } catch (error) {
