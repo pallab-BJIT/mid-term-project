@@ -624,3 +624,119 @@ actualPrice is not defined  ( Time -> September 19, 2023 9:31 AM)
 
 /api/cart/cartByUser  ( Time -> September 19, 2023 10:01 AM)
 
+/api/books/details/65018c91b5b9996c54eb0fe1  ( Time -> September 19, 2023 10:13 AM)
+
+/api/books/details/65018c91b5b9996c54eb0fe1  ( Time -> September 19, 2023 10:13 AM)
+
+/api/books/all?offset=1&limit=20&search=Great%20Gatsby&sortBy=stock&sortOrder=asc&filter=stock&filterOrder=high&filterValue=20&category=Fantasy,Classics  ( Time -> September 19, 2023 10:17 AM)
+
+/api/books/all?offset=1&limit=20&filter=stock&filterOrder=low&filterValue=20  ( Time -> September 19, 2023 10:17 AM)
+
+/api/books/details/65018c91b5b9996c54eb0fe  ( Time -> September 19, 2023 10:19 AM)
+
+/api/auth/login  ( Time -> September 19, 2023 10:21 AM)
+
+/api/books/create  ( Time -> September 19, 2023 10:22 AM)
+
+/api/review/details/6502fa36b45b576cb8547ad2  ( Time -> September 19, 2023 10:42 AM)
+
+/api/review/details/65018c91b5b9996c54eb0fe1  ( Time -> September 19, 2023 10:42 AM)
+
+/api/auth/login  ( Time -> September 19, 2023 10:49 AM)
+
+/api/discount-price/all  ( Time -> September 19, 2023 10:49 AM)
+
+/api/discount-price/all  ( Time -> September 19, 2023 10:53 AM)
+
+/api/discount-price/all  ( Time -> September 19, 2023 10:54 AM)
+
+/api/discount-price/all  ( Time -> September 19, 2023 10:55 AM)
+
+/api/discount-price/create  ( Time -> September 19, 2023 11:00 AM)
+
+/api/discount-price/create  ( Time -> September 19, 2023 11:01 AM)
+
+/api/discount-price/create  ( Time -> September 19, 2023 11:01 AM)
+
+/api/discount-price/create  ( Time -> September 19, 2023 11:01 AM)
+
+/api/discount-price/create  ( Time -> September 19, 2023 11:02 AM)
+
+/api/discount-price/create  ( Time -> September 19, 2023 11:05 AM)
+
+/api/discount-price/create  ( Time -> September 19, 2023 11:10 AM)
+
+/api/discount-price/create  ( Time -> September 19, 2023 11:10 AM)
+
+/api/discount-price/create  ( Time -> September 19, 2023 11:11 AM)
+
+/api/discount-price/create  ( Time -> September 19, 2023 11:11 AM)
+
+/api/discount-price/create  ( Time -> September 19, 2023 11:11 AM)
+
+/api/discount-price/create  ( Time -> September 19, 2023 11:11 AM)
+
+/api/discount-price/create  ( Time -> September 19, 2023 11:11 AM)
+
+/api/discount-price/create  ( Time -> September 19, 2023 11:11 AM)
+
+/api/discount-price/create  ( Time -> September 19, 2023 11:14 AM)
+
+/api/discount-price/update/65059948c448aaf6bc0cc583  ( Time -> September 19, 2023 11:16 AM)
+
+/api/discount-price/update/65059948c448aaf6bc0cc583  ( Time -> September 19, 2023 11:18 AM)
+
+/api/discount-price/update/65059948c448aaf6bc0cc583  ( Time -> September 19, 2023 11:19 AM)
+
+/api/discount-price/update/65059948c448aaf6bc0cc583  ( Time -> September 19, 2023 11:21 AM)
+
+/api/discount-price/update/65092e2917cdc9114fc266a  ( Time -> September 19, 2023 11:22 AM)
+
+/api/discount-price/update/65092e2917cdc9114fc266a1  ( Time -> September 19, 2023 11:22 AM)
+
+/api/auth/login  ( Time -> September 19, 2023 11:38 AM)
+
+/api/cart/cartByUser  ( Time -> September 19, 2023 11:38 AM)
+
+/api/cart/create  ( Time -> September 19, 2023 11:39 AM)
+
+/api/cart/cartByUser  ( Time -> September 19, 2023 11:40 AM)
+
+/api/cart/cartByUser  ( Time -> September 19, 2023 11:52 AM)
+
+/api/cart/cartByUser  ( Time -> September 19, 2023 11:59 AM)
+
+/api/cart/cartByUser  ( Time -> September 19, 2023 12:00 PM)
+
+/api/cart/cartByUser  ( Time -> September 19, 2023 12:01 PM)
+
+/api/cart/cartByUser  ( Time -> September 19, 2023 12:03 PM)
+
+/api/cart/create  ( Time -> September 19, 2023 12:08 PM)
+
+/api/cart/cartByUser  ( Time -> September 19, 2023 12:10 PM)
+
+Cannot read properties of null (reading 'books')  ( Time -> September 19, 2023 12:10 PM)
+
+/api/cart/cartByUser  ( Time -> September 19, 2023 12:12 PM)
+
+/api/cart/create  ( Time -> September 19, 2023 12:12 PM)
+
+/api/cart/create  ( Time -> September 19, 2023 12:14 PM)
+
+/api/cart/create  ( Time -> September 19, 2023 12:24 PM)
+
+/api/cart/update  ( Time -> September 19, 2023 12:24 PM)
+
+/api/cart/update  ( Time -> September 19, 2023 12:25 PM)
+
+/api/cart/update  ( Time -> September 19, 2023 12:25 PM)
+
+/api/cart/update  ( Time -> September 19, 2023 12:25 PM)
+
+/api/cart/update  ( Time -> September 19, 2023 12:25 PM)
+
+/api/cart/update  ( Time -> September 19, 2023 12:26 PM)
+
+/api/cart/update  ( Time -> September 19, 2023 12:26 PM)
+

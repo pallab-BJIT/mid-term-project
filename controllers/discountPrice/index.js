@@ -13,7 +13,10 @@ class DiscountPriceController {
     async getAllDiscount(req, res) {
         try {
             databaseLogger(req.originalUrl);
-            const result = await DiscountPrice.find().populate('bookIds');
+            const result = await DiscountPrice.find().populate(
+                'bookIds',
+                '-reviews -__v'
+            );
             if (result) {
                 return sendResponse(
                     res,
@@ -132,15 +135,13 @@ class DiscountPriceController {
             });
             bookId.forEach((ele) => discount.bookIds.push(ele));
             await discount.save();
-            const populateDiscount = await DiscountPrice.findById(
-                discount._id
-            ).populate('bookIds');
+
             if (discount) {
                 return sendResponse(
                     res,
                     HTTP_STATUS.CREATED,
                     'Discount added successfully',
-                    populateDiscount
+                    discount
                 );
             }
             return sendResponse(

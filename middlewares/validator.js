@@ -752,7 +752,7 @@ const validator = {
             .bail()
             .custom((value) => {
                 if (value <= 0) {
-                    throw new Error('Quantity can not be less than 0');
+                    throw new Error('Quantity can not be less than 1');
                 } else if (value > 10000000) {
                     throw new Error(
                         'Quantity can not be greater than 10000000'

@@ -125,7 +125,7 @@ class BookController {
                     result
                 );
             } else {
-                return sendResponse(res, 200, 'No data found', []);
+                return sendResponse(res, HTTP_STATUS.OK, 'No data found', []);
             }
         } catch (error) {
             databaseLogger(error.message);
@@ -155,7 +155,9 @@ class BookController {
                     { endDate: { $gte: new Date() } },
                 ],
             });
-            const result = await bookModel.findById(bookId).populate('reviews');
+            const result = await bookModel
+                .findById(bookId)
+                .populate('reviews', '-__v');
             let data = { result };
             if (discountPrice) {
                 const discountAmount =

@@ -24,7 +24,16 @@ class CartController {
                     'No user Found'
                 );
             }
-
+            const cartExists = await cartModel.findOne({
+                user: userExists._id,
+            });
+            if (!cartExists) {
+                return sendResponse(
+                    res,
+                    HTTP_STATUS.NOT_FOUND,
+                    'No cart exists for this user'
+                );
+            }
             const cartExistsForUser = await cartModel
                 .findOne({
                     user: userExists._id,
