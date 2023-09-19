@@ -118,14 +118,14 @@ class TransactionController {
             const bookIds = cartExistsForUser.books.map(
                 (ele) => new mongoose.Types.ObjectId(ele.book)
             );
+            const userCountry = userExists.address.country;
+
             const query = {
                 $and: [
                     { startDate: { $lte: new Date() } },
                     { endDate: { $gte: new Date() } },
-                ],
-                $or: [
                     { bookIds: { $in: bookIds } },
-                    { counties: { $eq: userExists.address.country } },
+                    { counties: userCountry },
                 ],
             };
             const discountPrice = await DiscountPrice.find(query);

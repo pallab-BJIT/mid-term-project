@@ -53,17 +53,17 @@ class CartController {
             const bookIds = cartExistsForUser.books.map(
                 (ele) => new mongoose.Types.ObjectId(ele.book)
             );
+            const userCountry = userExists.address.country;
             const query = {
                 $and: [
                     { startDate: { $lte: new Date() } },
                     { endDate: { $gte: new Date() } },
-                ],
-                $or: [
                     { bookIds: { $in: bookIds } },
-                    { counties: { $eq: userExists.address.country } },
+                    { counties: userCountry },
                 ],
             };
             const discountPrice = await DiscountPrice.find(query);
+            console.log(discountPrice);
             const allBooks = await bookModel
                 .find({
                     _id: { $in: bookIds },
@@ -181,18 +181,18 @@ class CartController {
                 const bookIds = saveToCart.books.map(
                     (ele) => new mongoose.Types.ObjectId(ele.book)
                 );
+                const userCountry = userExists.address.country;
+
                 const query = {
                     $and: [
                         { startDate: { $lte: new Date() } },
                         { endDate: { $gte: new Date() } },
-                    ],
-                    $or: [
                         { bookIds: { $in: bookIds } },
-                        { counties: { $eq: userExists.address.country } },
+                        { counties: userCountry },
                     ],
                 };
                 const discountPrice = await DiscountPrice.find(query);
-
+                console.log('add to cart', discountPrice);
                 const allBooks = await bookModel
                     .find({
                         _id: { $in: bookIds },
@@ -252,18 +252,19 @@ class CartController {
                     const bookIds = cartExistsForUser.books.map(
                         (ele) => new mongoose.Types.ObjectId(ele.book)
                     );
+                    console.log({ bookIds });
+                    const userCountry = userExists.address.country;
+
                     const query = {
                         $and: [
                             { startDate: { $lte: new Date() } },
                             { endDate: { $gte: new Date() } },
-                        ],
-                        $or: [
                             { bookIds: { $in: bookIds } },
-                            { counties: { $eq: userExists.address.country } },
+                            { counties: userCountry },
                         ],
                     };
                     const discountPrice = await DiscountPrice.find(query);
-
+                    console.log('add to cart 262', discountPrice);
                     const allBooks = await bookModel
                         .find({
                             _id: { $in: bookIds },
@@ -313,18 +314,19 @@ class CartController {
                 const bookIds = cartExistsForUser.books.map(
                     (ele) => new mongoose.Types.ObjectId(ele.book)
                 );
+                console.log({ bookIds });
+                const userCountry = userExists.address.country;
+
                 const query = {
                     $and: [
                         { startDate: { $lte: new Date() } },
                         { endDate: { $gte: new Date() } },
-                    ],
-                    $or: [
                         { bookIds: { $in: bookIds } },
-                        { counties: { $eq: userExists.address.country } },
+                        { counties: userCountry },
                     ],
                 };
                 const discountPrice = await DiscountPrice.find(query);
-
+                console.log('add to cart 321', discountPrice);
                 const allBooks = await bookModel
                     .find({
                         _id: { $in: bookIds },
@@ -363,6 +365,7 @@ class CartController {
                 );
             }
         } catch (error) {
+            console.log(error);
             databaseLogger(error.message);
             return sendResponse(
                 res,
@@ -436,18 +439,18 @@ class CartController {
                 const bookIds = cartExistsForUser.books.map(
                     (ele) => new mongoose.Types.ObjectId(ele.book)
                 );
+                const userCountry = userExists.address.country;
+
                 const query = {
                     $and: [
                         { startDate: { $lte: new Date() } },
                         { endDate: { $gte: new Date() } },
-                    ],
-                    $or: [
                         { bookIds: { $in: bookIds } },
-                        { counties: { $eq: userExists.address.country } },
+                        { counties: userCountry },
                     ],
                 };
                 const discountPrice = await DiscountPrice.find(query);
-
+                console.log('update cart 442', discountPrice);
                 const allBooks = await bookModel
                     .find({
                         _id: { $in: bookIds },
@@ -492,18 +495,18 @@ class CartController {
                 const bookIds = cartExistsForUser.books.map(
                     (ele) => new mongoose.Types.ObjectId(ele.book)
                 );
+                const userCountry = userExists.address.country;
+
                 const query = {
                     $and: [
                         { startDate: { $lte: new Date() } },
                         { endDate: { $gte: new Date() } },
-                    ],
-                    $or: [
                         { bookIds: { $in: bookIds } },
-                        { counties: { $eq: userExists.address.country } },
+                        { counties: userCountry },
                     ],
                 };
                 const discountPrice = await DiscountPrice.find(query);
-
+                console.log('update cart 496', discountPrice);
                 const allBooks = await bookModel
                     .find({
                         _id: { $in: bookIds },

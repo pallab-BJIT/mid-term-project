@@ -780,3 +780,75 @@ Cannot read properties of null (reading 'books')  ( Time -> September 19, 2023 1
 
 /api/books/all?offset=1&limit=20  ( Time -> September 19, 2023 1:42 PM)
 
+/api/auth/login  ( Time -> September 19, 2023 1:50 PM)
+
+/api/cart/create  ( Time -> September 19, 2023 1:51 PM)
+
+/api/cart/cartByUser  ( Time -> September 19, 2023 1:51 PM)
+
+/api/cart/cartByUser  ( Time -> September 19, 2023 1:55 PM)
+
+/api/cart/cartByUser  ( Time -> September 19, 2023 1:56 PM)
+
+/api/cart/cartByUser  ( Time -> September 19, 2023 1:57 PM)
+
+/api/cart/cartByUser  ( Time -> September 19, 2023 1:57 PM)
+
+/api/cart/cartByUser  ( Time -> September 19, 2023 1:58 PM)
+
+/api/cart/cartByUser  ( Time -> September 19, 2023 1:59 PM)
+
+/api/cart/create  ( Time -> September 19, 2023 2:00 PM)
+
+/api/cart/cartByUser  ( Time -> September 19, 2023 2:01 PM)
+
+/api/cart/cartByUser  ( Time -> September 19, 2023 2:01 PM)
+
+/api/cart/create  ( Time -> September 19, 2023 2:06 PM)
+
+userCountry is not defined  ( Time -> September 19, 2023 2:06 PM)
+
+/api/cart/create  ( Time -> September 19, 2023 2:06 PM)
+
+userCountry is not defined  ( Time -> September 19, 2023 2:06 PM)
+
+/api/cart/create  ( Time -> September 19, 2023 2:07 PM)
+
+userCountry is not defined  ( Time -> September 19, 2023 2:07 PM)
+
+/api/cart/create  ( Time -> September 19, 2023 2:08 PM)
+
+/api/cart/update  ( Time -> September 19, 2023 2:09 PM)
+
+/api/cart/create  ( Time -> September 19, 2023 2:09 PM)
+
+/api/cart/cartByUser  ( Time -> September 19, 2023 2:09 PM)
+
+/api/cart/create  ( Time -> September 19, 2023 2:11 PM)
+
+/api/cart/update  ( Time -> September 19, 2023 2:12 PM)
+
+/api/cart/cartByUser  ( Time -> September 19, 2023 2:12 PM)
+
+/api/cart/cartByUser  ( Time -> September 19, 2023 2:13 PM)
+
+/api/auth/login  ( Time -> September 19, 2023 2:14 PM)
+
+/api/cart/cartByUser  ( Time -> September 19, 2023 2:14 PM)
+
+/api/cart/create  ( Time -> September 19, 2023 2:14 PM)
+
+/api/cart/create  ( Time -> September 19, 2023 2:15 PM)
+
+/api/cart/create  ( Time -> September 19, 2023 2:19 PM)
+
+/api/cart/create  ( Time -> September 19, 2023 2:19 PM)
+
+/api/cart/create  ( Time -> September 19, 2023 2:20 PM)
+
+/api/cart/cartByUser  ( Time -> September 19, 2023 2:22 PM)
+
+/api/transaction/create  ( Time -> September 19, 2023 2:23 PM)
+
+/api/transaction/create  ( Time -> September 19, 2023 2:24 PM)
+
