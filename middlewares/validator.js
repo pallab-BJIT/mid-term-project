@@ -2,185 +2,52 @@ const { query, body, param } = require('express-validator');
 const { PHONE_REGEX } = require('../constants/regex');
 const mongoose = require('mongoose');
 const validator = {
-    getAllProductsFilter: [
-        query('offset')
-            .optional()
-            .custom((value, { req, res }) => {
-                const val = parseInt(value);
-                if (isNaN(val)) {
-                    throw new Error('Offset must be a number');
-                }
-                if (value >= 1) {
-                    if (!req.query.limit) {
-                        throw new Error('Limit is not specified');
-                    } else {
-                        return true;
-                    }
-                } else {
-                    throw new Error('Offset cannot be less than 1');
-                }
-            }),
-        query('limit')
-            .optional()
-            .custom((value, { req, res }) => {
-                const val = parseInt(value);
-                if (isNaN(val)) {
-                    throw new Error('limit must be a number');
-                }
-                if (value >= 1) {
-                    if (!req.query.offset) {
-                        throw new Error('Offset is not specified');
-                    } else {
-                        return true;
-                    }
-                } else {
-                    throw new Error('Limit cannot be less than 1');
-                }
-            }),
-        query('search')
-            .optional()
-            .not()
-            .equals('')
-            .withMessage('Search cannot be empty'),
-        query('sortBy')
-            .optional()
-            .not()
-            .equals('')
-            .withMessage('SortBy cannot be empty')
-            .bail()
-            .custom((value, { req, res }) => {
-                if (
-                    value === 'price' ||
-                    value === 'stock' ||
-                    value === 'rating'
-                ) {
-                    if (!req.query.sortOrder) {
-                        throw new Error('Sort order is not specified');
-                    } else {
-                        return true;
-                    }
-                } else {
-                    throw new Error('Invalid property provided for sortBy');
-                }
-            }),
-        query('sortOrder')
-            .optional()
-            .not()
-            .equals('')
-            .withMessage('sortOrder cannot be empty')
-            .bail()
-            .custom((value, { req }) => {
-                if (value === 'asc' || value === 'desc') {
-                    if (!req.query.sortBy) {
-                        throw new Error('Sort By is not specified');
-                    } else {
-                        return true;
-                    }
-                } else {
-                    throw new Error('Invalid property provided for sortOrder');
-                }
-            }),
-        query('filter')
-            .optional()
-            .not()
-            .equals('')
-            .withMessage('filter cannot be empty')
-            .bail()
-            .custom((value, { req, res }) => {
-                if (
-                    value === 'stock' ||
-                    value === 'price' ||
-                    value === 'rating' ||
-                    value === 'discountPercentage'
-                ) {
-                    if (!req.query.filterOrder) {
-                        throw new Error('Filter  order is not specified');
-                    }
-                    if (!req.query.filterValue) {
-                        throw new Error('Filter  value is not specified');
-                    } else {
-                        return true;
-                    }
-                } else {
-                    throw new Error('Invalid property provided for filter');
-                }
-            }),
-        query('filterOrder')
-            .optional()
-            .not()
-            .equals('')
-            .withMessage('filterOrder cannot be empty')
-            .bail()
-            .custom((value, { req }) => {
-                if (value === 'high' || value === 'low') {
-                    if (!req.query.filter) {
-                        throw new Error('Filter is not specified');
-                    }
-                    if (!req.query.filterValue) {
-                        throw new Error('Filter  value is not specified');
-                    } else {
-                        return true;
-                    }
-                } else {
-                    throw new Error(
-                        'Invalid property provided for filterOrder'
-                    );
-                }
-            }),
-        query('filterValue')
-            .optional()
-            .not()
-            .equals('')
-            .withMessage('filterValue cannot be empty')
-            .bail()
-            .custom((value, { req }) => {
-                value = parseInt(value);
-                if (!isNaN(value)) {
-                    if (!req.query.filter) {
-                        throw new Error('Filter is not specified');
-                    }
-                    if (!req.query.filterOrder) {
-                        throw new Error('Filter order value is not specified');
-                    } else {
-                        return true;
-                    }
-                } else {
-                    throw new Error('Filter value must be a number');
-                }
-            }),
-        query('category')
-            .optional()
-            .custom((value) => {
-                if (value.length) {
-                    const category = value.split(',');
-                    const validCategory = category.every(function (item) {
-                        return typeof item === 'string';
-                    });
-                    if (!validCategory) {
-                        throw new Error('All the categories must be strings');
-                    } else {
-                        return true;
-                    }
-                } else {
-                    throw new Error('Category cannot be empty');
-                }
-            }),
-    ],
-
     createBook: [
-        body('title').notEmpty().withMessage('Title is required.'),
-        body('description').notEmpty().withMessage('Description is required.'),
+        body('title')
+            .exists()
+            .notEmpty()
+            .withMessage('Title is required.')
+            .bail()
+            .isString()
+            .isLength({ min: 3, max: 50 })
+            .withMessage('Title length must be between 3 to 50'),
+        body('description')
+            .exists()
+            .notEmpty()
+            .withMessage('Description is required.')
+            .bail()
+            .isString()
+            .isLength({ min: 15, max: 200 })
+            .withMessage('Title length must be between 15 to 200'),
         body('price')
+            .exists()
             .isFloat({ min: 0, max: 10000 })
             .withMessage('Price must be a valid number between 0 and 100.'),
         body('rating')
-            .isFloat({ min: 0, max: 5 })
-            .withMessage('Rating is required and must be between 0 and 5.'),
+            .exists()
+            .isFloat({ min: 1, max: 5 })
+            .withMessage('Rating is required and must be between 1 and 5.'),
         body('stock')
-            .isFloat({ min: 0, max: 300 })
-            .withMessage('Stock must be a valid number between 0 and 300.'),
-        body('author').notEmpty().withMessage('Author is required.'),
-        body('category').notEmpty().withMessage('Category is required.'),
+            .exists()
+            .isFloat({ min: 10, max: 500 })
+            .withMessage('Stock must be a valid number between 10 and 500.'),
+        body('author')
+            .exists()
+            .notEmpty()
+            .withMessage('Author is required.')
+            .bail()
+            .isString()
+            .withMessage('Author must be a string'),
+        body('category')
+            .exists()
+            .notEmpty()
+            .withMessage('Category is required.')
+            .bail()
+            .isString()
+            .withMessage('Category must be a string')
+            .bail()
+            .isLength({ min: 3, max: 50 })
+            .withMessage('Category length must be between 3 to 50'),
         body('publishedAt')
             .not()
             .equals('')
@@ -189,6 +56,7 @@ const validator = {
             .isDate()
             .withMessage('Published at must be of type Date'),
         body('isbn')
+            .exists()
             .not()
             .equals()
             .withMessage('ISBN number cannot be empty')
@@ -196,6 +64,7 @@ const validator = {
             .isISBN()
             .withMessage('Invalid ISBN number'),
     ],
+
     updateBook: [
         param('bookId')
             .exists()
@@ -210,17 +79,21 @@ const validator = {
             }),
         body('title')
             .optional()
-            .optional()
             .isString()
             .withMessage('Title must be of type string')
+            .bail()
+            .isLength({ min: 3, max: 50 })
+            .withMessage('Title length must be between 3 to 50')
             .bail()
             .custom((value) => typeof value === 'string' && value.trim() !== '')
             .withMessage('Title is required.'),
         body('description')
             .optional()
-            .optional()
             .isString()
             .withMessage('Description must be of type string')
+            .bail()
+            .isLength({ min: 15, max: 200 })
+            .withMessage('Title length must be between 15 to 200')
             .bail()
             .custom((value) => typeof value === 'string' && value.trim() !== '')
             .withMessage('Description is required.'),
@@ -238,7 +111,6 @@ const validator = {
             .withMessage('Stock must be a valid number between 10 and 500.'),
         body('author')
             .optional()
-            .optional()
             .isString()
             .withMessage('Author must be of type string')
             .bail()
@@ -251,7 +123,10 @@ const validator = {
             .withMessage('Category must be of type string')
             .bail()
             .custom((value) => typeof value === 'string' && value.trim() !== '')
-            .withMessage('Category is required.'),
+            .withMessage('Category is required.')
+            .bail()
+            .isLength({ min: 3, max: 50 })
+            .withMessage('Category length must be between 3 to 50'),
         body('publishedAt')
             .optional()
             .isDate()

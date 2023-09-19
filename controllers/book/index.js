@@ -11,10 +11,6 @@ class BookController {
     async getAllBooks(req, res) {
         try {
             databaseLogger(req.originalUrl);
-            const validation = validationResult(req).array();
-            if (validation.length) {
-                return sendValidationError(res, validation);
-            }
 
             let page = parseInt(req.query.offset);
             let limit = parseInt(req.query.limit);
