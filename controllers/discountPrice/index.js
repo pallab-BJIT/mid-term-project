@@ -44,7 +44,7 @@ class DiscountPriceController {
             if (validation.length) {
                 return sendValidationError(res, validation);
             }
-            const { discountPercentage, bookId, startDate, endDate, country } =
+            let { discountPercentage, bookId, startDate, endDate, country } =
                 req.body;
 
             const hasDuplicateBookIds = bookId.length !== new Set(bookId).size;
@@ -127,11 +127,16 @@ class DiscountPriceController {
                     );
                 }
             }
+            let uppercaseCountry = [];
+            for (let ele of country) {
+                let uppercase = ele.toUpperCase();
+                uppercaseCountry.push(uppercase);
+            }
             const discount = new DiscountPrice({
                 discountPercentage,
                 startDate,
                 endDate,
-                counties: country,
+                counties: uppercaseCountry,
             });
             bookId.forEach((ele) => discount.bookIds.push(ele));
             await discount.save();
@@ -279,11 +284,17 @@ class DiscountPriceController {
                 }
             }
             if (country?.length) {
-                for (let i = 0; i < country.length; i++) {
-                    if (!discountById.counties.includes(country[i])) {
-                        discountById.counties.push(country[i]);
-                    }
+                let uppercaseCountry = [];
+                for (let ele of country) {
+                    let uppercase = ele.toUpperCase();
+                    uppercaseCountry.push(uppercase);
                 }
+                console.log(uppercaseCountry);
+                uppercaseCountry.forEach((ele) => {
+                    if (!discountById.counties.includes(ele)) {
+                        discountById.counties.push(ele);
+                    }
+                });
             }
             if (discountPercentage) {
                 discountById.discountPercentage = discountPercentage;

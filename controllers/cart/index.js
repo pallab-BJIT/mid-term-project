@@ -39,6 +39,10 @@ class CartController {
                     user: userExists._id,
                 })
                 .populate(
+                    'user',
+                    '-address -balance -phoneNumber -createdAt -updatedAt -__v'
+                )
+                .populate(
                     'books.book',
                     'title description price rating category'
                 );

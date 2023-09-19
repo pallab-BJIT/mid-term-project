@@ -53,6 +53,9 @@ class AuthController {
                 email: email,
             });
             if (!emailExists && !emailExistsAtUser) {
+                // address.country = address.country.ele.toUpperCase();
+                address.country = address.country.toUpperCase();
+                console.log({ address });
                 const newUser = await userModel.create({
                     email,
                     name,
@@ -108,6 +111,7 @@ class AuthController {
                 );
             }
         } catch (error) {
+            console.log(error);
             databaseLogger(error.message);
             return sendResponse(
                 res,
