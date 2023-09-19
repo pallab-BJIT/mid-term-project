@@ -48,11 +48,15 @@ class BookController {
                 }
             }
 
-            let baseQuery = bookModel.find();
+            let baseQuery = bookModel.find().select('-reviews');
             if (!search && !sortBy && !filter && !category) {
                 const skip = (page - 1) * limit;
 
-                const data = await bookModel.find({}).skip(skip).limit(limit);
+                const data = await bookModel
+                    .find({})
+                    .skip(skip)
+                    .limit(limit)
+                    .select('-reviews');
                 let totalCount = await bookModel.countDocuments();
                 if (!page && !limit) {
                     page = 1;
