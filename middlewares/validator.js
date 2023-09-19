@@ -308,6 +308,28 @@ const validator = {
             ),
     ],
 
+    verifyAccount: [
+        body('email')
+            .exists()
+            .not()
+            .equals('')
+            .withMessage('Email is required')
+            .bail()
+            .isString()
+            .withMessage('Email Must be of type string')
+            .bail()
+            .isEmail()
+            .withMessage('Invalid email address'),
+        body('verificationCode')
+            .exists()
+            .withMessage('Verification code is required')
+            .bail()
+            .isNumeric()
+            .withMessage('Verification code must contain only number')
+            .bail()
+            .isLength({ max: 6 })
+            .withMessage('Verification code is too long'),
+    ],
     addBalance: [
         body('amount')
             .exists()

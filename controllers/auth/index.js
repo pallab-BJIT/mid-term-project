@@ -13,6 +13,7 @@ const jwt = require('jsonwebtoken');
 const databaseLogger = require('../../util/dbLogger');
 const { sendValidationError } = require('../../util/validationErrorHelper');
 const generateVerificationCode = require('../../util/generateVerificationCode');
+const sendVerificationEmail = require('../../util/nodeMailer');
 class AuthController {
     async signUp(req, res) {
         try {
@@ -70,11 +71,13 @@ class AuthController {
                 }
                 const hashedPassword = await hashPasswordUsingBcrypt(password);
                 if (newUser && hashedPassword) {
+                    const verificationCode = generateVerificationCode();
                     const newRegistration = await authModel.create({
                         email,
                         password: hashedPassword,
                         rank,
                         user: newUser._id,
+                        verificationCode,
                     });
 
                     const savedRegistration = await authModel
@@ -82,12 +85,11 @@ class AuthController {
                         .select('-password')
                         .exec();
                     if (newRegistration && savedRegistration) {
-                        const verificationCode = generateVerificationCode();
+                        sendVerificationEmail(email, verificationCode);
                         return sendResponse(
                             res,
                             HTTP_STATUS.CREATED,
-                            'Sign up successfully',
-                            savedRegistration
+                            'Sign up successfully.One verification code is sent to your email.Please verify it before login'
                         );
                     } else {
                         return sendResponse(
@@ -154,7 +156,13 @@ class AuthController {
                     password,
                     emailExists?.password
                 );
-
+                if (!emailExists.isVerified) {
+                    return sendResponse(
+                        res,
+                        HTTP_STATUS.BAD_REQUEST,
+                        'Please verify your account before login'
+                    );
+                }
                 if (!passwordExists) {
                     return sendResponse(
                         res,
@@ -243,6 +251,55 @@ class AuthController {
                 res,
                 HTTP_STATUS.UNAUTHORIZED,
                 'Unauthorized access'
+            );
+        }
+    }
+
+    async verifyAccount(req, res) {
+        try {
+            databaseLogger(req.originalUrl);
+            const validation = validationResult(req).array();
+            if (validation.length) {
+                return sendValidationError(res, validation);
+            }
+            const { email, verificationCode } = req.body;
+            const userExists = await authModel.findOne({ email });
+            if (!userExists) {
+                return sendResponse(
+                    res,
+                    HTTP_STATUS.NOT_FOUND,
+                    'No user found'
+                );
+            }
+
+            if (userExists.isVerified) {
+                return sendResponse(
+                    res,
+                    HTTP_STATUS.BAD_REQUEST,
+                    'You are already verified.Please login'
+                );
+            }
+            if (userExists.verificationCode != verificationCode) {
+                return sendResponse(
+                    res,
+                    HTTP_STATUS.OK,
+                    'Wrong verification code provided'
+                );
+            }
+
+            userExists.isVerified = true;
+            await userExists.save();
+            return sendResponse(
+                res,
+                HTTP_STATUS.OK,
+                'Account verified successfully.Now you can login.'
+            );
+        } catch (error) {
+            databaseLogger(error.message);
+            return sendResponse(
+                res,
+                HTTP_STATUS.INTERNAL_SERVER_ERROR,
+                'Internal server error'
             );
         }
     }

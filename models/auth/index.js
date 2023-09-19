@@ -36,10 +36,9 @@ const authSchema = new Schema(
             ref: 'User',
             required: true,
         },
-        sessionActive: {
-            type: Boolean,
-            required: false,
-            default: false,
+        verificationCode: {
+            type: Number,
+            required: true,
         },
     },
     { timestamps: true }
