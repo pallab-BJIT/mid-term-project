@@ -480,6 +480,13 @@ class CartController {
                         quantity
                     );
                 });
+                if (cartExistsForUser.books.length <= 0) {
+                    return sendResponse(
+                        res,
+                        HTTP_STATUS.OK,
+                        'All items removed from the cart'
+                    );
+                }
                 return sendResponse(
                     res,
                     HTTP_STATUS.ACCEPTED,
@@ -536,6 +543,13 @@ class CartController {
                         quantity
                     );
                 });
+                if (cartExistsForUser.books.length <= 0) {
+                    return sendResponse(
+                        res,
+                        HTTP_STATUS.OK,
+                        'All items removed from the cart'
+                    );
+                }
                 return sendResponse(
                     res,
                     HTTP_STATUS.ACCEPTED,

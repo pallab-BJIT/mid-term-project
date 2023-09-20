@@ -60,7 +60,6 @@ class TransactionController {
                     'title description price rating category'
                 )
                 .select('-__v');
-
             if (result.length <= 0) {
                 return sendResponse(
                     res,
