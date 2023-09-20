@@ -646,7 +646,7 @@ const validator = {
             .exists()
             .withMessage('Start Date is required')
             .bail()
-            .isDate()
+            .isISO8601()
             .withMessage('Start date can only be of type of date')
             .custom((value) => {
                 if (value.trim() === '') {
@@ -659,7 +659,7 @@ const validator = {
             .exists()
             .withMessage('End Date is required')
             .bail()
-            .isDate()
+            .isISO8601()
             .withMessage('End date can only be of type of date')
             .custom((value) => {
                 if (value.trim() === '') {
@@ -747,7 +747,7 @@ const validator = {
             }),
         body('startDate')
             .optional()
-            .isDate()
+            .isISO8601()
             .withMessage('Start date can only be of type of date')
             .custom((value) => {
                 if (value.trim() === '') {
@@ -758,7 +758,7 @@ const validator = {
             }),
         body('endDate')
             .optional()
-            .isDate()
+            .isISO8601()
             .withMessage('End date can only be of type of date')
             .custom((value) => {
                 if (value.trim() === '') {
