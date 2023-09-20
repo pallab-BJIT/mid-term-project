@@ -40,6 +40,11 @@ const authSchema = new Schema(
             type: Number,
             required: true,
         },
+        isUserRestricted: {
+            type: Boolean,
+            default: false,
+            required: false,
+        },
     },
     { timestamps: true }
 );

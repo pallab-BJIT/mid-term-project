@@ -129,7 +129,7 @@ class UserController {
                     'You can not perform this action'
                 );
             }
-            const result = await authModel.findByIdAndDelete(userId);
+            const result = await authModel.findById(userId);
             if (!result) {
                 return sendResponse(
                     res,
@@ -138,8 +138,7 @@ class UserController {
                 );
             }
 
-            const user = await userModel.findByIdAndDelete(result.user);
-            console.log({ user });
+            const user = await userModel.findById(result.user);
             if (!user) {
                 return sendResponse(
                     res,
@@ -147,10 +146,13 @@ class UserController {
                     'No user associated with this id'
                 );
             }
+
+            result.isUserRestricted = true;
+            await result.save();
             return sendResponse(
                 res,
                 HTTP_STATUS.OK,
-                'Deleted user successfully',
+                'User restricted successfully',
                 result
             );
         } catch (error) {
@@ -222,6 +224,7 @@ class UserController {
                 'Something went wrong.'
             );
         } catch (error) {
+            console.log(error);
             databaseLogger(error.message);
             return sendResponse(res, 500, 'Internal server error');
         }

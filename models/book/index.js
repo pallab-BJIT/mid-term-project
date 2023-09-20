@@ -31,7 +31,7 @@ const bookSchema = new Schema({
     stock: {
         type: Number,
         required: [true, 'Stock is required'],
-        min: [10, 'Stock can not be less than 10'],
+        min: [0, 'Stock can not be less than 0'],
         max: [500, 'Stock can not be greater than 500'],
     },
     category: {

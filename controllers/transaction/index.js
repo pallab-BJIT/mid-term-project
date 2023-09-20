@@ -150,6 +150,18 @@ class TransactionController {
                     quantity
                 );
             });
+            console.log(userExists.balance);
+            if (
+                userExists.balance === undefined ||
+                userExists.balance === null ||
+                !userExists.balance
+            ) {
+                return sendResponse(
+                    res,
+                    HTTP_STATUS.UNPROCESSABLE_ENTITY,
+                    'Not enough balance.Please recharge and then place your order'
+                );
+            }
             if (userExists.balance < totalPrice) {
                 return sendResponse(
                     res,
@@ -173,6 +185,7 @@ class TransactionController {
                     'All products in cart do not exist'
                 );
             }
+            let lessStock = false;
             booksInCart.forEach((book) => {
                 const bookFound = cartExistsForUser.books.findIndex(
                     (cartItem) => {
@@ -180,15 +193,21 @@ class TransactionController {
                     }
                 );
                 if (book.stock < cartExistsForUser.books[bookFound].quantity) {
-                    return sendResponse(
-                        res,
-                        HTTP_STATUS.NOT_FOUND,
-                        'Unable to check out at this time, product does not exist'
-                    );
+                    lessStock = true;
+                    return;
                 }
                 book.stock -= cartExistsForUser.books[bookFound].quantity;
+                if (lessStock) {
+                    return;
+                }
             });
-
+            if (lessStock) {
+                return sendResponse(
+                    res,
+                    HTTP_STATUS.NOT_FOUND,
+                    'Unable to check out at this time, product does not exist'
+                );
+            }
             const bulk = [];
             booksInCart.map((element) => {
                 bulk.push({

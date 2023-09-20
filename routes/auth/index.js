@@ -6,11 +6,7 @@ const validator = require('../../middlewares/validator');
 router
     .post('/sign-up', [validator.signUpUser], AuthController.signUp)
     .post('/login', [validator.loginUser], AuthController.login)
-    .post(
-        '/refreshToken',
-        [validator.refreshToken],
-        AuthController.refreshToken
-    )
+    .post('/refreshToken', AuthController.refreshToken)
     .post(
         '/verify-account',
         [validator.verifyAccount],

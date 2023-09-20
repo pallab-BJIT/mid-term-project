@@ -145,6 +145,7 @@ class AuthController {
             const emailExists = await authModel
                 .findOne({ email: email })
                 .populate('user');
+            console.log(emailExists);
             if (!emailExists) {
                 return sendResponse(
                     res,
@@ -156,6 +157,13 @@ class AuthController {
                     password,
                     emailExists?.password
                 );
+                if (emailExists.isUserRestricted) {
+                    return sendResponse(
+                        res,
+                        HTTP_STATUS.BAD_REQUEST,
+                        'You can not login.Your account is restricted'
+                    );
+                }
                 if (!emailExists.isVerified) {
                     return sendResponse(
                         res,
@@ -212,14 +220,15 @@ class AuthController {
                 return sendValidationError(res, validation);
             }
             const token = req.headers.authorization?.split(' ')[1];
-            if (!token || token === undefined) {
+            if (!token || token === undefined || token.length === 0) {
                 return res.status(401).json(failure('Token Cannot be Null'));
             }
             const secretKey = process.env.REFRESH_TOKEN_SECRET;
-
             const decoded = await jwt.verify(token, secretKey);
+
             delete decoded.iat;
             delete decoded.exp;
+
             if (decoded) {
                 const accessToken = generateAccessToken(decoded);
                 if (accessToken) {

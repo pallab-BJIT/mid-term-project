@@ -9,6 +9,8 @@ const validator = {
             .withMessage('Title is required.')
             .bail()
             .isString()
+            .withMessage('Title must be a string.')
+            .bail()
             .isLength({ min: 3, max: 50 })
             .withMessage('Title length must be between 3 to 50'),
         body('description')
@@ -17,20 +19,46 @@ const validator = {
             .withMessage('Description is required.')
             .bail()
             .isString()
+            .withMessage('Description must be a string.')
+            .bail()
             .isLength({ min: 15, max: 200 })
             .withMessage('Title length must be between 15 to 200'),
         body('price')
             .exists()
             .isFloat({ min: 0, max: 10000 })
-            .withMessage('Price must be a valid number between 0 and 100.'),
+            .withMessage('Price must be a valid number between 0 and 100.')
+            .bail()
+            .custom((value) => {
+                if (typeof value != 'number') {
+                    throw new Error('Price must be a number');
+                } else {
+                    return true;
+                }
+            }),
         body('rating')
             .exists()
             .isFloat({ min: 1, max: 5 })
-            .withMessage('Rating is required and must be between 1 and 5.'),
+            .withMessage('Rating is required and must be between 1 and 5.')
+            .bail()
+            .custom((value) => {
+                if (typeof value != 'number') {
+                    throw new Error('Rating must be a number');
+                } else {
+                    return true;
+                }
+            }),
         body('stock')
             .exists()
             .isFloat({ min: 10, max: 500 })
-            .withMessage('Stock must be a valid number between 10 and 500.'),
+            .withMessage('Stock must be a valid number between 10 and 500.')
+            .bail()
+            .custom((value) => {
+                if (typeof value != 'number') {
+                    throw new Error('Stock must be a number');
+                } else {
+                    return true;
+                }
+            }),
         body('author')
             .exists()
             .notEmpty()
@@ -79,17 +107,12 @@ const validator = {
             .exists()
             .withMessage('Please provide book id')
             .bail()
-            .custom((value) => {
-                if (!mongoose.Types.ObjectId.isValid(value)) {
-                    throw new Error('Invalid object Id provided');
-                } else {
-                    return true;
-                }
-            }),
+            .isMongoId()
+            .withMessage('Invalid object id provided'),
         body('title')
             .optional()
             .isString()
-            .withMessage('Title must be of type string')
+            .withMessage('Title must be a string')
             .bail()
             .isLength({ min: 3, max: 50 })
             .withMessage('Title length must be between 3 to 50')
@@ -99,7 +122,7 @@ const validator = {
         body('description')
             .optional()
             .isString()
-            .withMessage('Description must be of type string')
+            .withMessage('Description must be a string')
             .bail()
             .isLength({ min: 15, max: 200 })
             .withMessage('Title length must be between 15 to 200')
@@ -109,19 +132,43 @@ const validator = {
         body('price')
             .optional()
             .isFloat({ min: 10, max: 10000 })
-            .withMessage('Price must be a valid number between 0 and 100.'),
+            .withMessage('Price must be a valid number between 0 and 100.')
+            .bail()
+            .custom((value) => {
+                if (typeof value != 'number') {
+                    throw new Error('Price must be a number');
+                } else {
+                    return true;
+                }
+            }),
         body('rating')
             .optional()
             .isFloat({ min: 1, max: 5 })
-            .withMessage('Rating must be a valid number between 1 and 5.'),
+            .withMessage('Rating must be a valid number between 1 and 5.')
+            .bail()
+            .custom((value) => {
+                if (typeof value != 'number') {
+                    throw new Error('Rating must be a number');
+                } else {
+                    return true;
+                }
+            }),
         body('stock')
             .optional()
             .isFloat({ min: 10, max: 500 })
-            .withMessage('Stock must be a valid number between 10 and 500.'),
+            .withMessage('Stock must be a valid number between 10 and 500.')
+            .bail()
+            .custom((value) => {
+                if (typeof value != 'number') {
+                    throw new Error('Stock must be a number');
+                } else {
+                    return true;
+                }
+            }),
         body('author')
             .optional()
             .isString()
-            .withMessage('Author must be of type string')
+            .withMessage('Author must be a string')
             .bail()
             .custom((value) => typeof value === 'string' && value.trim() !== '')
             .withMessage('Author is required.')
@@ -132,7 +179,7 @@ const validator = {
             .optional()
             .optional()
             .isString()
-            .withMessage('Category must be of type string')
+            .withMessage('Category must be a string')
             .bail()
             .custom((value) => typeof value === 'string' && value.trim() !== '')
             .withMessage('Category is required.')
@@ -168,7 +215,7 @@ const validator = {
             .withMessage('Name is required')
             .bail()
             .isString()
-            .withMessage('Name Must be of type string')
+            .withMessage('Name Must be a string')
             .bail()
             .isLength({ max: 50 })
             .withMessage('Name cannot be greater than 50'),
@@ -179,7 +226,7 @@ const validator = {
             .withMessage('Email is required')
             .bail()
             .isString()
-            .withMessage('Email Must be of type string')
+            .withMessage('Email Must be a string')
             .bail()
             .isEmail()
             .withMessage('Invalid email address')
@@ -193,7 +240,7 @@ const validator = {
             .withMessage('Password is required')
             .bail()
             .isString()
-            .withMessage('Password Must be of type string')
+            .withMessage('Password Must be a string')
             .bail()
             .isStrongPassword({
                 minLength: 8,
@@ -212,7 +259,7 @@ const validator = {
             .withMessage('Password is required')
             .bail()
             .isString()
-            .withMessage('Password Must be of type string')
+            .withMessage('Confirm password Must be a string')
             .bail()
             .isStrongPassword({
                 minLength: 8,
@@ -244,7 +291,10 @@ const validator = {
         body('rank')
             .optional()
             .custom((data) => {
-                if (data > 0 && data < 10 && typeof data === 'number') {
+                if (typeof data != 'number') {
+                    throw new Error('Rank must be a number');
+                }
+                if (data > 0 && data < 10) {
                     return true;
                 }
                 throw new Error('Rank must be between 1 and 10');
@@ -259,7 +309,7 @@ const validator = {
             .withMessage('Country is required')
             .bail()
             .isString()
-            .withMessage('Country only be string')
+            .withMessage('Country must be a string')
             .bail()
             .isLength({ max: 20 })
             .withMessage('Country cannot be greater than 20'),
@@ -270,7 +320,7 @@ const validator = {
             .withMessage('City is required')
             .bail()
             .isString()
-            .withMessage('City only be string')
+            .withMessage('City must be a string')
             .bail()
             .isLength({ max: 20 })
             .withMessage('City cannot be greater than 20'),
@@ -281,7 +331,7 @@ const validator = {
             .withMessage('Area is required')
             .bail()
             .isString()
-            .withMessage('Area only be string')
+            .withMessage('Area must be a string')
             .bail()
             .isLength({ max: 20 })
             .withMessage('Area cannot be greater than 20'),
@@ -292,7 +342,7 @@ const validator = {
             .withMessage('Street is required')
             .bail()
             .isString()
-            .withMessage('Street only be string')
+            .withMessage('Street must be a string')
             .bail()
             .isLength({ max: 20 })
             .withMessage('Street cannot be greater than 20'),
@@ -305,7 +355,7 @@ const validator = {
             .withMessage('Email is required')
             .bail()
             .isString()
-            .withMessage('Email Must be of type string')
+            .withMessage('Email Must be a string')
             .bail()
             .isEmail()
             .withMessage('Invalid email address')
@@ -318,7 +368,7 @@ const validator = {
             .withMessage('Password is required')
             .bail()
             .isString()
-            .withMessage('Password Must be of type string')
+            .withMessage('Password Must be a string')
             .bail()
             .isStrongPassword({
                 minLength: 8,
@@ -355,20 +405,15 @@ const validator = {
             .withMessage('Verification code must contain only number')
             .bail()
             .isLength({ max: 6 })
-            .withMessage('Verification code is too long'),
-    ],
-
-    refreshToken: [
-        body('token')
-            .exists()
-            .withMessage('Token is required')
+            .withMessage('Verification code is too long')
             .bail()
-            .not()
-            .equals('')
-            .withMessage('Token is required')
-            .bail()
-            .isJWT()
-            .withMessage('Invalid token provided'),
+            .custom((value) => {
+                if (typeof value != 'number') {
+                    throw new Error('Verification code must be a number');
+                } else {
+                    return true;
+                }
+            }),
     ],
 
     addBalance: [
@@ -376,6 +421,9 @@ const validator = {
             .exists()
             .withMessage('Amount is required')
             .custom((value) => {
+                if (typeof value != 'number') {
+                    throw new Error('Amount must be a number');
+                }
                 if (value <= 0 || isNaN(value) || value > 30000) {
                     throw new Error(
                         'Amount must be a positive number less than 30000'
@@ -390,33 +438,32 @@ const validator = {
         param('bookId')
             .exists()
             .withMessage('Please provide book id')
-            .custom((value) => {
-                if (!mongoose.Types.ObjectId.isValid(value)) {
-                    throw new Error('Invalid object Id provided');
-                } else {
-                    return true;
-                }
-            }),
+            .bail()
+            .isMongoId()
+            .withMessage('Invalid object id provided'),
     ],
 
     deleteUser: [
         param('userId')
             .exists()
             .withMessage('Please provide user id')
-            .custom((value) => {
-                if (!mongoose.Types.ObjectId.isValid(value)) {
-                    throw new Error('Invalid object Id provided');
-                } else {
-                    return true;
-                }
-            }),
+            .bail()
+            .isMongoId()
+            .withMessage('Invalid object id provided'),
     ],
 
     updateUser: [
+        param('userId')
+            .exists()
+            .withMessage('Please provide user id')
+            .bail()
+            .isMongoId()
+            .withMessage('Invalid object id provided')
+            .bail(),
         body('name')
             .optional()
             .isString()
-            .withMessage('Name only be of type string')
+            .withMessage('Name only be a string')
             .bail()
             .custom((value) => {
                 if (value.trim() === '') {
@@ -431,13 +478,12 @@ const validator = {
         body('rank')
             .optional()
             .custom((value) => {
-                console.log(typeof value);
                 if (value > 2) {
                     throw new Error('Invalid rank provided');
                 } else if (!value) {
                     throw new Error('Rank can not be empty');
                 } else if (typeof value != 'number') {
-                    throw new Error('Rank must be of type number');
+                    throw new Error('Rank must be a number');
                 } else {
                     return true;
                 }
@@ -460,13 +506,8 @@ const validator = {
             .equals('')
             .withMessage('book id cannot be empty')
             .bail()
-            .custom((value) => {
-                if (mongoose.Types.ObjectId.isValid(value)) {
-                    return true;
-                } else {
-                    throw new Error('Invalid book id');
-                }
-            }),
+            .isMongoId()
+            .withMessage('Invalid object id provided'),
         body('message')
             .optional()
             .not()
@@ -474,12 +515,23 @@ const validator = {
             .withMessage('Message  cannot be empty')
             .bail()
             .isLength({ min: 5, max: 200 })
-            .withMessage('Review message must be between 5 to 200 words'),
+            .withMessage('Review message must be between 5 to 200 words')
+            .bail()
+            .custom((value) => {
+                if (typeof value != 'string') {
+                    throw new Error('Review message must be a string');
+                } else {
+                    return true;
+                }
+            }),
         body('rating')
             .exists()
             .withMessage('Rating can not be null')
             .bail()
             .custom((value) => {
+                if (typeof value != 'number') {
+                    throw new Error('Rating must be a number');
+                }
                 if (!isNaN(value)) {
                     if (value >= 1 && value <= 5) return true;
                     throw new Error('Rating must be between 1 and 5');
@@ -496,23 +548,37 @@ const validator = {
             .equals('')
             .withMessage('book id cannot be empty')
             .bail()
-            .custom((value) => {
-                if (mongoose.Types.ObjectId.isValid(value)) {
-                    return true;
-                } else {
-                    throw new Error('Invalid book id');
-                }
-            }),
+            .isMongoId()
+            .withMessage('Invalid object id provided'),
         body('rating')
             .exists()
             .withMessage('Rating can not be null')
             .bail()
             .custom((value) => {
+                if (typeof value != 'number') {
+                    throw new Error('Rating must be a number');
+                }
                 if (!isNaN(value)) {
                     if (value >= 1 && value <= 5) return true;
                     throw new Error('Rating must be between 1 and 5');
                 } else {
                     throw new Error('Rating only accepts numeric values');
+                }
+            }),
+        body('message')
+            .optional()
+            .not()
+            .equals('')
+            .withMessage('Message  cannot be empty')
+            .bail()
+            .isLength({ min: 5, max: 200 })
+            .withMessage('Review message must be between 5 to 200 words')
+            .bail()
+            .custom((value) => {
+                if (typeof value != 'string') {
+                    throw new Error('Review message must be a string');
+                } else {
+                    return true;
                 }
             }),
     ],
@@ -524,13 +590,8 @@ const validator = {
             .equals('')
             .withMessage('book id cannot be empty')
             .bail()
-            .custom((value) => {
-                if (mongoose.Types.ObjectId.isValid(value)) {
-                    return true;
-                } else {
-                    throw new Error('Invalid book id');
-                }
-            }),
+            .isMongoId()
+            .withMessage('Invalid object id provided'),
     ],
 
     addDiscount: [
@@ -542,6 +603,9 @@ const validator = {
             .withMessage('Discount Percentage can only be of type number')
             .bail()
             .custom((value) => {
+                if (typeof value != 'number') {
+                    throw new Error('Discount Percentage must be a number');
+                }
                 if (value < 5) {
                     throw new Error(
                         'Discount Percentage can not be less than 5'
@@ -635,19 +699,18 @@ const validator = {
         param('discountId')
             .exists()
             .withMessage('Discount id is required')
-            .custom((value) => {
-                if (!mongoose.Types.ObjectId.isValid(value)) {
-                    throw new Error('Invalid discount id provided');
-                } else {
-                    return true;
-                }
-            }),
+            .bail()
+            .isMongoId()
+            .withMessage('Invalid object id provided'),
         body('discountPercentage')
             .optional()
             .isNumeric()
             .withMessage('Discount Percentage can only be of type number')
             .bail()
             .custom((value) => {
+                if (typeof value != 'number') {
+                    throw new Error('Discount Percentage must be a number');
+                }
                 if (value < 5) {
                     throw new Error(
                         'Discount Percentage can not be less than 5'
@@ -733,13 +796,9 @@ const validator = {
         param('discountId')
             .exists()
             .withMessage('Discount id is required')
-            .custom((value) => {
-                if (!mongoose.Types.ObjectId.isValid(value)) {
-                    throw new Error('Invalid discount id provided');
-                } else {
-                    return true;
-                }
-            }),
+            .bail()
+            .isMongoId()
+            .withMessage('Invalid object id provided'),
         body('bookId')
             .optional()
             .custom((value) => {
@@ -772,18 +831,16 @@ const validator = {
             .equals('')
             .withMessage('Book id is required')
             .bail()
-            .custom((value) => {
-                if (!mongoose.Types.ObjectId.isValid(value)) {
-                    throw new Error('Invalid book id provided');
-                } else {
-                    return true;
-                }
-            }),
+            .isMongoId()
+            .withMessage('Invalid object id provided'),
         body('quantity')
             .exists()
             .withMessage('Quantity is required')
             .bail()
             .custom((value) => {
+                if (typeof value != 'number') {
+                    throw new Error('Quantity must be a number');
+                }
                 if (value <= 0) {
                     throw new Error('Quantity can not be less than 1');
                 } else if (value > 10000000) {
@@ -805,18 +862,17 @@ const validator = {
             .equals('')
             .withMessage('Book id is required')
             .bail()
-            .custom((value) => {
-                if (!mongoose.Types.ObjectId.isValid(value)) {
-                    throw new Error('Invalid book id provided');
-                } else {
-                    return true;
-                }
-            }),
+            .isMongoId()
+            .withMessage('Invalid object id provided')
+            .bail(),
         body('quantity')
             .exists()
             .withMessage('Quantity is required')
             .bail()
             .custom((value) => {
+                if (typeof value != 'number') {
+                    throw new Error('Quantity must be a number');
+                }
                 if (value <= 0) {
                     throw new Error('Quantity can not be less than 1');
                 } else if (value > 10000000) {
@@ -832,19 +888,14 @@ const validator = {
     createTransaction: [
         body('cart')
             .exists()
-            .withMessage('Book id is required')
+            .withMessage('Cart id is required')
             .bail()
             .not()
             .equals('')
-            .withMessage('Book id is required')
+            .withMessage('Cart id is required')
             .bail()
-            .custom((value) => {
-                if (!mongoose.Types.ObjectId.isValid(value)) {
-                    throw new Error('Invalid book id provided');
-                } else {
-                    return true;
-                }
-            }),
+            .isMongoId()
+            .withMessage('Invalid object id provided'),
         body('paymentMethod')
             .exists()
             .withMessage('Payment method is required')
@@ -854,6 +905,9 @@ const validator = {
             .withMessage('Payment method is required')
             .custom((value) => {
                 const allowedPaymentMethods = ['online', 'cash', 'card'];
+                if (typeof value != 'string') {
+                    throw new Error('Payment method must be a string');
+                }
                 if (!allowedPaymentMethods.includes(value)) {
                     throw new Error('Invalid payment method provided');
                 } else if (value.length > 20) {

@@ -1018,3 +1018,35 @@ validation is not defined  ( Time -> September 19, 2023 4:19 PM)
 
 /api/auth/login  ( Time -> September 19, 2023 4:43 PM)
 
+/api/auth/sign-up  ( Time -> September 20, 2023 7:32 AM)
+
+/api/auth/verify-account  ( Time -> September 20, 2023 7:34 AM)
+
+/api/auth/login  ( Time -> September 20, 2023 7:34 AM)
+
+/api/cart/create  ( Time -> September 20, 2023 7:34 AM)
+
+/api/cart/cartByUser  ( Time -> September 20, 2023 7:35 AM)
+
+/api/cart/update  ( Time -> September 20, 2023 7:36 AM)
+
+/api/cart/update  ( Time -> September 20, 2023 7:36 AM)
+
+/api/cart/create  ( Time -> September 20, 2023 7:36 AM)
+
+/api/cart/cartByUser  ( Time -> September 20, 2023 7:36 AM)
+
+/api/cart/create  ( Time -> September 20, 2023 7:37 AM)
+
+/api/cart/update  ( Time -> September 20, 2023 7:37 AM)
+
+/api/cart/cartByUser  ( Time -> September 20, 2023 7:37 AM)
+
+/api/transaction/create  ( Time -> September 20, 2023 7:45 AM)
+
+/api/transaction/create  ( Time -> September 20, 2023 7:45 AM)
+
+/api/transaction/create  ( Time -> September 20, 2023 7:46 AM)
+
+/api/transaction/create  ( Time -> September 20, 2023 7:46 AM)
+
